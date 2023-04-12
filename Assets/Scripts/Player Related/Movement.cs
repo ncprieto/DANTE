@@ -20,6 +20,11 @@ public class Movement : MonoBehaviour
     public float deceleration;            
     public float groundDrag;
     public float jumpHeight;
+    private bool justJumped;
+
+    [Header("B Hop Variables")]
+    public float maxSpeed;
+    public float bHopStep;
 
     void Start()
     {
@@ -59,6 +64,11 @@ public class Movement : MonoBehaviour
         else if(!isGrounded)
         {
             rb.drag = 0;
+            // if(GetInputs())
+            // {
+            //     Vector3 dir = GetWishDirection();
+            //     rb.AddForce(dir * 30, ForceMode.Acceleration);
+            // }
         }
     }
     
@@ -91,7 +101,10 @@ public class Movement : MonoBehaviour
     {
         if(isGrounded)
         {
-            rb.AddForce(transform.up * jumpHeight, ForceMode.Impulse);
+            float mag = rb.velocity.magnitude;
+            rb.velocity -= rb.velocity;
+            rb.velocity = GetWishDirection() * mag + transform.up * jumpHeight;
+            // rb.AddForce(transform.up * jumpHeight, ForceMode.Impulse);
         }
     }
 }

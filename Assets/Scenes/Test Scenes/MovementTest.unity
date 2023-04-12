@@ -2550,9 +2550,10 @@ MonoBehaviour:
   right: 100
   jump: 32
   acceleration: 4
-  deceleration: 10
+  deceleration: 4
   groundDrag: 10
   jumpHeight: 5
+  maxSpeed: 200
 --- !u!1 &1575921430
 GameObject:
   m_ObjectHideFlags: 0
