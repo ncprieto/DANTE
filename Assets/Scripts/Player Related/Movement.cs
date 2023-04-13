@@ -73,15 +73,7 @@ public class Movement : MonoBehaviour
         else if(!isGrounded)
         {
             rb.drag = 0;
-            if(!apexReached && rb.velocity.y < 0)
-            {
-                apexReached = true;
-            }
-            // if(GetInputs())
-            // {
-            //     Vector3 dir = GetWishDirection();
-            //     rb.AddForce(dir * 30, ForceMode.Acceleration);
-            // }
+            if(!apexReached && rb.velocity.y < 0){ apexReached = true; }
         }
     }
     
@@ -114,10 +106,16 @@ public class Movement : MonoBehaviour
     {
         if(isGrounded)
         {
-            Vector3 original = rb.velocity;
-            rb.velocity -= rb.velocity;
-            Vector3 dir = GetInputs() ? GetWishDirection() : original;
-            rb.velocity = dir * currentBHop + transform.up * jumpHeight;
+            if(GetInputs())
+            {
+                rb.velocity -= rb.velocity;
+                rb.velocity = GetWishDirection() * currentBHop + transform.up * jumpHeight;
+            }
+            else
+            {
+                // bugged
+                rb.AddForce(rb.velocity * currentBHop + transform.up * jumpHeight, ForceMode.Impulse);
+            }
             justJumped = true;
             apexReached = false;
         }
