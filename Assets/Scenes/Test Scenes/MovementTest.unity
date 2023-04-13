@@ -2553,7 +2553,10 @@ MonoBehaviour:
   deceleration: 4
   groundDrag: 10
   jumpHeight: 5
-  maxSpeed: 200
+  bHopMax: 20
+  currentBHop: 15
+  bHopStep: 1.7
+  bHopWindow: 1
 --- !u!1 &1575921430
 GameObject:
   m_ObjectHideFlags: 0

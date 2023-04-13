@@ -21,10 +21,13 @@ public class Movement : MonoBehaviour
     public float groundDrag;
     public float jumpHeight;
     private bool justJumped;
+    private bool apexReached;
 
     [Header("B Hop Variables")]
-    public float maxSpeed;
+    public float bHopMax;
+    public float currentBHop;
     public float bHopStep;
+    public float bHopWindow;
 
     void Start()
     {
@@ -38,6 +41,12 @@ public class Movement : MonoBehaviour
         // check if player is on the ground
         RaycastHit hit;
         isGrounded = Physics.SphereCast(orientation.position, 0.001f, -orientation.up, out hit, 1f, ground);
+        if(isGrounded && justJumped && apexReached)
+        {
+            StartCoroutine(CheckBHopWindow());
+            justJumped = false;
+            apexReached = false;
+        }
         if(Input.GetKeyDown(jump)){ OnJumpPressed(); }
     }
 
@@ -64,6 +73,10 @@ public class Movement : MonoBehaviour
         else if(!isGrounded)
         {
             rb.drag = 0;
+            if(!apexReached && rb.velocity.y < 0)
+            {
+                apexReached = true;
+            }
             // if(GetInputs())
             // {
             //     Vector3 dir = GetWishDirection();
@@ -101,10 +114,32 @@ public class Movement : MonoBehaviour
     {
         if(isGrounded)
         {
-            float mag = rb.velocity.magnitude;
+            Vector3 original = rb.velocity;
             rb.velocity -= rb.velocity;
-            rb.velocity = GetWishDirection() * mag + transform.up * jumpHeight;
-            // rb.AddForce(transform.up * jumpHeight, ForceMode.Impulse);
+            Vector3 dir = GetInputs() ? GetWishDirection() : original;
+            rb.velocity = dir * currentBHop + transform.up * jumpHeight;
+            justJumped = true;
+            apexReached = false;
         }
+    }
+
+    private IEnumerator CheckBHopWindow()
+    {
+        float timer = bHopWindow;
+        float original = currentBHop;
+        // while player is inside of the b hop window
+        while(timer > 0)
+        {
+            // if player pressed jump while in the b hop window then up
+            // a multiplier that affects their horizontal distance
+            if(Input.GetKeyDown(jump)){
+                if(currentBHop < bHopMax){ currentBHop += bHopStep; }
+                yield break; // completely breaks out of the coroutine
+            };
+            timer -= Time.deltaTime;
+            yield return null;
+        }
+        currentBHop = 15f;
+        yield break;
     }
 }
