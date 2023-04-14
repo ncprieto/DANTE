@@ -16,50 +16,61 @@ public class Movement : MonoBehaviour
     public KeyCode jump;
 
     [Header("Ground Movement Variables")]
-    public float acceleration;
-    public float deceleration;            
-    public float groundDrag;
+    public float moveSpeed;
+    public float groundAccel;
+    public float groundDecel;
+    public float airAccel;
     public float jumpHeight;
+
+    private bool justJumped;
+    private bool apexReached;
+
+    [Header("B Hop Variables")]
+    public int bHopMax;
+    public float bHopMultiplier;
+    public float bHopWindow;
+    private int bHopCount;
 
     void Start()
     {
-        // sets deceleration to 1 if its less than 1, deceleration value less than 1 causes bugs
-        deceleration = deceleration < 1 ? 1 : deceleration;
+        // sets groundDecel to 1 if its less than 1, groundDecel value less than 1 causes bugs
+        groundDecel = groundDecel < 1 ? 1 : groundDecel;
     }
 
     bool isGrounded;
     void Update()
     {
+        GetInputs();
         // check if player is on the ground
-        RaycastHit hit;
-        isGrounded = Physics.SphereCast(orientation.position, 0.001f, -orientation.up, out hit, 1f, ground);
+        isGrounded = Physics.Raycast(orientation.position, -orientation.up, 1f);
+        if(isGrounded && justJumped && apexReached)
+        {
+            StartCoroutine(CheckBHopWindow());
+            justJumped = false;
+            apexReached = false;
+        }
+        CapSpeed();
         if(Input.GetKeyDown(jump)){ OnJumpPressed(); }
     }
 
     void FixedUpdate()
     {
+        MovePlayer();
         if(isGrounded)
         {
-            rb.drag = groundDrag;
-            if(GetInputs())
+            if(!GetInputs() && rb.velocity.magnitude > 0)
             {
-                Vector3 dir = GetWishDirection();
-                rb.velocity += dir * acceleration;
-            }
-            else
-            {
-                // slow player down if they aren't inputting anything if
-                // their currently velocty is > 0 ie player was just moving
-                if(rb.velocity.magnitude > 0)
-                {
-                    rb.velocity -=  rb.velocity / deceleration;
-                }
+                rb.velocity -= rb.velocity / groundDecel;
             }
         }
         else if(!isGrounded)
         {
-            rb.drag = 0;
+            if(justJumped && rb.velocity.y < 0)
+            {
+                apexReached = true;
+            }
         }
+        CapSpeed();
     }
     
     int fb;
@@ -87,11 +98,56 @@ public class Movement : MonoBehaviour
         return dir.normalized;
     }
 
+    void MovePlayer()
+    {
+        float acceleration = isGrounded ? groundAccel : airAccel; // controls how fast they player
+        // essentially quake 3 movement phyics
+        Vector3 wishDir = GetWishDirection();
+        float current = Vector3.Dot(rb.velocity, wishDir);
+        float addSpeed = moveSpeed - current;
+        addSpeed = Mathf.Max(Mathf.Min(addSpeed, acceleration * Time.deltaTime), 0);
+        // get bHop multiplier
+        float bHop = bHopCount > 0 ? bHopMultiplier * bHopCount : 1;
+        rb.velocity += wishDir * addSpeed * bHop;
+    }
+
+    void CapSpeed()
+    {
+        Vector3 velo = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
+        if(velo.magnitude > moveSpeed + (bHopCount * bHopMultiplier))
+        {
+            velo = velo.normalized * (moveSpeed + (bHopCount * bHopMultiplier));
+            rb.velocity = new Vector3(velo.x, rb.velocity.y, velo.z);
+        }
+    }
+
+    private Vector3 direction;
     void OnJumpPressed()
     {
         if(isGrounded)
         {
             rb.AddForce(transform.up * jumpHeight, ForceMode.Impulse);
+            justJumped = true;
+            apexReached = false;
         }
+    }
+
+    private IEnumerator CheckBHopWindow()
+    {
+        float timer = bHopWindow;
+        // while player is inside of the b hop window
+        while(timer > 0)
+        {
+            // add to counter if they jump in the window
+            if(Input.GetKeyDown(jump)){
+                bHopCount += bHopCount < bHopMax ? 1 : 0;
+                Debug.Log("COUNT " + bHopCount);
+                yield break; // completely breaks out of the coroutine
+            };
+            timer -= Time.deltaTime;
+            yield return null;
+        }
+        bHopCount = 0;
+        yield break;
     }
 }
