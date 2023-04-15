@@ -14,6 +14,7 @@ public class Movement : MonoBehaviour
     public KeyCode left;
     public KeyCode right;
     public KeyCode jump;
+    public KeyCode grapple;
 
     [Header("Ground Movement Variables")]
     public float moveSpeed;
@@ -31,6 +32,12 @@ public class Movement : MonoBehaviour
     public float bHopWindow;
     private int bHopCount;
 
+    [Header("Grapple Variables")]
+    public Transform playerCamera;
+    public float grappleAccel;
+    public float grappleSpeed;
+    // maybe a layer?
+
     void Start()
     {
         // sets groundDecel to 1 if its less than 1, groundDecel value less than 1 causes bugs
@@ -42,20 +49,27 @@ public class Movement : MonoBehaviour
     {
         GetInputs();
         // check if player is on the ground
-        isGrounded = Physics.Raycast(orientation.position, -orientation.up, 1f);
-        if(isGrounded && justJumped && apexReached)
+        RaycastHit hit;
+        isGrounded = Physics.Raycast(orientation.position, -orientation.up, 1.0001f, ground);
+        if(isGrounded && justJumped)
         {
             StartCoroutine(CheckBHopWindow());
             justJumped = false;
-            apexReached = false;
         }
         CapSpeed();
         if(Input.GetKeyDown(jump)){ OnJumpPressed(); }
+        if(Input.GetKeyDown(grapple)) { OnGrapplePressed(); }
     }
 
     void FixedUpdate()
     {
         MovePlayer();
+        if(grappling)
+        {
+            // rb.velocity = (grapplePoint - orientation.position) * grappleSpeed;
+            rb.velocity = Vector3.zero;
+            rb.AddForce((grapplePoint - orientation.position) * grappleSpeed, ForceMode.Impulse);
+        }
         if(isGrounded)
         {
             if(!GetInputs() && rb.velocity.magnitude > 0)
@@ -65,10 +79,7 @@ public class Movement : MonoBehaviour
         }
         else if(!isGrounded)
         {
-            if(justJumped && rb.velocity.y < 0)
-            {
-                apexReached = true;
-            }
+            // bruh
         }
         CapSpeed();
     }
@@ -113,6 +124,8 @@ public class Movement : MonoBehaviour
 
     void CapSpeed()
     {
+        if(grappling) return;
+
         Vector3 velo = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
         if(velo.magnitude > moveSpeed + (bHopCount * bHopMultiplier))
         {
@@ -121,15 +134,40 @@ public class Movement : MonoBehaviour
         }
     }
 
-    private Vector3 direction;
     void OnJumpPressed()
     {
         if(isGrounded)
         {
             rb.AddForce(transform.up * jumpHeight, ForceMode.Impulse);
             justJumped = true;
-            apexReached = false;
         }
+    }
+
+    Vector3 grapplePoint;
+    bool grappling;
+    void OnGrapplePressed()
+    {
+        if(!grappling)
+        {
+            RaycastHit hit;
+            if(Physics.Raycast(orientation.position, playerCamera.forward, out hit, Mathf.Infinity))
+            {
+                Debug.Log("POINT " + hit.point);
+                grapplePoint = hit.point;
+                grappling = true;
+                Debug.DrawLine(orientation.position, hit.point, Color.red, 1f);
+            }
+        }
+        else if(grappling)
+        {
+            grappling = false;
+        }
+    }
+
+    private bool CheckWallJump()
+    {
+
+        return false;
     }
 
     private IEnumerator CheckBHopWindow()
