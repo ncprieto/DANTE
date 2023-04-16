@@ -33,10 +33,10 @@ public class Movement : MonoBehaviour
     private int bHopCount;
 
     [Header("Grapple Variables")]
-    public Transform playerCamera;
-    public float grappleAccel;
     public float grappleSpeed;
-    // maybe a layer?
+    public float grappleJumpHeight;
+    public Transform playerCamera;
+    public LineRenderer lineRen;
 
     void Start()
     {
@@ -49,7 +49,6 @@ public class Movement : MonoBehaviour
     {
         GetInputs();
         // check if player is on the ground
-        RaycastHit hit;
         isGrounded = Physics.Raycast(orientation.position, -orientation.up, 1.0001f, ground);
         if(isGrounded && justJumped)
         {
@@ -66,9 +65,19 @@ public class Movement : MonoBehaviour
         MovePlayer();
         if(grappling)
         {
-            // rb.velocity = (grapplePoint - orientation.position) * grappleSpeed;
-            rb.velocity = Vector3.zero;
-            rb.AddForce((grapplePoint - orientation.position) * grappleSpeed, ForceMode.Impulse);
+            // set vertex 0 of line renderer to player position
+            lineRen.SetPosition(0, orientation.position);
+            // set velocity towards grapple point with some speed multiplier
+            rb.velocity = GetGrappleVector() * grappleSpeed;
+            float dist = Vector3.Distance(grapplePoint, orientation.position);
+            if(dist < 1.1)
+            {
+                // disconnect player from grapple once they come close enough to the point
+                ToggleGrapple();
+                rb.velocity = Vector3.zero;
+                // grapple jumping
+                // rb.velocity = grappleReflect
+            }
         }
         if(isGrounded)
         {
@@ -76,10 +85,6 @@ public class Movement : MonoBehaviour
             {
                 rb.velocity -= rb.velocity / groundDecel;
             }
-        }
-        else if(!isGrounded)
-        {
-            // bruh
         }
         CapSpeed();
     }
@@ -143,8 +148,10 @@ public class Movement : MonoBehaviour
         }
     }
 
-    Vector3 grapplePoint;
     bool grappling;
+    bool grappleJumping;
+    Vector3 grapplePoint;
+    Vector3 grappleReflect;
     void OnGrapplePressed()
     {
         if(!grappling)
@@ -152,21 +159,38 @@ public class Movement : MonoBehaviour
             RaycastHit hit;
             if(Physics.Raycast(orientation.position, playerCamera.forward, out hit, Mathf.Infinity))
             {
-                Debug.Log("POINT " + hit.point);
-                grapplePoint = hit.point;
-                grappling = true;
-                Debug.DrawLine(orientation.position, hit.point, Color.red, 1f);
+                grapplePoint  = hit.point;
+                ToggleGrapple();
+                Debug.DrawLine(orientation.position, hit.point, Color.green, 1f);               // player to grapple point (working)
+                Debug.DrawLine(hit.point, hit.point + hit.normal, Color.black, 1f);             // surface normal at grapple point (working)
+                Vector3 grappleReflect = Vector3.Reflect(GetGrappleVector(), hit.normal);       // reflected grapple direction vector (working)
+                Debug.DrawLine(hit.point, hit.point + grappleReflect, Color.red, 1f);           // grapple point to end of reflection vector (working)
             }
         }
-        else if(grappling)
+        else if(grappling){ ToggleGrapple(); }
+    }
+
+    // toggles the grapple boolean and line renderer
+    void ToggleGrapple()
+    {
+        grappling = !grappling;
+        lineRen.enabled = !lineRen.enabled;
+        if(grappling)
         {
-            grappling = false;
+            // reset line renderer points
+            lineRen.SetPosition(0, grapplePoint);
+            lineRen.SetPosition(1, grapplePoint);
         }
+    }
+
+    Vector3 GetGrappleVector()
+    {
+        Vector3 dir = grapplePoint - orientation.position;
+        return dir.normalized;
     }
 
     private bool CheckWallJump()
     {
-
         return false;
     }
 
