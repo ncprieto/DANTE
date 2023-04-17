@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.12731749, g: 0.13414757, b: 0.1210787, a: 1}
+  m_IndirectSpecularColor: {r: 0.12731704, g: 0.13414726, b: 0.1210787, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -8502,7 +8502,7 @@ MonoBehaviour:
   right: 100
   jump: 32
   grapple: 324
-  moveSpeed: 15
+  moveSpeed: 12
   groundAccel: 200
   groundDecel: 4
   airAccel: 50
@@ -8510,11 +8510,13 @@ MonoBehaviour:
   bHopMax: 3
   bHopMultiplier: 1.2
   bHopWindow: 0.5
-  grappleSpeed: 100
-  grappleVerticalBoost: 15
-  grappleHorizontalBoost: 10
-  grappleSlowTimer: 2
-  grappleMaxSpeed: 35
+  grappleSpeed: 20
+  grappleVerticalBoost: 10
+  grappleHorizontalBoost: 4
+  grappleDecelerateTime: 1
+  grappleDecelMaxSpeed: 15
+  grappleAccelerateTime: 0.5
+  grappleAccelMaxSpeed: 25
   playerCamera: {fileID: 728739701}
   lineRen: {fileID: 1575644301}
 --- !u!120 &1575644301
@@ -9494,7 +9496,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh27060
+  m_Name: pb_Mesh27064
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
