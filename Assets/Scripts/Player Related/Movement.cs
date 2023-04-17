@@ -122,8 +122,6 @@ public class Movement : MonoBehaviour
 
     void CapSpeed()
     {
-        // if(grappling) return;
-
         Vector3 velo = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
         if(velo.magnitude > moveSpeed + (bHopCount * bHopMultiplier))
         {
@@ -187,7 +185,7 @@ public class Movement : MonoBehaviour
         return dir.normalized;
     }
 
-    /* CalculateReflectVector() calculates the a vector reflected across the parameter
+    /* CalculateReflectVector() calculates a vector reflected across the parameter
      * normal. It create a point that has the same y value as the grapple point and an
      * x and z component as the player's x and z position. It then creates the vector from
      * this point to the grapplePoint and then reflects it across the normal. The reflected
@@ -258,53 +256,27 @@ public class Movement : MonoBehaviour
         StartCoroutine(grappleInterpolateCoroutine);
     }
 
-    /* DecelerateAfterGrapple() will slowly limit the speed the player gains form 
-     * grappling after they either grapple wall jump or dismount. Essentially linerally
-     * interpolates from a max speed value back down to the original move speed value in
-     * an amount of time that is determined by grappleSlowTimer.
+    /* InterpolatedGrappleSpeed() will decelerate/accelerate the speed of the player
+     * when the grapple is actve and when they dismount or wall jump. Essentially linerally
+     * interpolates up or down between values to limit the amount of speed the player retains
+     * when/after grappling.
      */
     float baseMoveSpeed;
-    // private IEnumerator DecelerateAfterGrapple()
-    // {
-    //     grappleCoroutineRunning = true;
-    //     float timeLeft = grappleSlowTimer;
-    //     float t = 1.0f;
-
-    //     while(timeLeft > 0)
-    //     {
-    //         timeLeft -= Time.deltaTime;
-    //         t = timeLeft / grappleSlowTimer;                                      // get interpolation value from timer
-    //         float newMoveSpeed = Mathf.Lerp(baseMoveSpeed, grappleMaxSpeed, t);   // get new interpolated move speed
-    //         moveSpeed = newMoveSpeed;
-    //         yield return null;
-    //     }
-
-    //     moveSpeed = baseMoveSpeed;
-    // }
-
-    // float baseMoveSpeed;
     private IEnumerator InterpolateGrappleSpeed(float window, float lerpStart, string mode, float maxSpeed)
     {
         grappleCoroutineRunning = true;
         float timeLeft = window;
         float t = lerpStart;
-        Debug.Log("TIMER " + window);
-        Debug.Log("STARTING INTERPOLATION VALUE " + lerpStart);
-        Debug.Log("MODE " + mode);
-        Debug.Log("MAX SPEED " + maxSpeed);
 
         while(timeLeft > 0f)
         {
             timeLeft -= Time.deltaTime;
             t = mode == "decelerate" ? timeLeft / window : 1 - (timeLeft / window);
-            Debug.Log("T " + t);
             float newMoveSpeed = Mathf.Lerp(baseMoveSpeed, maxSpeed, t);   // get new interpolated move speed
             moveSpeed = newMoveSpeed;
-            Debug.Log("NEW MOVE SPEED " + moveSpeed);
             yield return null;
         }
 
-        // moveSpeed = baseMoveSpeed;
         grappleCoroutineRunning = false;
         moveSpeed = mode == "decelerate" ?  baseMoveSpeed  : moveSpeed;
     }
