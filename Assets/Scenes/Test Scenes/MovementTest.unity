@@ -9435,6 +9435,9 @@ MonoBehaviour:
   bHopMultiplier: 1.2
   bHopWindow: 0.5
   grappleSpeed: 20
+  grappleRange: 50
+  grappleCooldown: 0
+  toggleControl: 1
   playerCamera: {fileID: 803506145}
   lineRen: {fileID: 1922195348}
   grappleAccelerateTime: 0.5
