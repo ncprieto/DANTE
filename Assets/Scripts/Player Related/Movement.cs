@@ -34,14 +34,21 @@ public class Movement : MonoBehaviour
 
     [Header("Grapple Variables")]
     public float grappleSpeed;
+    public float grappleRange;
+    public float grappleCooldown;
+    public bool  toggleControl;
+    public Transform playerCamera;
+    public LineRenderer lineRen;
+
+    [Header("Grapple Start Variables")]
+    public float grappleAccelerateTime;
+    public float grappleAccelMaxSpeed;
+
+    [Header("Grapple End Variables")]
     public float grappleVerticalBoost;
     public float grappleHorizontalBoost;
     public float grappleDecelerateTime;
     public float grappleDecelMaxSpeed;
-    public float grappleAccelerateTime;
-    public float grappleAccelMaxSpeed;
-    public Transform playerCamera;
-    public LineRenderer lineRen;
 
     void Start()
     {
@@ -53,16 +60,12 @@ public class Movement : MonoBehaviour
     void Update()
     {
         GetInputs();
-        
         isGrounded = Physics.Raycast(orientation.position, -orientation.up, 1.0001f, ground);                 // check if player is on the ground
-        if(isGrounded && justJumped)
-        {
-            StartCoroutine(CheckBHopWindow());
-            justJumped = false;
-        }
+        if(isGrounded) StartCoroutine(CheckBHopWindow());
         CapSpeed();
-        if(Input.GetKeyDown(jump)){ OnJumpPressed(); }
-        if(Input.GetKeyDown(grapple)) { OnGrapplePressed(); }
+        if(Input.GetKeyDown(jump)) OnJumpPressed();
+        if(Input.GetKeyDown(grapple))  OnGrapplePressed();
+        if(Input.GetKeyUp(grapple) && !toggleControl) OnGrappleReleased();
     }
 
     void FixedUpdate()
@@ -71,13 +74,16 @@ public class Movement : MonoBehaviour
         if(grappling)
         {
             float speed = baseMoveSpeed > moveSpeed ? baseMoveSpeed : moveSpeed;
-            rb.velocity = GetGrappleVector() * speed;                                                         // set velocity towards grapple point with some speed multiplier
-            lineRen.SetPosition(0, orientation.position);                                                     // set vertex 0 of line renderer to player position
-            if(Vector3.Distance(grapplePoint, orientation.position) < 1.1f) { DoGrappleWallJump(); }          // check if less than a distance of 1.1 from the grapplePoint
+            rb.velocity = VectorToGrapplePoint() * speed;                                                     // set velocity towards grapple point with some speed multiplier
+            lineRen.SetPosition(0, orientation.position);                                           // set vertex 0 of line renderer to player position
+            if(Vector3.Distance(grapplePoint, orientation.position) < 1.1f)
+            {
+                DoGrappleEnd(grappleReflect * grappleHorizontalBoost, transform.up * grappleVerticalBoost);
+            }          // check if less than a distance of 1.1 from the grapplePoint
         }
         if(isGrounded)
         {
-            if(!GetInputs() && rb.velocity.magnitude > 0){ rb.velocity -= rb.velocity / groundDecel; }        // slow player down if they were just moving
+            if(!GetInputs() && rb.velocity.magnitude > 0) rb.velocity -= rb.velocity / groundDecel;         // slow player down if they were just moving
         }
         CapSpeed();
     }
@@ -109,12 +115,15 @@ public class Movement : MonoBehaviour
 
     void MovePlayer()
     {
-        float acceleration = isGrounded ? groundAccel : airAccel; // controls how fast they player
+        if(grappling) return;
+        float acceleration = isGrounded ? groundAccel : airAccel; // controls how fast the player accelerates
+
         // essentially quake 3 movement phyics
         Vector3 wishDir = GetWishDirection();
         float current = Vector3.Dot(rb.velocity, wishDir);
         float addSpeed = moveSpeed - current;
         addSpeed = Mathf.Max(Mathf.Min(addSpeed, acceleration * Time.deltaTime), 0);
+
         // get bHop multiplier
         float bHop = bHopCount > 0 ? bHopMultiplier * bHopCount : 1;
         rb.velocity += wishDir * addSpeed * bHop;
@@ -132,32 +141,33 @@ public class Movement : MonoBehaviour
 
     void OnJumpPressed()
     {
-        if(isGrounded)
-        {
-            rb.AddForce(transform.up * jumpHeight, ForceMode.Impulse);
-            justJumped = true;
-        }
+        if(isGrounded) rb.AddForce(transform.up * jumpHeight, ForceMode.Impulse);
     }
 
-    /* OnGrapplePressed() executes functions relating to grapple functionality.
-     */
+    // OnGrapplePressed() executes functions relating to grapple functionality.
     bool grappling;
+    bool grappleOnCooldown;
     Vector3 grapplePoint;
-    Vector3 grappleReflect;
     void OnGrapplePressed()
     {
-        if(!grappling)
+        if(!grappling && !grappleOnCooldown)
         {
             RaycastHit hit;
-            if(Physics.Raycast(orientation.position, playerCamera.forward, out hit, Mathf.Infinity))
+            if(Physics.Raycast(orientation.position, playerCamera.forward, out hit, grappleRange))
             {
-                grapplePoint  = hit.point;
+                grapplePoint = hit.point;
                 ToggleGrapple();
                 CalculateReflectVector(hit.normal);
-                StartGrappleCoroutine(grappleAccelerateTime, 0f, "accelerate", grappleAccelMaxSpeed);
+                LimitGrappleSpeed(grappleAccelerateTime, 0f, "accelerate", grappleAccelMaxSpeed);
             }
         }
-        else if(grappling) { DoGrappleDismount(); }
+        else if(grappling && toggleControl) DoGrappleEnd(grappleAligned * grappleHorizontalBoost * 2, transform.up * grappleVerticalBoost);
+    }
+
+    // OnGrappleReleased() ends the player's grapple if toggleControl is set to false.
+    void OnGrappleReleased()
+    {
+        if(grappling) DoGrappleEnd(grappleAligned * grappleHorizontalBoost * 2, transform.up * grappleVerticalBoost);
     }
 
     /* ToggleGrapple() turns the grappling boolean and the line renderer on
@@ -176,10 +186,10 @@ public class Movement : MonoBehaviour
         }
     }
 
-    /* GetGrappleVector() returns the normalized vector from the player to
+    /* VectorToGrapplePoint() returns the normalized vector from the player to
      * the grapplePoint.
      */
-    Vector3 GetGrappleVector()
+    Vector3 VectorToGrapplePoint()
     {
         Vector3 dir = grapplePoint - orientation.position;
         return dir.normalized;
@@ -192,68 +202,63 @@ public class Movement : MonoBehaviour
      * vector is stored in grappleReflect.
      */
     Vector3 grappleAligned;
+    Vector3 grappleReflect;
     void CalculateReflectVector(Vector3 normal)
     {
         // vector that has same y as the grapple point and x/z of the player
         // is essentially on the same elevation of the grapple point and keeps y component 0
         Vector3 aligned = new Vector3(orientation.position.x, grapplePoint.y, orientation.position.z);                                                      
-        grappleAligned = grapplePoint - aligned;                                                      // vector from the aligned point to the grapple point
-        grappleReflect = Vector3.Reflect(grappleAligned, normal);                                     // the reflected aligned vector
-
-        // debug stuff for visualizing where the player is going, what reflected direction
-        // they are traveling in if they grapple jump, and the normal of the surface grappled to
-        Debug.DrawLine(aligned,   aligned + grappleAligned,       Color.green, 1f);                   // aligned vector from player to grapple point
-        Debug.DrawLine(grapplePoint, grapplePoint + normal,     Color.black, 1f);                     // surface normal at grapple point
+        grappleAligned = grapplePoint - aligned;                                                  // vector from the aligned point to the grapple point
+        grappleReflect = Vector3.Reflect(grappleAligned, normal);                                 // the reflected aligned vector
+        grappleReflect.Normalize();
+        grappleAligned.Normalize();
     }
 
-    /* DoGrappleWallJump() calculates a vector in the direction the player will
-     * wall jump off of a surface and applies it to the player's rigidbody.
+    
+    /* DoGrappleEnd() launches the player is the direction provided by the
+     * parameters horizontal and vertical. It also starts a coroutine that
+     * decelerates the player's velocity.
      */
-    void DoGrappleWallJump()
-    {
-        ToggleGrapple();                                                                              // disconnect player from grapple once they come close enough to the point
-
-        rb.velocity = Vector3.zero;
-        Vector3 grappleJumpDir = grappleReflect.normalized * grappleHorizontalBoost + transform.up * grappleVerticalBoost; // exit vector of the grapple wall jump
-        rb.velocity = grappleJumpDir;
-        StartGrappleCoroutine(grappleDecelerateTime, 0f, "decelerate", grappleDecelMaxSpeed);
-
-        Debug.DrawLine(grapplePoint, grapplePoint + grappleJumpDir, Color.red, 1f);                   // debug vector from grapple point to the exit direction of player
-    }
-
-    /* DoGrappleDismount() sets the player velocity to the direction in which they
-     * grappled and applies a small vertical boost. Recreates the effect of jumping
-     * off of the grapple when dismounting.
-     */
-    void DoGrappleDismount()
+    void DoGrappleEnd(Vector3 horizontal, Vector3 vertical)
     {
         ToggleGrapple();
+        rb.velocity = Vector3.zero;
+        rb.velocity = horizontal + vertical;
+        LimitGrappleSpeed(grappleDecelerateTime, 0f, "decelerate", grappleDecelMaxSpeed);
+        StartCoroutine(StartGrappleCooldown());
 
-        Vector3 dismountDir = grappleAligned.normalized * grappleHorizontalBoost * 2 + transform.up * grappleVerticalBoost;
-        rb.velocity = dismountDir;
-        StartGrappleCoroutine(grappleDecelerateTime, 0f, "decelerate", grappleDecelMaxSpeed);
-
-        Debug.DrawLine(grapplePoint, grapplePoint + dismountDir, Color.cyan, 1f);                     // debug vector that player get launched to
+        Debug.DrawLine(grapplePoint, grapplePoint + horizontal + vertical, Color.cyan, 1f);                     // debug vector that player get launched to
     }
 
-    /* StartGrappleCoroutine() keeps track if the grappleDecelCoroutine is running. If
+    private IEnumerator StartGrappleCooldown()
+    {
+        grappleOnCooldown = true;
+        float cdTimer = grappleCooldown;
+        while(cdTimer > 0)
+        {
+            cdTimer -= Time.deltaTime;
+            yield return null;
+        }
+        grappleOnCooldown = false;
+    }
+
+    /* LimitGrappleSpeed() keeps track if the grappleInterpolate is running. If
      * so it stops it then, sets the player's movement speed back to its original value
      * then restarts the coroutine.
      */
     bool grappleCoroutineRunning;
-    IEnumerator grappleDecelCoroutine;
-    IEnumerator grappleInterpolateCoroutine;
-    void StartGrappleCoroutine(float startTime, float lerpStart, string mode, float max)
+    IEnumerator  grappleLerpCoroutine;
+    void LimitGrappleSpeed(float startTime, float lerpStart, string mode, float max)
     {
         if(grappleCoroutineRunning)
         {
-            StopCoroutine(grappleInterpolateCoroutine);
+            StopCoroutine(grappleLerpCoroutine);
             grappleCoroutineRunning = false;
-            if(mode == "decelerate") { moveSpeed = baseMoveSpeed; }
+            if(mode == "decelerate") moveSpeed = baseMoveSpeed;
         }
 
-        grappleInterpolateCoroutine = InterpolateGrappleSpeed(startTime, lerpStart, mode, max);
-        StartCoroutine(grappleInterpolateCoroutine);
+        grappleLerpCoroutine = LerpGrappleSpeed(startTime, lerpStart, mode, max);
+        StartCoroutine(grappleLerpCoroutine);
     }
 
     /* InterpolatedGrappleSpeed() will decelerate/accelerate the speed of the player
@@ -262,7 +267,7 @@ public class Movement : MonoBehaviour
      * when/after grappling.
      */
     float baseMoveSpeed;
-    private IEnumerator InterpolateGrappleSpeed(float window, float lerpStart, string mode, float maxSpeed)
+    private IEnumerator LerpGrappleSpeed(float window, float lerpStart, string mode, float maxSpeed)
     {
         grappleCoroutineRunning = true;
         float timeLeft = window;
@@ -272,7 +277,7 @@ public class Movement : MonoBehaviour
         {
             timeLeft -= Time.deltaTime;
             t = mode == "decelerate" ? timeLeft / window : 1 - (timeLeft / window);
-            float newMoveSpeed = Mathf.Lerp(baseMoveSpeed, maxSpeed, t);   // get new interpolated move speed
+            float newMoveSpeed = Mathf.Lerp(baseMoveSpeed, maxSpeed, t);                            // get new interpolated move speed
             moveSpeed = newMoveSpeed;
             yield return null;
         }
@@ -295,18 +300,15 @@ public class Movement : MonoBehaviour
     private IEnumerator CheckBHopWindow()
     {
         float timer = bHopWindow;
-
         while(timer > 0)
         {
             if(Input.GetKeyDown(jump)){
                 bHopCount += bHopCount < bHopMax ? 1 : 0;
-                yield break; // completely breaks out of the coroutine
+                yield break;
             };
-
             timer -= Time.deltaTime;
             yield return null;
         }
-
         bHopCount = 0;
         yield break;
     }
