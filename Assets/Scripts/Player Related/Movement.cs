@@ -62,10 +62,10 @@ public class Movement : MonoBehaviour
         GetInputs();
         isGrounded = Physics.Raycast(orientation.position, -orientation.up, 1.0001f, ground);                 // check if player is on the ground
         if(isGrounded) StartCoroutine(CheckBHopWindow());
+        CapSpeed();
         if(Input.GetKeyDown(jump)) OnJumpPressed();
         if(Input.GetKeyDown(grapple))  OnGrapplePressed();
         if(Input.GetKeyUp(grapple) && !toggleControl) OnGrappleReleased();
-        CapSpeed();
     }
 
     void FixedUpdate()
@@ -146,10 +146,11 @@ public class Movement : MonoBehaviour
 
     // OnGrapplePressed() executes functions relating to grapple functionality.
     bool grappling;
+    bool grappleOnCooldown;
     Vector3 grapplePoint;
     void OnGrapplePressed()
     {
-        if(!grappling)
+        if(!grappling && !grappleOnCooldown)
         {
             RaycastHit hit;
             if(Physics.Raycast(orientation.position, playerCamera.forward, out hit, grappleRange))
@@ -157,7 +158,7 @@ public class Movement : MonoBehaviour
                 grapplePoint = hit.point;
                 ToggleGrapple();
                 CalculateReflectVector(hit.normal);
-                StartGrappleCoroutine(grappleAccelerateTime, 0f, "accelerate", grappleAccelMaxSpeed);
+                LimitGrappleSpeed(grappleAccelerateTime, 0f, "accelerate", grappleAccelMaxSpeed);
             }
         }
         else if(grappling && toggleControl) DoGrappleEnd(grappleAligned * grappleHorizontalBoost * 2, transform.up * grappleVerticalBoost);
@@ -223,18 +224,31 @@ public class Movement : MonoBehaviour
         ToggleGrapple();
         rb.velocity = Vector3.zero;
         rb.velocity = horizontal + vertical;
-        StartGrappleCoroutine(grappleDecelerateTime, 0f, "decelerate", grappleDecelMaxSpeed);
+        LimitGrappleSpeed(grappleDecelerateTime, 0f, "decelerate", grappleDecelMaxSpeed);
+        StartCoroutine(StartGrappleCooldown());
 
         Debug.DrawLine(grapplePoint, grapplePoint + horizontal + vertical, Color.cyan, 1f);                     // debug vector that player get launched to
     }
 
-    /* StartGrappleCoroutine() keeps track if the grappleInterpolate is running. If
+    private IEnumerator StartGrappleCooldown()
+    {
+        grappleOnCooldown = true;
+        float cdTimer = grappleCooldown;
+        while(cdTimer > 0)
+        {
+            cdTimer -= Time.deltaTime;
+            yield return null;
+        }
+        grappleOnCooldown = false;
+    }
+
+    /* LimitGrappleSpeed() keeps track if the grappleInterpolate is running. If
      * so it stops it then, sets the player's movement speed back to its original value
      * then restarts the coroutine.
      */
     bool grappleCoroutineRunning;
     IEnumerator  grappleLerpCoroutine;
-    void StartGrappleCoroutine(float startTime, float lerpStart, string mode, float max)
+    void LimitGrappleSpeed(float startTime, float lerpStart, string mode, float max)
     {
         if(grappleCoroutineRunning)
         {
@@ -244,7 +258,7 @@ public class Movement : MonoBehaviour
         }
 
         grappleLerpCoroutine = LerpGrappleSpeed(startTime, lerpStart, mode, max);
-        StartCoroutine( grappleLerpCoroutine);
+        StartCoroutine(grappleLerpCoroutine);
     }
 
     /* InterpolatedGrappleSpeed() will decelerate/accelerate the speed of the player
@@ -286,18 +300,15 @@ public class Movement : MonoBehaviour
     private IEnumerator CheckBHopWindow()
     {
         float timer = bHopWindow;
-
         while(timer > 0)
         {
             if(Input.GetKeyDown(jump)){
                 bHopCount += bHopCount < bHopMax ? 1 : 0;
-                yield break; // completely breaks out of the coroutine
+                yield break;
             };
-
             timer -= Time.deltaTime;
             yield return null;
         }
-
         bHopCount = 0;
         yield break;
     }
