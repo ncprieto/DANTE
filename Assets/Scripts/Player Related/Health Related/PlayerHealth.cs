@@ -26,7 +26,7 @@ public class PlayerHealth : MonoBehaviour
             Destroy(col.gameObject);
             if (playerCurrentHealth < 100){
                 playerCurrentHealth += 5;
-                if (playerCurrentHealth > 100){
+                if (playerCurrentHealth >= 100){
                     playerCurrentHealth = 100;
                 }
             }
@@ -35,7 +35,7 @@ public class PlayerHealth : MonoBehaviour
             Destroy(col.gameObject);
             if (playerCurrentHealth < 100){
                 playerCurrentHealth += 10;
-                if (playerCurrentHealth > 100){
+                if (playerCurrentHealth >= 100){
                     playerCurrentHealth = 100;
                 }
             }
@@ -44,7 +44,7 @@ public class PlayerHealth : MonoBehaviour
             Destroy(col.gameObject);
             if (playerCurrentHealth < 100){
                 playerCurrentHealth += 25;
-                if (playerCurrentHealth > 100){
+                if (playerCurrentHealth >= 100){
                     playerCurrentHealth = 100;
                 }
             }
@@ -54,9 +54,12 @@ public class PlayerHealth : MonoBehaviour
     void OnTriggerStay(Collider col){
         if (col.gameObject.tag == "FireDOT"){
             dotTimer += Time.deltaTime;
-            if ((dotTimer > .25) && (playerCurrentHealth > 0)){
+            if ((dotTimer > .2) && (playerCurrentHealth > 0)){
                 dotTimer = 0;
                 playerCurrentHealth -= 5;
+                if (playerCurrentHealth <= 0){
+                    playerCurrentHealth = 0;
+                }
             }
         }
     }
