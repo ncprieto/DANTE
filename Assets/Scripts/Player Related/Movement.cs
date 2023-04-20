@@ -36,8 +36,9 @@ public class Movement : MonoBehaviour
     public float grappleSpeed;
     public float grappleRange;
     public float grappleCooldown;
+    public float grapplePointVerticalBoost;
     public bool  toggleControl;
-    public Transform playerCamera;
+    public Camera playerCamera;
     public LineRenderer lineRen;
 
     [Header("Grapple Start Variables")]
@@ -50,18 +51,25 @@ public class Movement : MonoBehaviour
     public float grappleDecelerateTime;
     public float grappleDecelMaxSpeed;
 
+    [Header("Grapple FOV Variables")]
+    public float grappleFOVTime;
+    public float grappleFOVFactor;
+
     void Start()
     {
         groundDecel = groundDecel < 1 ? 1 : groundDecel;                                                      // sets groundDecel to 1 if its less than 1, groundDecel value less than 1 causes bugs
         baseMoveSpeed = moveSpeed;
+        originalFOV = playerCamera.fieldOfView;
     }
 
     bool isGrounded;
+    bool wasInAir;
     void Update()
     {
         GetInputs();
         isGrounded = Physics.Raycast(orientation.position, -orientation.up, 1.0001f, ground);                 // check if player is on the ground
-        if(isGrounded) StartCoroutine(CheckBHopWindow());
+        if(isGrounded && wasInAir) StartBHopCoroutine();
+        wasInAir = rb.velocity.y < 0;
         CapSpeed();
         if(Input.GetKeyDown(jump)) OnJumpPressed();
         if(Input.GetKeyDown(grapple))  OnGrapplePressed();
@@ -153,8 +161,17 @@ public class Movement : MonoBehaviour
         if(!grappling && !grappleOnCooldown)
         {
             RaycastHit hit;
-            if(Physics.Raycast(orientation.position, playerCamera.forward, out hit, grappleRange))
+            if(Physics.Raycast(orientation.position, playerCamera.transform.forward, out hit, grappleRange))
             {
+                if(hit.transform.parent.name == "GrapplePoint")
+                {
+                    Vector3 teleportTo = new Vector3(hit.transform.position.x, hit.transform.position.y + 4, hit.transform.position.z);
+                    transform.position = teleportTo;
+                    rb.velocity = Vector3.zero;
+                    rb.velocity = transform.up * grapplePointVerticalBoost;
+                    LimitGrappleSpeed(grappleDecelerateTime, 0f, "decelerate", grappleDecelMaxSpeed);
+                    return;
+                }
                 grapplePoint = hit.point;
                 ToggleGrapple();
                 CalculateReflectVector(hit.normal);
@@ -219,8 +236,10 @@ public class Movement : MonoBehaviour
      * parameters horizontal and vertical. It also starts a coroutine that
      * decelerates the player's velocity.
      */
+    float originalFOV;
     void DoGrappleEnd(Vector3 horizontal, Vector3 vertical)
     {
+        playerCamera.fieldOfView = originalFOV;
         ToggleGrapple();
         rb.velocity = Vector3.zero;
         rb.velocity = horizontal + vertical;
@@ -247,7 +266,9 @@ public class Movement : MonoBehaviour
      * then restarts the coroutine.
      */
     bool grappleCoroutineRunning;
-    IEnumerator  grappleLerpCoroutine;
+    IEnumerator grappleLerpCoroutine;
+    bool grappleFOVCoroutineRunning;
+    IEnumerator grappleFOVCoroutine;
     void LimitGrappleSpeed(float startTime, float lerpStart, string mode, float max)
     {
         if(grappleCoroutineRunning)
@@ -256,9 +277,12 @@ public class Movement : MonoBehaviour
             grappleCoroutineRunning = false;
             if(mode == "decelerate") moveSpeed = baseMoveSpeed;
         }
+        if(grappleFOVCoroutineRunning) StopCoroutine(grappleFOVCoroutine);
 
         grappleLerpCoroutine = LerpGrappleSpeed(startTime, lerpStart, mode, max);
         StartCoroutine(grappleLerpCoroutine);
+        grappleFOVCoroutine = LerpGrappleFOV(mode, grappleFOVTime, lerpStart);
+        StartCoroutine(grappleFOVCoroutine);
     }
 
     /* InterpolatedGrappleSpeed() will decelerate/accelerate the speed of the player
@@ -285,10 +309,32 @@ public class Movement : MonoBehaviour
         grappleCoroutineRunning = false;
         moveSpeed = mode == "decelerate" ?  baseMoveSpeed  : moveSpeed;
     }
-    
-    private bool CheckWallJump()
+
+    private IEnumerator LerpGrappleFOV(string mode, float window, float lerpStart)
     {
-        return false;
+        grappleFOVCoroutineRunning = true;
+        float timeLeft = window;
+        float t = lerpStart;
+        while(timeLeft > 0f)
+        {
+            timeLeft -= Time.deltaTime;
+            t = mode == "decelerate" ? timeLeft / window : 1 - (timeLeft / window);
+            playerCamera.fieldOfView = Mathf.Lerp(originalFOV, originalFOV + grappleFOVFactor, t);
+            yield return null;
+        }
+        grappleFOVCoroutineRunning = false;
+    }
+
+    /* StartBHopCoroutine() will stop the bHopCoroutine is it's running
+     * and start if it isn't.
+     */
+    bool bHopCoroutineRunning;
+    IEnumerator bHopCoroutine;
+    void StartBHopCoroutine()
+    {
+        if(bHopCoroutineRunning) StopCoroutine(bHopCoroutine);
+        bHopCoroutine = CheckBHopWindow();
+        StartCoroutine(bHopCoroutine);
     }
 
     /* CheckBHopWindow() determines if the player is inside the b hop window 
@@ -299,10 +345,11 @@ public class Movement : MonoBehaviour
      */
     private IEnumerator CheckBHopWindow()
     {
+        bHopCoroutineRunning = true;
         float timer = bHopWindow;
         while(timer > 0)
         {
-            if(Input.GetKeyDown(jump)){
+            if(Input.GetKeyUp(jump)){
                 bHopCount += bHopCount < bHopMax ? 1 : 0;
                 yield break;
             };
@@ -310,6 +357,7 @@ public class Movement : MonoBehaviour
             yield return null;
         }
         bHopCount = 0;
+        bHopCoroutineRunning = false;
         yield break;
     }
 }

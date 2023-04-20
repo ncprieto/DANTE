@@ -10585,8 +10585,9 @@ MonoBehaviour:
   grappleSpeed: 20
   grappleRange: 50
   grappleCooldown: 2
+  grapplePointVerticalBoost: 25
   toggleControl: 1
-  playerCamera: {fileID: 1705315972}
+  playerCamera: {fileID: 1705315976}
   lineRen: {fileID: 939103760}
   grappleAccelerateTime: 0.5
   grappleAccelMaxSpeed: 60
@@ -10594,6 +10595,8 @@ MonoBehaviour:
   grappleHorizontalBoost: 4
   grappleDecelerateTime: 2
   grappleDecelMaxSpeed: 15
+  grappleFOVTime: 0.5
+  grappleFOVFactor: 25
 --- !u!136 &939103762
 CapsuleCollider:
   m_ObjectHideFlags: 0
