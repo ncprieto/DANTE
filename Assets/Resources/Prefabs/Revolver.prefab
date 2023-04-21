@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 2676563041553457553}
   - component: {fileID: 2676563041553457552}
   - component: {fileID: 2676563041553457557}
+  - component: {fileID: 7727793071097516243}
   m_Layer: 0
   m_Name: Revolver
   m_TagString: Untagged
@@ -214,9 +215,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   fireRate: 0.5
   weaponRange: 35
-  recoilStrength: 3
   trailOrigin: {fileID: 2676563042148244215}
   trailDuration: 0.1
+  gunMovement: {fileID: 7727793071097516243}
 --- !u!95 &2676563041553457557
 Animator:
   serializedVersion: 5
@@ -238,6 +239,21 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &7727793071097516243
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2676563041553457550}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9d42fbc8d506de440ba6d363cb620b8b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  slowScale: 0.2
+  maxChainedShots: 3
+  maxTimeBetweenShots: 2.5
 --- !u!1 &2676563042148244214
 GameObject:
   m_ObjectHideFlags: 0
