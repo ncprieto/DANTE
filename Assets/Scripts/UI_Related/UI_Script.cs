@@ -7,8 +7,9 @@ public class UI_Script : MonoBehaviour
 {
     public Rigidbody player;
     public GameObject speedText;
-    
+
     //timer stuff
+    [Header("Time Related")]
     public GameObject timerText;
     public bool timerOn;
     public float timeLeft;
@@ -17,10 +18,26 @@ public class UI_Script : MonoBehaviour
     TextMeshProUGUI gameSpeedText;
     TextMeshProUGUI gameTimerText;
     // Start is called before the first frame update
+
+    //bhop multiplier stuff
+    [Header("Movment Related")]
+    public Movement movementScript;
+    public GameObject multiplierText;
+    public int bhopCounter;
+    TextMeshProUGUI moveCounterText;
+
+    //Health stuff
+    [Header("Health Related")]
+    public int playerHealth;
+    public GameObject healthText;
+    TextMeshProUGUI healthTextMesh;
+
     void Start()
     {
         gameSpeedText = speedText.GetComponent<TextMeshProUGUI>();
         gameTimerText = timerText.GetComponent<TextMeshProUGUI>();
+        moveCounterText = multiplierText.GetComponent<TextMeshProUGUI>();
+        healthTextMesh = healthText.GetComponent<TextMeshProUGUI>();
 
     }
 
@@ -34,6 +51,15 @@ public class UI_Script : MonoBehaviour
         {
             if (timeLeft > 0)
             {
+                bhopCounter = movementScript.bHopCount;
+                if (bhopCounter > 0)
+                {
+                    changeBhopText(bhopCounter);
+                }
+                else
+                {
+                    multiplierText.SetActive(false);
+                }
                 timeLeft -= Time.deltaTime;
                 updateTimerText(timeLeft);
             }
@@ -55,5 +81,16 @@ public class UI_Script : MonoBehaviour
 
         //update the text     
         gameTimerText.text = minutes.ToString() + " : " + seconds.ToString() + "." + milliseconds.ToString();
+    }
+
+    void changeBhopText(int count)
+    {
+        moveCounterText.text = "X " + count.ToString();
+        multiplierText.SetActive(true);
+    }
+
+    public void updateHealthUI(int n)
+    {
+        healthTextMesh.text = n.ToString();
     }
 }

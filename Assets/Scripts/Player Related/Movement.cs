@@ -30,7 +30,7 @@ public class Movement : MonoBehaviour
     public int bHopMax;
     public float bHopMultiplier;
     public float bHopWindow;
-    private int bHopCount;
+    public int bHopCount;
 
     [Header("Grapple Variables")]
     public float grappleSpeed;
