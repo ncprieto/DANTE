@@ -20,9 +20,12 @@ public class GunAttributes : MonoBehaviour
 
     private Animator fireAnim;
 
+    public GunMovement gunMovement;
+
     void Awake(){
         shotTrail = GetComponent<LineRenderer>();
         fireAnim = GetComponent<Animator>();
+        gunMovement.Initialize(GameObject.Find("Player"), this);
         //playerAim = GameObject.Find("Orientation").transform;
         //mainCam = GameObject.Find("Main Camera").transform;
     }
@@ -43,6 +46,7 @@ public class GunAttributes : MonoBehaviour
             else{
                 shotTrail.SetPosition(1, rayOrigin + (Camera.main.transform.forward * weaponRange));
             }
+            gunMovement.ReceiveHitInfo(hit);
             StartCoroutine(DrawTrail());
             // Quaternion recoilRotation = Camera.main.transform.localRotation;
             // recoilRotation.x -= recoilStrength;
