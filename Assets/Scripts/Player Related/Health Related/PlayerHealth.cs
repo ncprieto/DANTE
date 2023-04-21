@@ -11,7 +11,7 @@ public class PlayerHealth : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        playerCurrentHealth = 69;
+        playerCurrentHealth = 50;
         dotTimer = 0;
     }
 
