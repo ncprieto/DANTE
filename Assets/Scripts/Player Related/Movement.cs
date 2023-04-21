@@ -173,6 +173,7 @@ public class Movement : MonoBehaviour
                     return;
                 }
                 grapplePoint = hit.point;
+                FOVAtGrapple = playerCamera.fieldOfView;
                 ToggleGrapple();
                 CalculateReflectVector(hit.normal);
                 LimitGrappleSpeed(grappleAccelerateTime, 0f, "accelerate", grappleAccelMaxSpeed);
@@ -237,9 +238,10 @@ public class Movement : MonoBehaviour
      * decelerates the player's velocity.
      */
     float originalFOV;
+    float FOVAtGrapple;
     void DoGrappleEnd(Vector3 horizontal, Vector3 vertical)
     {
-        playerCamera.fieldOfView = originalFOV;
+        playerCamera.fieldOfView = FOVAtGrapple;
         ToggleGrapple();
         rb.velocity = Vector3.zero;
         rb.velocity = horizontal + vertical;
@@ -319,7 +321,7 @@ public class Movement : MonoBehaviour
         {
             timeLeft -= Time.deltaTime;
             t = mode == "decelerate" ? timeLeft / window : 1 - (timeLeft / window);
-            playerCamera.fieldOfView = Mathf.Lerp(originalFOV, originalFOV + grappleFOVFactor, t);
+            playerCamera.fieldOfView = Mathf.Lerp(FOVAtGrapple, FOVAtGrapple + grappleFOVFactor, t);
             yield return null;
         }
         grappleFOVCoroutineRunning = false;
