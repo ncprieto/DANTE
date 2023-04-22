@@ -5,6 +5,7 @@ using UnityEngine;
 public class PlayerHealth : MonoBehaviour
 {
 
+    public bool isInvincible;
     public int playerCurrentHealth = 100;
     private float dotTimer;
 
@@ -21,6 +22,7 @@ public class PlayerHealth : MonoBehaviour
         Debug.Log("HEALTH: " + playerCurrentHealth);
     }
 
+    // Health pickups
     void OnTriggerEnter(Collider col){
         if (col.gameObject.tag == "SmallHealth"){
             Destroy(col.gameObject);
@@ -51,17 +53,24 @@ public class PlayerHealth : MonoBehaviour
         }
     }
 
-    void OnTriggerStay(Collider col){
-        if (col.gameObject.tag == "FireDOT"){
-            dotTimer += Time.deltaTime;
-            if ((dotTimer > .2) && (playerCurrentHealth > 0)){
-                dotTimer = 0;
-                playerCurrentHealth -= 5;
-                if (playerCurrentHealth <= 0){
-                    playerCurrentHealth = 0;
-                }
+    // Called by enemy scripts
+    public void ReceiveDamage(int damageTaken, bool hasIFrames){
+        if ((playerCurrentHealth > 0) && !isInvincible){
+            playerCurrentHealth -= damageTaken;
+            if (playerCurrentHealth <= 0){
+                playerCurrentHealth = 0;
+            }
+            if (hasIFrames){
+                StartCoroutine(IFrames());
             }
         }
+    }
+
+    IEnumerator IFrames()
+    {
+        isInvincible = true;
+        yield return new WaitForSeconds(3f);
+        isInvincible = false;
     }
 
 }

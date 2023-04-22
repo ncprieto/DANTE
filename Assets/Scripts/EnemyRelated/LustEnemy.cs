@@ -7,7 +7,8 @@ public class LustEnemy : MonoBehaviour
 {
 
     public NavMeshAgent nmAgent;
-    public Transform player;
+    public GameObject player;
+    public PlayerHealth playerHP;
     public LayerMask groundLayer;
     public LayerMask playerLayer;
 
@@ -25,7 +26,8 @@ public class LustEnemy : MonoBehaviour
     // On creation of enemy
     void Awake()
     {
-        player = GameObject.Find("Player").transform;
+        player = GameObject.Find("Player");
+        playerHP = player.GetComponent<PlayerHealth>();
         nmAgent = GetComponent<NavMeshAgent>();
     }
 
@@ -82,15 +84,21 @@ public class LustEnemy : MonoBehaviour
     // Stalk state functions
     void StalkState()
     {
-        nmAgent.speed = 5;
-        nmAgent.SetDestination(player.position);
+        nmAgent.speed = 6;
+        nmAgent.SetDestination(player.transform.position);
     }
 
     // Chase state functions
     void ChaseState()
     {
-        nmAgent.speed = 15;
-        nmAgent.SetDestination(player.position);
+        nmAgent.speed = 13;
+        nmAgent.SetDestination(player.transform.position);
     }
 
+    // Send damage to player
+    void OnCollisionEnter(Collision col){
+        if (col.gameObject.tag == "Player"){
+            playerHP.ReceiveDamage(10, true);
+        }
+    }
 }
