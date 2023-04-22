@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8686938218594342354}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: FireDOTArea (5)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -44,7 +44,7 @@ GameObject:
   - component: {fileID: 5218503525329068531}
   - component: {fileID: 3044283238462761210}
   - component: {fileID: 8541283515974191169}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: FireParticle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4868,7 +4868,7 @@ GameObject:
   - component: {fileID: 2317860769980023975}
   - component: {fileID: 2514386755051460539}
   - component: {fileID: 2514697551622992299}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Fire
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -9699,7 +9699,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2317743085887614789}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: FireDOTArea
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -9734,7 +9734,7 @@ GameObject:
   - component: {fileID: 2317887665553118567}
   - component: {fileID: 2515014935218176805}
   - component: {fileID: 2514863763126260257}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: FireParticle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -14558,7 +14558,7 @@ GameObject:
   - component: {fileID: 5462022682062399297}
   - component: {fileID: 4315264881488674397}
   - component: {fileID: 5166450066271896558}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Fire
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -19391,7 +19391,7 @@ GameObject:
   - component: {fileID: 6888691908018935203}
   - component: {fileID: 7779449963384258515}
   - component: {fileID: 3178867524475239814}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: FireParticle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -24213,7 +24213,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 9016513865886241289}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: FireDOTArea (4)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -24246,7 +24246,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7743110093454704683}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: FireDOTArea (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -24281,7 +24281,7 @@ GameObject:
   - component: {fileID: 8777917885416500197}
   - component: {fileID: 4547843808854732777}
   - component: {fileID: 3671362942046079964}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: FireParticle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -29103,7 +29103,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3152964273874506882}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: FireDOTArea (3)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -29136,8 +29136,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2397965148855655667}
-  - component: {fileID: 2934661383674853664}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: FlameTornado
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -29153,8 +29152,8 @@ Transform:
   m_GameObject: {fileID: 4143339906242531090}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -14.764, y: 1.78, z: 18.521}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_LocalScale: {x: 1.5, y: 1.5, z: 1.5}
+  m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 6448591580937861654}
   - {fileID: 2317743085887614789}
@@ -29167,21 +29166,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &2934661383674853664
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4143339906242531090}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b771a12660bb1c040a636fa92512d290, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  player: {fileID: 0}
-  moveSpeed: 5
-  spinSpeed: 250
 --- !u!1 &4788247685628579946
 GameObject:
   m_ObjectHideFlags: 0
@@ -29193,7 +29177,7 @@ GameObject:
   - component: {fileID: 6746541647819753765}
   - component: {fileID: 1488696014857376476}
   - component: {fileID: 133720036502410581}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Fire
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -34026,7 +34010,7 @@ GameObject:
   - component: {fileID: 2936755047732978915}
   - component: {fileID: 4640775268608040454}
   - component: {fileID: 8374355429627285309}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Fire
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -38862,7 +38846,8 @@ GameObject:
   - component: {fileID: 6458105312030310692}
   - component: {fileID: 5491422193814468958}
   - component: {fileID: 5862930537767408428}
-  m_Layer: 0
+  - component: {fileID: 1678872753583559784}
+  m_Layer: 2
   m_Name: TornadoHitbox
   m_TagString: FireDOT
   m_Icon: {fileID: 0}
@@ -39863,6 +39848,22 @@ MeshCollider:
   m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: 0}
+--- !u!114 &1678872753583559784
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5072849258997646589}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b771a12660bb1c040a636fa92512d290, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  player: {fileID: 0}
+  playerHP: {fileID: 0}
+  moveSpeed: 5
+  spinSpeed: 250
 --- !u!1 &5894427600888887244
 GameObject:
   m_ObjectHideFlags: 0
@@ -39874,7 +39875,7 @@ GameObject:
   - component: {fileID: 7960641594881017235}
   - component: {fileID: 6329007231760378026}
   - component: {fileID: 6063785182745877237}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Fire
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -44707,7 +44708,7 @@ GameObject:
   - component: {fileID: 802371903720494627}
   - component: {fileID: 6602644628497407114}
   - component: {fileID: 3765014147753127502}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Fire
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -49540,7 +49541,7 @@ GameObject:
   - component: {fileID: 549020787987790939}
   - component: {fileID: 8866063273602387869}
   - component: {fileID: 6360178885380520008}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Fire
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -54373,7 +54374,7 @@ GameObject:
   - component: {fileID: 6827612369282038681}
   - component: {fileID: 6643100951236486034}
   - component: {fileID: 1113161899073916445}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: FireParticle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -59195,7 +59196,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6404576267409744883}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: FireDOTArea (6)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -59228,7 +59229,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8762733939720934999}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: FireDOTArea (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -59263,7 +59264,7 @@ GameObject:
   - component: {fileID: 1230177759710902765}
   - component: {fileID: 5966956579005029484}
   - component: {fileID: 8329356056356333245}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: FireParticle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -64087,7 +64088,7 @@ GameObject:
   - component: {fileID: 46063907130254440}
   - component: {fileID: 9201679708052166307}
   - component: {fileID: 204824755321151313}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: FireParticle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
