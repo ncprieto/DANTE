@@ -4,17 +4,19 @@ using UnityEngine;
 
 public class GunMovement : MonoBehaviour
 {
-    private GameObject player;
-    private Rigidbody rb;
-    private Camera playerCamera;
-    private Movement movement;
-    private GunAttributes gunAttributes;
+    protected GameObject player;
+    protected Rigidbody rb;
+    protected Camera playerCamera;
+    protected Movement movement;
+    protected GunAttributes gunAttributes;
+    protected FOVVFX fovVFX;
 
     public void Initialize(GameObject playerObj, GunAttributes ga)
     {
         player = playerObj;
         rb = player.GetComponent<Rigidbody>();
         movement = player.GetComponent<Movement>();
+        fovVFX = player.GetComponent<FOVVFX>();
         gunAttributes = ga;
     }
 

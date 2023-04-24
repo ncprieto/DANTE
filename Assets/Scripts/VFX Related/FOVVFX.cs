@@ -4,50 +4,68 @@ using UnityEngine;
 
 public class FOVVFX : MonoBehaviour
 {
-    public Camera cam;
     private float originalFOV;
+    private float currentFOV;
+
+    [Header ("Grapple FOV Variables")]
+    public float grappleFOVTime;
+    public float grappleFOVOffset;
+
+    [Header ("Revolver FOV Variables")]
+    public float revolverFOVTime;
+    public float revolverFOVOffset;
 
     void Start()
     {
-        originalFOV = cam.fieldOfView;
+        originalFOV = Camera.main.fieldOfView;
     }
 
-    private bool FOVLerpRunning;
-    IEnumerator FOVLerpCoroutine;
-    public void DoFOVLerpUp(float offset, float timeFrame)
+    void Update()
     {
-        float start = cam.fieldOfView;
-        if(FOVLerpRunning) StopCoroutine(FOVLerpCoroutine);
-        FOVLerpCoroutine = LerpFOV(start + offset, start, timeFrame);
-        StartCoroutine(FOVLerpCoroutine);
+        currentFOV = Camera.main.fieldOfView;
     }
 
-    public void DoFOVLerpDown(float offset, float timeFrame)
+    bool grappleFOVLerping;
+    float FOVAtGrapple;
+    IEnumerator grappleFOVCoroutine;
+    public void GrappleStartVFX()
     {
-        float end = cam.fieldOfView;
-        if(FOVLerpRunning) StopCoroutine(FOVLerpCoroutine);
-        FOVLerpCoroutine = LerpFOV(end - offset, end, timeFrame);
-        StartCoroutine(FOVLerpCoroutine);
+        FOVAtGrapple = currentFOV;
+        grappleFOVCoroutine = LerpFOV(currentFOV + grappleFOVOffset, currentFOV, grappleFOVTime, grappleFOVLerping);
+        StartCoroutine(grappleFOVCoroutine);
     }
 
-    public void DoFOVLerpToOriginal(float timeFrame)
+    public void GrappleEndVFX()
     {
-        float end = cam.fieldOfView;
-        if(FOVLerpRunning) StopCoroutine(FOVLerpCoroutine);
-        FOVLerpCoroutine = LerpFOV(originalFOV, end, timeFrame);
-        StartCoroutine(FOVLerpCoroutine);
+        if(grappleFOVLerping) StopCoroutine(grappleFOVCoroutine);
+        float newOffset = Mathf.Min(currentFOV - FOVAtGrapple, grappleFOVOffset);
+        grappleFOVCoroutine = LerpFOV(currentFOV - newOffset, currentFOV, grappleFOVTime, grappleFOVLerping);
+        StartCoroutine(grappleFOVCoroutine);
     }
 
-    IEnumerator LerpFOV(float start, float end, float timeFrame)
+    bool revolverFOVLerping;
+    float FOVAtRevolverShot;
+    IEnumerator revolverFOVCoroutine;
+    public void RevolverChainShotVFX()
     {
-        FOVLerpRunning = true;
+        Debug.Log("STARTING REVOLVER CHAIN SHOT VFX");
+    }
+
+    public void UndoRevolverVFX()
+    {
+        Debug.Log("UNDOING REVOLVER VFX");
+    }
+
+    IEnumerator LerpFOV(float start, float end, float timeFrame, bool tracker)
+    {
+        tracker = true;
         float timeLeft = timeFrame;
         while(timeLeft > 0)
         {
             timeLeft -= Time.deltaTime;
-            cam.fieldOfView = Mathf.Lerp(start, end, timeLeft / timeFrame);
+            Camera.main.fieldOfView = Mathf.Lerp(start, end, Mathf.Clamp(timeLeft / timeFrame, 0f, 1f));
             yield return null;
         }
-        FOVLerpRunning = false;
+        tracker = false;
     }
 }
