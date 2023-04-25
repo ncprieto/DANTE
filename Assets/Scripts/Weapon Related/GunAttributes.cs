@@ -52,6 +52,7 @@ public class GunAttributes : MonoBehaviour
                 gunMovement.ReceiveHitInfo(parent.name);
             }
             else{
+                gunMovement.ReceiveHitInfo(null);
                 shotTrail.SetPosition(1, rayOrigin + (Camera.main.transform.forward * weaponRange));
             }
             StartCoroutine(DrawTrail());

@@ -13,55 +13,44 @@ public class RevolverMovement : GunMovement
     int shotsHit;
     public override void ReceiveHitInfo(string tag)
     {
-        // if(tag == "CritHitbox")
-        // {
-        //     shotsHit++;
-        //     if(shotsHit == 1) StartCountdownCoroutine();                           // if player has hit a shot then start the check
-        //     else if(shotsHit > 1 && inChainShotWindow)
-        //     {
-        //         if(shotsHit < maxChainedShots + 1) Time.timeScale -= slowScale;    // if players has chained shots together they apply slow effect
-        //         StartCountdownCoroutine();
-        //     }
-        // }
-        // else                                                  // if players missed then completely cancel the slow effect
-        // {
-        //     StopCountdownCoroutine();
-        //     Time.timeScale = 1f;
-        //     shotsHit = 0;
-        //     return;
-        // }
-        shotsHit++;
-        if(shotsHit == 1) StartCountdownCoroutine();                           // if player has hit a shot then start the check
-        else if(shotsHit > 1 && inChainShotWindow)
+        if(tag != null)
         {
-            if(shotsHit < maxChainedShots + 1) Time.timeScale -= slowScale;    // if players has chained shots together they apply slow effect
-            StartCountdownCoroutine();
+            shotsHit++;
+            if(shotsHit == 1) StartCountdownCoroutine();           // if player has hit a shot then start the check
+            else if(shotsHit > 1 && ChainShotCoroutine != null)
+            {
+                if(shotsHit < maxChainedShots + 1)
+                {
+                    Time.timeScale -= slowScale;                  // if players has chained shots together they apply slow effect
+                    fovVFX.RevolverChainShotVFX(shotsHit);
+                }
+                StartCountdownCoroutine();
+            }
         }
+        else if(tag == null) UndoSlowAndVFX();
     }
 
-    bool ChainShotRunning;
     IEnumerator ChainShotCoroutine;
     void StartCountdownCoroutine()
     {
-        StopCountdownCoroutine();
+        if(ChainShotCoroutine != null) StopCoroutine(ChainShotCoroutine);
         ChainShotCoroutine = StartCountdown();
         StartCoroutine(ChainShotCoroutine);
     }
 
-    void StopCountdownCoroutine()
-    {
-        if(ChainShotRunning) StopCoroutine(ChainShotCoroutine);
-    }
-
-    bool inChainShotWindow;
     private IEnumerator StartCountdown()
     {
-        ChainShotRunning = true;
-        inChainShotWindow = true;
         yield return new WaitForSeconds(maxTimeBetweenShots);
-        inChainShotWindow = false;
-        ChainShotRunning = false;
-        Time.timeScale = 1f;
-        shotsHit = 0;
+        UndoSlowAndVFX();
+    }
+
+    private void UndoSlowAndVFX()
+    {
+        if(shotsHit > 1)
+        {
+            fovVFX.UndoRevolverVFX();
+            Time.timeScale = 1f;
+            shotsHit = 0;
+        }
     }
 }
