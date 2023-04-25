@@ -19,7 +19,7 @@ public class PlayerHealth : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        // Debug.Log("HEALTH: " + playerCurrentHealth);
+        Debug.Log("HEALTH: " + playerCurrentHealth);
     }
 
     // Health pickups
