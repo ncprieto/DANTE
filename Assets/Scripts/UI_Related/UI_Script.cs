@@ -33,6 +33,8 @@ public class UI_Script : MonoBehaviour
 
     public PlayerHealth health;
 
+    public HealthBarScript healthBar;
+
     void Start()
     {
         healthTextGUI = healthTextObj.GetComponent<TextMeshProUGUI>();
@@ -93,6 +95,7 @@ public class UI_Script : MonoBehaviour
 
     public void updateHealthUI(int n)
     {
+        healthBar.setSliderHealth(n);
         healthTextGUI.text = n.ToString();
     }
 }
