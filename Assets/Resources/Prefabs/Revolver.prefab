@@ -203,6 +203,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   fireRate: 0.5
   weaponRange: 35
+  hitboxLayer:
+    serializedVersion: 2
+    m_Bits: 256
+  damageValues: {fileID: 11400000, guid: 7773607d0c1914da69040a69a74b8cbf, type: 2}
   trailOrigin: {fileID: 2676563042148244215}
   trailDuration: 0.1
   gunMovement: {fileID: 7727793071097516243}
