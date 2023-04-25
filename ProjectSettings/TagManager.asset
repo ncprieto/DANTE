@@ -17,8 +17,12 @@ TagManager:
   - UI
   - Ground
   - Player
+  -
   - 
   - Obstacle
+  - Hitbox
+  - 
+  -
   - 
   - 
   - 

@@ -3,14 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class LustEnemy : MonoBehaviour
+public class LustEnemy : Enemy
 {
-
+    [Header ("Lust Specfic Variables")]
     public NavMeshAgent nmAgent;
-    public GameObject player;
-    public PlayerHealth playerHP;
-    public LayerMask groundLayer;
-    public LayerMask playerLayer;
 
     // Patrol state vars
     public Vector3 patrolTo;
@@ -22,14 +18,6 @@ public class LustEnemy : MonoBehaviour
     public float chaseRange;
     public bool inStalkRange;
     public bool inChaseRange;
-
-    // On creation of enemy
-    void Awake()
-    {
-        player = GameObject.Find("Player");
-        playerHP = player.GetComponent<PlayerHealth>();
-        nmAgent = GetComponent<NavMeshAgent>();
-    }
 
     // Update is called once per frame
     void Update()
@@ -47,7 +35,6 @@ public class LustEnemy : MonoBehaviour
         if (inStalkRange && inChaseRange){
             ChaseState();
         }
-
     }
 
     // Patrol state functions

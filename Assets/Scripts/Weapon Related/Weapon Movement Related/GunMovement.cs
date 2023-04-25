@@ -18,7 +18,7 @@ public class GunMovement : MonoBehaviour
         gunAttributes = ga;
     }
 
-    public virtual void ReceiveHitInfo(RaycastHit hit)
+    public virtual void ReceiveHitInfo(string tag)
     {
         // overwritten
     }

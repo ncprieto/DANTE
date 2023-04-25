@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 8435643816808417542}
   - component: {fileID: 8435643816808417543}
   - component: {fileID: 8435643816808417592}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Sphere
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -109,7 +109,7 @@ GameObject:
   - component: {fileID: 8435643816930341096}
   - component: {fileID: 8435643816930341097}
   - component: {fileID: 8435643816930341098}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Capsule (3)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -207,7 +207,7 @@ GameObject:
   - component: {fileID: 8435643817128784312}
   - component: {fileID: 8435643817128784313}
   - component: {fileID: 8435643817128784314}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Capsule (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -302,7 +302,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8435643817239397195}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: CritHitbox
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -337,7 +337,7 @@ GameObject:
   - component: {fileID: 8435643817331327319}
   - component: {fileID: 8435643817331327304}
   - component: {fileID: 8435643817331327305}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Capsule (5)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -496,15 +496,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3b8fa3a4251a9d1479cd5a5953050bd2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  nmAgent: {fileID: 8435643818165358570}
-  player: {fileID: 0}
-  playerHP: {fileID: 0}
+  startingHealth: 100
   groundLayer:
     serializedVersion: 2
     m_Bits: 64
   playerLayer:
     serializedVersion: 2
     m_Bits: 128
+  nmAgent: {fileID: 8435643818165358570}
   patrolTo: {x: 0, y: 0, z: 0}
   patrolDistance: 7
   stalkRange: 32
@@ -596,7 +595,7 @@ GameObject:
   - component: {fileID: 8435643818272525875}
   - component: {fileID: 8435643818272525876}
   - component: {fileID: 8435643818272525877}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Capsule (6)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -694,7 +693,7 @@ GameObject:
   - component: {fileID: 8435643818274622116}
   - component: {fileID: 8435643818274622117}
   - component: {fileID: 8435643818274622118}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Capsule
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -792,7 +791,7 @@ GameObject:
   - component: {fileID: 8435643818385963507}
   - component: {fileID: 8435643818385963508}
   - component: {fileID: 8435643818385963509}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Capsule (4)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -887,7 +886,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8435643818715428859}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: NormalHitbox
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -928,7 +927,7 @@ GameObject:
   - component: {fileID: 8435643818774200509}
   - component: {fileID: 8435643818774200510}
   - component: {fileID: 8435643818774200511}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Capsule (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
