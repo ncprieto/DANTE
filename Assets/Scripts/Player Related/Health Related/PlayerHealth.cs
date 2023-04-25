@@ -28,35 +28,28 @@ public class PlayerHealth : MonoBehaviour
     // Health pickups
     void OnTriggerEnter(Collider col){
         if (col.gameObject.tag == "SmallHealth"){
-            Destroy(col.gameObject);
-            if (playerCurrentHealth < 100){
+            if(playerCurrentHealth < 100)
+            {
+                Destroy(col.gameObject);
                 playerCurrentHealth += 5;
-                UI.updateHealthUI(playerCurrentHealth);//call UI function
-                if (playerCurrentHealth >= 100){
-                    playerCurrentHealth = 100;
-                }
             }
         }
         else if (col.gameObject.tag == "MediumHealth"){
-            Destroy(col.gameObject);
-            if (playerCurrentHealth < 100){
+            if(playerCurrentHealth < 100)
+            {
+                Destroy(col.gameObject);
                 playerCurrentHealth += 10;
-                UI.updateHealthUI(playerCurrentHealth);//call UI function
-                if (playerCurrentHealth >= 100){
-                    playerCurrentHealth = 100;
-                }
             }
         }
         else if (col.gameObject.tag == "LargeHealth"){
-            Destroy(col.gameObject);
-            if (playerCurrentHealth < 100){
+            if(playerCurrentHealth < 100)
+            {
+                Destroy(col.gameObject);
                 playerCurrentHealth += 25;
-                UI.updateHealthUI(playerCurrentHealth);//call UI function
-                if (playerCurrentHealth >= 100){
-                    playerCurrentHealth = 100;
-                }
             }
         }
+        playerCurrentHealth = Mathf.Clamp(playerCurrentHealth, 0, 100);
+        UI.updateHealthUI(playerCurrentHealth);//call UI function
     }
 
     // Called by enemy scripts
