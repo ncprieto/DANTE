@@ -48,7 +48,7 @@ public class UI_Script : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        gameSpeedText.text = player.velocity.magnitude.ToString("0.##");
+        gameSpeedText.text = player.velocity.magnitude.ToString("0.##") + " m/s";
 
         //check if timer is on
         if (timerOn)
@@ -89,7 +89,7 @@ public class UI_Script : MonoBehaviour
 
     void changeBhopText(int count)
     {
-        moveCounterText.text = "X " + count.ToString();
+        moveCounterText.text = "X " + count.ToString() + " bHop Chain";
         multiplierText.SetActive(true);
     }
 

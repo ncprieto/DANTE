@@ -9,12 +9,12 @@ public class PlayerHealth : MonoBehaviour
     public int playerCurrentHealth = 100;
     private float dotTimer;
     public UI_Script UI;            //To call function in UI
+    public DamageVignette dmgVFX;
 
     // Start is called before the first frame update
     void Start()
     {
         playerCurrentHealth = 50;
-        
         dotTimer = 0;
     }
 
@@ -56,6 +56,7 @@ public class PlayerHealth : MonoBehaviour
     public void ReceiveDamage(int damageTaken, bool hasIFrames){
         if ((playerCurrentHealth > 0) && !isInvincible){
             playerCurrentHealth -= damageTaken;
+            StartCoroutine(dmgVFX.DamageVFX());
             UI.updateHealthUI(playerCurrentHealth);//call UI function
             if (playerCurrentHealth <= 0){
                 playerCurrentHealth = 0;
@@ -69,7 +70,7 @@ public class PlayerHealth : MonoBehaviour
     IEnumerator IFrames()
     {
         isInvincible = true;
-        yield return new WaitForSeconds(3f);
+        yield return new WaitForSeconds(1f);
         isInvincible = false;
     }
 
