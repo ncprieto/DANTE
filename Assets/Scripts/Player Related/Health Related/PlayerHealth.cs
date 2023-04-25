@@ -57,9 +57,10 @@ public class PlayerHealth : MonoBehaviour
         if ((playerCurrentHealth > 0) && !isInvincible){
             playerCurrentHealth -= damageTaken;
             StartCoroutine(dmgVFX.DamageVFX());
-            UI.updateHealthUI(playerCurrentHealth);//call UI function
+            
             if (playerCurrentHealth <= 0){
                 playerCurrentHealth = 0;
+                UI.updateHealthUI(playerCurrentHealth);//call UI function
             }
             if (hasIFrames){
                 StartCoroutine(IFrames());
