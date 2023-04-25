@@ -81,9 +81,18 @@ public class Movement : MonoBehaviour
             float speed = baseMoveSpeed > moveSpeed ? baseMoveSpeed : moveSpeed;
             rb.velocity = VectorToGrapplePoint() * speed;                                                     // set velocity towards grapple point with some speed multiplier
             lineRen.SetPosition(0, orientation.position);                                           // set vertex 0 of line renderer to player position
-            if(Vector3.Distance(grapplePoint, orientation.position) < 1.1f)
+            float dist = hitGrapplePoint ? 5f : 1.2f;
+            if(Vector3.Distance(grapplePoint, orientation.position) <= dist)
             {
-                DoGrappleEnd(grappleReflect * grappleHorizontalBoost, transform.up * grappleVerticalBoost);
+                Vector3 horizontal = grappleReflect * grappleHorizontalBoost;
+                Vector3 vertical = transform.up * grappleVerticalBoost;
+                if(hitGrapplePoint)
+                {
+                    horizontal = Vector3.zero;
+                    vertical *= 1.5f;
+                    hitGrapplePoint = false;
+                }
+                DoGrappleEnd(horizontal, vertical);
             }          // check if less than a distance of 1.1 from the grapplePoint
         }
         if(isGrounded)
@@ -152,6 +161,7 @@ public class Movement : MonoBehaviour
     // OnGrapplePressed() executes functions relating to grapple functionality.
     bool grappling;
     bool grappleOnCooldown;
+    bool hitGrapplePoint;
     Vector3 grapplePoint;
     void OnGrapplePressed()
     {
@@ -160,19 +170,12 @@ public class Movement : MonoBehaviour
             RaycastHit hit;
             if(Physics.Raycast(orientation.position, playerCamera.transform.forward, out hit, grappleRange))
             {
-                if(hit.transform.parent.name == "GrapplePoint") // change
-                {
-                    Vector3 teleportTo = new Vector3(hit.transform.position.x, hit.transform.position.y + 4, hit.transform.position.z);
-                    transform.position = teleportTo;
-                    rb.velocity = Vector3.zero;
-                    rb.velocity = transform.up * grapplePointVerticalBoost;
-                    LimitGrappleSpeed(baseMoveSpeed, grappleDecelMaxSpeed, grappleDecelerateTime);
-                    return;
-                }
+                hitGrapplePoint = hit.transform.name == "GrapplePoint" || hit.transform.parent.name == "GrapplePoint" ? true : false;
                 grapplePoint = hit.point;
                 ToggleGrapple();
                 CalculateReflectVector(hit.normal);
-                LimitGrappleSpeed(grappleAccelMaxSpeed, baseMoveSpeed, grappleAccelerateTime);
+                int factor = hitGrapplePoint ? 10 : 1;
+                LimitGrappleSpeed(grappleAccelMaxSpeed * factor, baseMoveSpeed, grappleAccelerateTime);
                 fovVFX.GrappleStartVFX();
             }
         }
