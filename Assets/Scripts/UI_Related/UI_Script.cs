@@ -28,16 +28,18 @@ public class UI_Script : MonoBehaviour
 
     //Health stuff
     [Header("Health Related")]
-    public int playerHealth;
-    public GameObject healthText;
-    TextMeshProUGUI healthTextMesh;
+    public GameObject healthTextObj;
+    TextMeshProUGUI healthTextGUI;
+
+    public PlayerHealth health;
 
     void Start()
     {
+        healthTextGUI = healthTextObj.GetComponent<TextMeshProUGUI>();
         gameSpeedText = speedText.GetComponent<TextMeshProUGUI>();
         gameTimerText = timerText.GetComponent<TextMeshProUGUI>();
         moveCounterText = multiplierText.GetComponent<TextMeshProUGUI>();
-        healthTextMesh = healthText.GetComponent<TextMeshProUGUI>();
+        updateHealthUI(health.playerCurrentHealth);
 
     }
 
@@ -91,6 +93,6 @@ public class UI_Script : MonoBehaviour
 
     public void updateHealthUI(int n)
     {
-        healthTextMesh.text = n.ToString();
+        healthTextGUI.text = n.ToString();
     }
 }
