@@ -11,24 +11,31 @@ public class RevolverMovement : GunMovement
     public float maxTimeBetweenShots;
 
     int shotsHit;
-    public override void ReceiveHitInfo(RaycastHit hit)
+    public override void ReceiveHitInfo(string tag)
     {
-        if(hit.transform == null)                                                  // if players missed then completely cancel the slow effect
+        // if(tag == "CritHitbox")
+        // {
+        //     shotsHit++;
+        //     if(shotsHit == 1) StartCountdownCoroutine();                           // if player has hit a shot then start the check
+        //     else if(shotsHit > 1 && inChainShotWindow)
+        //     {
+        //         if(shotsHit < maxChainedShots + 1) Time.timeScale -= slowScale;    // if players has chained shots together they apply slow effect
+        //         StartCountdownCoroutine();
+        //     }
+        // }
+        // else                                                  // if players missed then completely cancel the slow effect
+        // {
+        //     StopCountdownCoroutine();
+        //     Time.timeScale = 1f;
+        //     shotsHit = 0;
+        //     return;
+        // }
+        shotsHit++;
+        if(shotsHit == 1) StartCountdownCoroutine();                           // if player has hit a shot then start the check
+        else if(shotsHit > 1 && inChainShotWindow)
         {
-            StopCountdownCoroutine();
-            Time.timeScale = 1f;
-            shotsHit = 0;
-            return;
-        }
-        else
-        {
-            shotsHit++;
-            if(shotsHit == 1) StartCountdownCoroutine();                           // if player has hit a shot then start the check
-            else if(shotsHit > 1 && inChainShotWindow)
-            {
-                if(shotsHit < maxChainedShots + 1) Time.timeScale -= slowScale;    // if players has chained shots together they apply slow effect
-                StartCountdownCoroutine();
-            }
+            if(shotsHit < maxChainedShots + 1) Time.timeScale -= slowScale;    // if players has chained shots together they apply slow effect
+            StartCountdownCoroutine();
         }
     }
 
