@@ -23,11 +23,14 @@ public class GunAttributes : MonoBehaviour
     
     private Animator fireAnim;
     private float sinceLastFire = 0;
+    private UI_Script UI;
 
     void Awake(){
         shotTrail = GetComponent<LineRenderer>();
         fireAnim = GetComponent<Animator>();
         gunMovement.Initialize(GameObject.Find("Player"), this);
+        UI = GameObject.Find("Canvas").GetComponent<UI_Script>();
+
         //playerAim = GameObject.Find("Orientation").transform;
         //mainCam = GameObject.Find("Main Camera").transform;
     }
@@ -44,12 +47,21 @@ public class GunAttributes : MonoBehaviour
             RaycastHit hit;
             if (Physics.Raycast(rayOrigin, Camera.main.transform.forward, out hit, weaponRange, hitboxLayer)){
                 shotTrail.SetPosition(1, hit.point);
-                GameObject parent = hit.transform.parent.gameObject;
 
-                // calculate damage based on which hit box was hit
-                float damageToGive = damageValues.CalculateDamage(parent.name);
-                hit.transform.parent.parent.GetComponent<Enemy>().ReceiveDamage(damageToGive);
-                gunMovement.ReceiveHitInfo(parent.name);
+                // get correct gameobjects and enemy base script
+                GameObject root    = hit.transform.parent.parent.gameObject;
+                GameObject hitbox  = hit.transform.parent.gameObject;
+                Enemy enemyHit = root.GetComponent<Enemy>();
+                // calculate damage and if necessary update time UI
+                float damageToGive = damageValues.CalculateDamage(hitbox.name);                      // calculate damage that the enemy will take
+                if(enemyHit.IsThisDamageLethal(damageToGive))                                        // if this damage is lethal then update time on the UI
+                {
+                    float timeToAdd = root.GetComponent<Enemy>().GetTimeRewardValue(hitbox.name);
+                    UI.AddTime(timeToAdd);
+                }
+                enemyHit.ReceiveDamage(damageToGive);                                                // actually apply damage to the enemy that was hit
+
+                gunMovement.ReceiveHitInfo(hitbox.name);
             }
             else{
                 gunMovement.ReceiveHitInfo(null);

@@ -503,6 +503,7 @@ MonoBehaviour:
   playerLayer:
     serializedVersion: 2
     m_Bits: 128
+  timeValues: {fileID: 11400000, guid: 11283353a9c15344d8cf43fe5de90466, type: 2}
   nmAgent: {fileID: 8435643818165358570}
   patrolTo: {x: 0, y: 0, z: 0}
   patrolDistance: 7

@@ -73,6 +73,7 @@ public class UI_Script : MonoBehaviour
                 timerOn = false;
             }
         }
+        if(Input.GetKeyDown(KeyCode.G)) AddTime(5f);
     }
 
     void updateTimerText(float currentTime)             // 80
@@ -85,6 +86,12 @@ public class UI_Script : MonoBehaviour
 
         //update the text     
         gameTimerText.text = minutes.ToString() + " : " + seconds.ToString() + "." + milliseconds.ToString();
+    }
+
+    public void AddTime(float amount)
+    {
+        Debug.Log("ADDING THIS MUCH TIME " + amount);
+        timeLeft += amount;
     }
 
     void changeBhopText(int count)

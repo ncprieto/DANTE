@@ -8,6 +8,7 @@ public class Enemy : MonoBehaviour
     public float startingHealth;
     public LayerMask groundLayer;
     public LayerMask playerLayer;
+    public TimeValues timeValues;
 
     protected GameObject player;
     protected PlayerHealth playerHP;
@@ -23,6 +24,7 @@ public class Enemy : MonoBehaviour
         currentHealth = startingHealth;
     }
 
+    // Health System Related Functions
     protected float currentHealth;
     public void ReceiveDamage(float dmg)
     {
@@ -39,5 +41,16 @@ public class Enemy : MonoBehaviour
     public float GetCurrentHealth()
     {
         return currentHealth;
+    }
+
+    public bool IsThisDamageLethal(float amount)
+    {
+        return currentHealth - amount <= 0;
+    }
+
+    // Time Value For Enemy Specific
+    public float GetTimeRewardValue(string hitbox)
+    {
+        return timeValues.GetRewardValue(hitbox);
     }
 }

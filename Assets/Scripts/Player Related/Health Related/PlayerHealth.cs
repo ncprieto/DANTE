@@ -28,23 +28,23 @@ public class PlayerHealth : MonoBehaviour
     // Health pickups
     void OnTriggerEnter(Collider col){
         if (col.gameObject.tag == "SmallHealth"){
+            Destroy(col.gameObject);
             if(playerCurrentHealth < 100)
             {
-                Destroy(col.gameObject);
                 playerCurrentHealth += 5;
             }
         }
         else if (col.gameObject.tag == "MediumHealth"){
+            Destroy(col.gameObject);
             if(playerCurrentHealth < 100)
             {
-                Destroy(col.gameObject);
                 playerCurrentHealth += 10;
             }
         }
         else if (col.gameObject.tag == "LargeHealth"){
+            Destroy(col.gameObject);
             if(playerCurrentHealth < 100)
             {
-                Destroy(col.gameObject);
                 playerCurrentHealth += 25;
             }
         }
