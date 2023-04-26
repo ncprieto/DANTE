@@ -93,7 +93,7 @@ public class Movement : MonoBehaviour
                     hitGrapplePoint = false;
                 }
                 DoGrappleEnd(horizontal, vertical);
-            }          // check if less than a distance of 1.1 from the grapplePoint
+            }
         }
         if(isGrounded)
         {
@@ -244,27 +244,26 @@ public class Movement : MonoBehaviour
         rb.velocity = horizontal + vertical;
         LimitGrappleSpeed(baseMoveSpeed, grappleDecelMaxSpeed, grappleDecelerateTime);
         fovVFX.GrappleEndVFX();
-        StartCoroutine(StartGrappleCooldown());
+        StartCoroutine(StartCooldown(grappleOnCooldown, grappleCooldown));
 
         Debug.DrawLine(grapplePoint, grapplePoint + horizontal + vertical, Color.cyan, 1f);                     // debug vector that player get launched to
     }
 
-    private IEnumerator StartGrappleCooldown()
+    private IEnumerator StartCooldown(bool condition, float time)
     {
-        grappleOnCooldown = true;
-        yield return new WaitForSeconds(grappleCooldown);
-        grappleOnCooldown = false;
+        condition = true;
+        yield return new WaitForSeconds(time);
+        condition = false;
     }
 
     /* LimitGrappleSpeed() keeps track if the grappleInterpolate is running. If
      * so it stops it then, sets the player's movement speed back to its original value
      * then restarts the coroutine.
      */
-    bool grappleCoroutineRunning;
     IEnumerator grappleLerpCoroutine;
     void LimitGrappleSpeed(float start, float end, float timeFrame)
     {
-        if(grappleCoroutineRunning) StopCoroutine(grappleLerpCoroutine);
+        if(grappleLerpCoroutine != null) StopCoroutine(grappleLerpCoroutine);
         grappleLerpCoroutine = LerpGrappleSpeed(start, end, timeFrame);
         StartCoroutine(grappleLerpCoroutine);
     }
@@ -277,27 +276,22 @@ public class Movement : MonoBehaviour
     float baseMoveSpeed;
     private IEnumerator LerpGrappleSpeed(float start, float end, float window)
     {
-        grappleCoroutineRunning = true;
         float timeLeft = window;
-
         while(timeLeft > 0f)
         {
             timeLeft -= Time.deltaTime;
             moveSpeed = Mathf.Lerp(start, end, Mathf.Clamp(timeLeft / window, 0f, 1f));  // get new interpolated move speed
             yield return null;
         }
-
-        grappleCoroutineRunning = false;
     }
 
     /* StartBHopCoroutine() will stop the bHopCoroutine is it's running
      * and start if it isn't.
      */
-    bool bHopCoroutineRunning;
     IEnumerator bHopCoroutine;
     void StartBHopCoroutine()
     {
-        if(bHopCoroutineRunning) StopCoroutine(bHopCoroutine);
+        if(bHopCoroutine != null) StopCoroutine(bHopCoroutine);
         bHopCoroutine = CheckBHopWindow();
         StartCoroutine(bHopCoroutine);
     }
@@ -310,19 +304,18 @@ public class Movement : MonoBehaviour
      */
     private IEnumerator CheckBHopWindow()
     {
-        bHopCoroutineRunning = true;
         float timer = bHopWindow;
         while(timer > 0)
         {
             if(Input.GetKeyUp(jump)){
                 bHopCount += bHopCount < bHopMax ? 1 : 0;
+                // if(bHopCount < bHopMax) fovVFX.BHopVFX(bHopCount);
                 yield break;
             };
             timer -= Time.deltaTime;
             yield return null;
         }
+        // if(bHopCount > 1) fovVFX.UndoBHopVFX();
         bHopCount = 0;
-        bHopCoroutineRunning = false;
-        yield break;
     }
 }

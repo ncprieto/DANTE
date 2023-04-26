@@ -16651,6 +16651,8 @@ MonoBehaviour:
   grappleFOVOffset: 25
   revolverFOVTime: 0.1
   revolverFOVOffset: 5
+  bHopFOVTime: 0.1
+  bHopFOVOffset: 2.5
 --- !u!1 &940157611
 GameObject:
   m_ObjectHideFlags: 0

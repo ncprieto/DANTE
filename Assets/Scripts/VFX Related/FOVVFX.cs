@@ -15,6 +15,10 @@ public class FOVVFX : MonoBehaviour
     public float revolverFOVTime;
     public float revolverFOVOffset;
 
+    [Header ("B Hop FOV Variables")]
+    public float bHopFOVTime;
+    public float bHopFOVOffset;
+
     void Start()
     {
         originalFOV = Camera.main.fieldOfView;
@@ -25,40 +29,56 @@ public class FOVVFX : MonoBehaviour
         currentFOV = Camera.main.fieldOfView;
     }
 
+    // Grapple Realted FOV Functions
     float FOVAtGrapple;
     IEnumerator grappleFOVCoroutine;
     public void GrappleStartVFX()
     {
-        if(grappleFOVCoroutine != null) StopCoroutine(grappleFOVCoroutine);
         FOVAtGrapple = currentFOV;
-        grappleFOVCoroutine = LerpFOV(currentFOV + grappleFOVOffset, currentFOV, grappleFOVTime);
-        StartCoroutine(grappleFOVCoroutine);
+        StartFOVVFX(grappleFOVCoroutine, currentFOV + grappleFOVOffset, currentFOV, grappleFOVTime);
     }
 
     public void GrappleEndVFX()
     {
-        if(grappleFOVCoroutine != null) StopCoroutine(grappleFOVCoroutine);
         float start = currentFOV < FOVAtGrapple ? originalFOV : FOVAtGrapple;
-        grappleFOVCoroutine = LerpFOV(start, currentFOV, grappleFOVTime);
-        StartCoroutine(grappleFOVCoroutine);
+        StartFOVVFX(grappleFOVCoroutine, start, currentFOV, grappleFOVTime);
     }
 
+    // Revolver Related FOV Functions
     float FOVAtFirstShot;
     IEnumerator revolverFOVCoroutine;
     public void RevolverChainShotVFX(int shot)
     {
-        if(revolverFOVCoroutine != null) StopCoroutine(revolverFOVCoroutine);
         if(shot == 2) FOVAtFirstShot = currentFOV;
-        revolverFOVCoroutine = LerpFOV(currentFOV + revolverFOVOffset, currentFOV, revolverFOVTime);
-        StartCoroutine(revolverFOVCoroutine);
+        StartFOVVFX(revolverFOVCoroutine, currentFOV + revolverFOVOffset, currentFOV, revolverFOVTime);
     }
 
     public void UndoRevolverVFX()
     {
-        if(revolverFOVCoroutine != null) StopCoroutine(revolverFOVCoroutine);
         float start = currentFOV < FOVAtFirstShot ? originalFOV : FOVAtFirstShot;
-        revolverFOVCoroutine = LerpFOV(start, currentFOV, revolverFOVTime);
-        StartCoroutine(revolverFOVCoroutine);
+        StartFOVVFX(revolverFOVCoroutine, start, currentFOV, revolverFOVTime);
+    }
+
+    // B Hop Related FOV Functions
+    float FOVAtBHop;
+    IEnumerator bHopFOVCoroutine;
+    public void BHopVFX(int count)
+    {
+        if(count == 1) FOVAtBHop = currentFOV;
+        StartFOVVFX(bHopFOVCoroutine, currentFOV + bHopFOVOffset, currentFOV, bHopFOVTime);
+    }
+
+    public void UndoBHopVFX()
+    {
+        float start = currentFOV < FOVAtBHop ? originalFOV : FOVAtBHop;
+        StartFOVVFX(bHopFOVCoroutine, start, currentFOV, bHopFOVTime);
+    }
+
+    private void StartFOVVFX(IEnumerator coroutine, float start, float end, float time)
+    {
+        if(coroutine != null) StopCoroutine(coroutine);
+        coroutine = LerpFOV(start, end, time);
+        StartCoroutine(coroutine);
     }
 
     IEnumerator LerpFOV(float start, float end, float timeFrame)

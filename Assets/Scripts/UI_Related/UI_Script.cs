@@ -73,7 +73,6 @@ public class UI_Script : MonoBehaviour
                 timerOn = false;
             }
         }
-        if(Input.GetKeyDown(KeyCode.G)) AddTime(5f);
     }
 
     void updateTimerText(float currentTime)             // 80
@@ -90,7 +89,6 @@ public class UI_Script : MonoBehaviour
 
     public void AddTime(float amount)
     {
-        Debug.Log("ADDING THIS MUCH TIME " + amount);
         timeLeft += amount;
     }
 
