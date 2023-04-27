@@ -8,7 +8,8 @@ public class Movement : MonoBehaviour
     public Transform orientation;
     public LayerMask ground;
     public FOVVFX fovVFX;
-    public Camera playerCamera;
+    public GameObject playerCamera;
+    
 
     [Header("Input")]
     public KeyCode forward;
@@ -23,10 +24,9 @@ public class Movement : MonoBehaviour
     public float groundAccel;
     public float groundDecel;
     public float airAccel;
+    public float airDecel;
     public float jumpHeight;
-
-    private bool justJumped;
-    private bool apexReached;
+    public bool isGrounded;
 
     [Header("B Hop Variables")]
     public int bHopMax;
@@ -59,7 +59,6 @@ public class Movement : MonoBehaviour
         baseMoveSpeed = moveSpeed;
     }
 
-    public bool isGrounded;
     bool wasInAir;
     void Update()
     {
@@ -95,16 +94,14 @@ public class Movement : MonoBehaviour
                 DoGrappleEnd(horizontal, vertical);
             }
         }
-        if(isGrounded)
-        {
-            if(!GetInputs() && rb.velocity.magnitude > 0) rb.velocity -= rb.velocity / groundDecel;         // slow player down if they were just moving
-        }
+        float decel = isGrounded ? groundDecel : airDecel;
+        if(!GetInputs() && rb.velocity.magnitude > 0) rb.velocity -= rb.velocity / decel;
         CapSpeed();
     }
     
     int fb;
     int lr;
-    bool GetInputs()
+    public bool GetInputs()
     {
         // converts inputs into 0, 1, or -1 used for multiplying direction vectors
         fb =  Input.GetKey(forward)  ? 1 : 0;
@@ -168,7 +165,7 @@ public class Movement : MonoBehaviour
         if(!grappling && !grappleOnCooldown)
         {
             RaycastHit hit;
-            if(Physics.Raycast(orientation.position, playerCamera.transform.forward, out hit, grappleRange))
+            if(Physics.Raycast(playerCamera.transform.position, playerCamera.transform.forward, out hit, grappleRange))
             {
                 hitGrapplePoint = hit.transform.name == "GrapplePoint" || hit.transform.parent.name == "GrapplePoint" ? true : false;
                 grapplePoint = hit.point;
@@ -209,7 +206,7 @@ public class Movement : MonoBehaviour
      */
     Vector3 VectorToGrapplePoint()
     {
-        Vector3 dir = grapplePoint - orientation.position;
+        Vector3 dir = grapplePoint - playerCamera.transform.position;
         return dir.normalized;
     }
 
@@ -244,16 +241,16 @@ public class Movement : MonoBehaviour
         rb.velocity = horizontal + vertical;
         LimitGrappleSpeed(baseMoveSpeed, grappleDecelMaxSpeed, grappleDecelerateTime);
         fovVFX.GrappleEndVFX();
-        StartCoroutine(StartCooldown(grappleOnCooldown, grappleCooldown));
+        StartCoroutine(StartGrappleCooldown());
 
         Debug.DrawLine(grapplePoint, grapplePoint + horizontal + vertical, Color.cyan, 1f);                     // debug vector that player get launched to
     }
 
-    private IEnumerator StartCooldown(bool condition, float time)
+    private IEnumerator StartGrappleCooldown()
     {
-        condition = true;
-        yield return new WaitForSeconds(time);
-        condition = false;
+        grappleOnCooldown = true;
+        yield return new WaitForSeconds(grappleCooldown);
+        grappleOnCooldown = false;
     }
 
     /* LimitGrappleSpeed() keeps track if the grappleInterpolate is running. If

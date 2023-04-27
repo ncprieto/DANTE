@@ -35,13 +35,17 @@ public class FOVVFX : MonoBehaviour
     public void GrappleStartVFX()
     {
         FOVAtGrapple = currentFOV;
-        StartFOVVFX(grappleFOVCoroutine, currentFOV + grappleFOVOffset, currentFOV, grappleFOVTime);
+        if(grappleFOVCoroutine != null) StopCoroutine(grappleFOVCoroutine);
+        grappleFOVCoroutine = LerpFOV(currentFOV + grappleFOVOffset, currentFOV, grappleFOVTime);
+        StartCoroutine(grappleFOVCoroutine);
     }
 
     public void GrappleEndVFX()
     {
-        float start = currentFOV < FOVAtGrapple ? originalFOV : FOVAtGrapple;
-        StartFOVVFX(grappleFOVCoroutine, start, currentFOV, grappleFOVTime);
+        if(grappleFOVCoroutine != null) StopCoroutine(grappleFOVCoroutine);
+        float start = currentFOV < FOVAtGrapple ? originalFOV : FOVAtGrapple;    
+        grappleFOVCoroutine = LerpFOV(start, currentFOV, grappleFOVTime);
+        StartCoroutine(grappleFOVCoroutine);
     }
 
     // Revolver Related FOV Functions
@@ -50,13 +54,17 @@ public class FOVVFX : MonoBehaviour
     public void RevolverChainShotVFX(int shot)
     {
         if(shot == 2) FOVAtFirstShot = currentFOV;
-        StartFOVVFX(revolverFOVCoroutine, currentFOV + revolverFOVOffset, currentFOV, revolverFOVTime);
+        if(revolverFOVCoroutine != null) StopCoroutine(revolverFOVCoroutine);
+        revolverFOVCoroutine = LerpFOV(currentFOV + revolverFOVOffset, currentFOV, revolverFOVTime);
+        StartCoroutine(revolverFOVCoroutine);
     }
 
     public void UndoRevolverVFX()
     {
+        if(revolverFOVCoroutine != null) StopCoroutine(revolverFOVCoroutine);
         float start = currentFOV < FOVAtFirstShot ? originalFOV : FOVAtFirstShot;
-        StartFOVVFX(revolverFOVCoroutine, start, currentFOV, revolverFOVTime);
+        revolverFOVCoroutine = LerpFOV(start, currentFOV, revolverFOVTime);
+        StartCoroutine(revolverFOVCoroutine);
     }
 
     // B Hop Related FOV Functions
@@ -65,20 +73,17 @@ public class FOVVFX : MonoBehaviour
     public void BHopVFX(int count)
     {
         if(count == 1) FOVAtBHop = currentFOV;
-        StartFOVVFX(bHopFOVCoroutine, currentFOV + bHopFOVOffset, currentFOV, bHopFOVTime);
+        if(bHopFOVCoroutine != null) StopCoroutine(bHopFOVCoroutine);
+        bHopFOVCoroutine = LerpFOV(currentFOV + bHopFOVOffset, currentFOV, bHopFOVTime);
+        StartCoroutine(bHopFOVCoroutine);
     }
 
     public void UndoBHopVFX()
     {
+        if(bHopFOVCoroutine != null) StopCoroutine(bHopFOVCoroutine);
         float start = currentFOV < FOVAtBHop ? originalFOV : FOVAtBHop;
-        StartFOVVFX(bHopFOVCoroutine, start, currentFOV, bHopFOVTime);
-    }
-
-    private void StartFOVVFX(IEnumerator coroutine, float start, float end, float time)
-    {
-        if(coroutine != null) StopCoroutine(coroutine);
-        coroutine = LerpFOV(start, end, time);
-        StartCoroutine(coroutine);
+        bHopFOVCoroutine = LerpFOV(start, currentFOV, bHopFOVTime);
+        StartCoroutine(bHopFOVCoroutine);
     }
 
     IEnumerator LerpFOV(float start, float end, float timeFrame)

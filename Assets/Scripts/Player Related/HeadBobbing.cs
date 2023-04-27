@@ -24,8 +24,7 @@ public class HeadBobbing : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Debug.Log(movementScript.isGrounded);
-        if((Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.D)) && movementScript.isGrounded){
+        if(movementScript.GetInputs() && movementScript.isGrounded){
             timer += Time.deltaTime * bobSpeed;
             transform.localPosition = new Vector3(defaultX + Mathf.Sin(timer) * bobIntensityX, defaultY + Mathf.Sin(timer) * bobIntensityY, transform.localPosition.z);
             //transform.localPosition = new Vector3(transform.localPosition.x, defaultY + Mathf.Sin(timer) * bobIntensity, transform.localPosition.z);
