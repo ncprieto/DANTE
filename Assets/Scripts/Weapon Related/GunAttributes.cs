@@ -12,11 +12,12 @@ public class GunAttributes : MonoBehaviour
     //public float recoilStrength;
     //public float damageValue;
 
-    [Header ("Bullet Trail Variables")]
+    [Header ("Bullet Trail/Flash Variables")]
     //public Transform mainCam;
     public Transform trailOrigin;
     public float trailDuration;
     LineRenderer shotTrail;
+    public GameObject muzzleFlash;
 
     [Header ("Gun Movement")]
     public GunMovement gunMovement;
@@ -60,7 +61,7 @@ public class GunAttributes : MonoBehaviour
                     UI.AddTime(timeToAdd);
                 }
                 enemyHit.ReceiveDamage(damageToGive);                                                // actually apply damage to the enemy that was hit
-
+                enemyHit.BloodParticles(hit.transform);
                 gunMovement.ReceiveHitInfo(hitbox.name);
             }
             else{
@@ -68,6 +69,7 @@ public class GunAttributes : MonoBehaviour
                 shotTrail.SetPosition(1, rayOrigin + (Camera.main.transform.forward * weaponRange));
             }
             StartCoroutine(DrawTrail());
+            StartCoroutine(FlashMuzzle());
             // Quaternion recoilRotation = Camera.main.transform.localRotation;
             // recoilRotation.x -= recoilStrength;
             // recoilRotation.y += recoilStrength;
@@ -81,5 +83,12 @@ public class GunAttributes : MonoBehaviour
         shotTrail.enabled = true;
         yield return new WaitForSeconds(trailDuration);
         shotTrail.enabled = false;
+    }
+
+    IEnumerator FlashMuzzle()
+    {
+        muzzleFlash.SetActive(true);
+        yield return new WaitForSeconds(.05f);
+        muzzleFlash.SetActive(false);
     }
 }
