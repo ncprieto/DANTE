@@ -59,7 +59,7 @@ public class Movement : MonoBehaviour
         baseMoveSpeed = moveSpeed;
     }
 
-    bool isGrounded;
+    public bool isGrounded;
     bool wasInAir;
     void Update()
     {

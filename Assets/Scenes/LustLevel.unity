@@ -22591,6 +22591,7 @@ MonoBehaviour:
   grappleHorizontalBoost: 3
   grappleDecelerateTime: 2
   grappleDecelMaxSpeed: 15
+  isGrounded: 0
 --- !u!136 &939103762
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -28891,7 +28892,7 @@ ParticleSystem:
         m_PostInfinity: 2
         m_RotationOrder: 4
     randomizeRotationDirection: 0
-    maxNumParticles: 5000
+    maxNumParticles: 2500
     customEmitterVelocity: {x: 0, y: 0, z: 0}
     size3D: 1
     rotation3D: 0
@@ -34119,7 +34120,7 @@ ParticleSystem:
         m_PostInfinity: 2
         m_RotationOrder: 4
     randomizeRotationDirection: 0
-    maxNumParticles: 5000
+    maxNumParticles: 2500
     customEmitterVelocity: {x: 0, y: 0, z: 0}
     size3D: 1
     rotation3D: 0
@@ -41089,6 +41090,7 @@ GameObject:
   - component: {fileID: 1705315975}
   - component: {fileID: 1705315974}
   - component: {fileID: 1705315973}
+  - component: {fileID: 1705315977}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -41210,6 +41212,22 @@ Camera:
   m_OcclusionCulling: 1
   m_StereoConvergence: 10
   m_StereoSeparation: 0.022
+--- !u!114 &1705315977
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1705315971}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6e0c2001b747b5a44a54b47df710243f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  bobIntensityX: 0
+  bobIntensityY: 0.075
+  bobSpeed: 15
+  movementScript: {fileID: 939103761}
 --- !u!1001 &1717356987
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -43334,6 +43352,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1831446113}
+  - component: {fileID: 1831446114}
   m_Layer: 0
   m_Name: WeaponAnchor
   m_TagString: Untagged
@@ -43357,6 +43376,22 @@ Transform:
   m_Father: {fileID: 1705315972}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1831446114
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1831446112}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6e0c2001b747b5a44a54b47df710243f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  bobIntensityX: 0.005
+  bobIntensityY: 0.004
+  bobSpeed: 13
+  movementScript: {fileID: 939103761}
 --- !u!1001 &1832054964
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -47921,7 +47956,7 @@ ParticleSystem:
         m_PostInfinity: 2
         m_RotationOrder: 4
     randomizeRotationDirection: 0
-    maxNumParticles: 5000
+    maxNumParticles: 2500
     customEmitterVelocity: {x: 0, y: 0, z: 0}
     size3D: 1
     rotation3D: 0
