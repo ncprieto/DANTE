@@ -6,37 +6,21 @@ using TMPro;
 
 public class MainMenu : MonoBehaviour
 {
-    float gameTime = 0;
-    public double startTextFadeInTime;
-    public float durationOfFade;
+    public float waitForTilFade;
+    public float fadeDuration;
 
+    public List<TextMeshProUGUI> titleGUIs;
+    public List<TextMeshProUGUI> otherGUIs;
 
-    float currentTime;
-    float alpha;
-    int timesDone;
-
-    public GameObject startText;
-    public TextMeshProUGUI startTextGUI;
-
-    public GameObject quitText;
-    public TextMeshProUGUI quitTextGUI;
     void Start()
     {
-        startTextGUI = startText.GetComponent<TextMeshProUGUI>();
-        quitTextGUI = quitText.GetComponent<TextMeshProUGUI>();
+        StartCoroutine(FadeTextToFullAlpha(waitForTilFade, fadeDuration, titleGUIs));
+        StartCoroutine(FadeTextToFullAlpha(waitForTilFade * 1.75f, fadeDuration, otherGUIs));
     }
 
     void Update()
     {
-        gameTime += Time.deltaTime;
-        //Debug.Log(startTextGUI);
-        if (gameTime >= startTextFadeInTime && timesDone < 1)
-        {
-            //Debug.Log(startTextGUI);
-            timesDone++;
-            StartCoroutine(FadeTextToFullAlpha(durationOfFade, startTextGUI, quitTextGUI));
 
-        }
     }
 
     public void StartGame()
@@ -49,14 +33,18 @@ public class MainMenu : MonoBehaviour
        Application.Quit();
     }
 
-    public IEnumerator FadeTextToFullAlpha(float t, TextMeshProUGUI i, TextMeshProUGUI y)
+    public IEnumerator FadeTextToFullAlpha(float timeToWait, float duration, List<TextMeshProUGUI> elements)
     {
-        i.color = new Color(i.color.r, i.color.g, i.color.b, 0);
-        y.color = new Color(y.color.r, y.color.g, y.color.b, 0);
-        while (i.color.a < 1.0f)
+        yield return new WaitForSeconds(timeToWait);                               // wait and then start fading the alpha in
+        float timeToFade = duration;
+        while(timeToFade > 0f)
         {
-            i.color = new Color(i.color.r, i.color.g, i.color.b, i.color.a + (Time.deltaTime / t));
-            y.color = new Color(y.color.r, y.color.g, y.color.b, y.color.a + (Time.deltaTime / t));
+            foreach(TextMeshProUGUI text in elements)
+            {
+                Color newAlpha = new Color(text.color.r, text.color.g, text.color.b, Mathf.Lerp(1f, 0f, timeToFade / duration)); // lerp alpha based on duration of fade
+                text.color = newAlpha;
+            }
+            timeToFade -= Time.deltaTime;
             yield return null;
         }
     }
