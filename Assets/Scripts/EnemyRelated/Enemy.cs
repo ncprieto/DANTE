@@ -12,8 +12,8 @@ public class Enemy : MonoBehaviour
 
     protected GameObject player;
     protected PlayerHealth playerHP;
+    protected LevelHandler lvlHandler;
 
-    //private UnityEngine.Object loadedPrefab;
     private UnityEngine.Object hpDrop;
     private UnityEngine.Object deathParticles;
 
@@ -21,6 +21,7 @@ public class Enemy : MonoBehaviour
     {
         player = GameObject.Find("Player");
         playerHP = player.GetComponent<PlayerHealth>();
+        lvlHandler = GameObject.Find("LevelHandler").GetComponent<LevelHandler>();
     }
 
     void Start()
@@ -41,13 +42,17 @@ public class Enemy : MonoBehaviour
 
     // Health System Related Functions
     protected float currentHealth;
+    protected bool damageKnockback;
+    protected bool invertVelocity;
     public void ReceiveDamage(float dmg)
     {
+        StartCoroutine(DamageKnockbackStateTimer());
         if (currentHealth > 0) currentHealth -= dmg;
         if (currentHealth <= 0){
             Instantiate(hpDrop, new Vector3 (this.gameObject.transform.position.x, this.gameObject.transform.position.y + 1, this.gameObject.transform.position.z), Quaternion.identity);
             Instantiate(deathParticles, new Vector3 (this.gameObject.transform.position.x, this.gameObject.transform.position.y + 3, this.gameObject.transform.position.z), Quaternion.identity);
             Destroy(this.gameObject);
+            lvlHandler.enemiesKilled++;
         }
     }
 
@@ -76,5 +81,13 @@ public class Enemy : MonoBehaviour
     public void BloodParticles(Transform hitbox)
     {
         hitbox.GetChild(0).gameObject.GetComponent<ParticleSystem>().Play();
+    }
+
+    IEnumerator DamageKnockbackStateTimer()
+    {
+        damageKnockback = true;
+        yield return new WaitForSeconds(.4f);
+        damageKnockback = false;
+        invertVelocity = false;
     }
 }
