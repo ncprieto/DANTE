@@ -53,25 +53,14 @@ public class UI_Script : MonoBehaviour
         //check if timer is on
         if (timerOn)
         {
-            if (timeLeft > 0)
-            {
-                bhopCounter = movementScript.bHopCount;
-                if (bhopCounter > 0)
-                {
-                    changeBhopText(bhopCounter);
-                }
-                else
-                {
-                    multiplierText.SetActive(false);
-                }
-                timeLeft -= Time.deltaTime;
-                updateTimerText(timeLeft);
-            }
-            else 
-            { 
-                timeLeft = 0;
-                timerOn = false;
-            }
+            bhopCounter = movementScript.bHopCount;
+            if (bhopCounter > 0) changeBhopText(bhopCounter);
+            else multiplierText.SetActive(false);
+
+            timeLeft -= Time.deltaTime;
+            timeLeft = timeLeft > -1 ? timeLeft : -1f;
+            timerOn = timeLeft != -1 ? true : false;
+            updateTimerText(timeLeft);
         }
     }
 
