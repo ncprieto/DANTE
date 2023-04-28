@@ -16,8 +16,9 @@ public class LustEnemy : Enemy
     // State variables
     public float stalkRange;
     public float chaseRange;
-    public bool inStalkRange;
-    public bool inChaseRange;
+    private bool inStalkRange;
+    private bool inChaseRange;
+    private bool playerHit;
 
     // Update is called once per frame
     void Update()
@@ -26,13 +27,19 @@ public class LustEnemy : Enemy
         inStalkRange = Physics.CheckSphere(transform.position, stalkRange, playerLayer);
         inChaseRange = Physics.CheckSphere(transform.position, chaseRange, playerLayer);
 
-        if (!inStalkRange && !inChaseRange){
+        if (damageKnockback){
+            DamageKnockbackState();
+        }
+        else if (playerHit){
+            HitPlayerState();
+        }
+        else if (!inStalkRange && !inChaseRange){
             PatrolState();
         }
-        if (inStalkRange && !inChaseRange){
+        else if (inStalkRange && !inChaseRange){
             StalkState();
         }
-        if (inStalkRange && inChaseRange){
+        else if (inStalkRange && inChaseRange){
             ChaseState();
         }
     }
@@ -82,10 +89,34 @@ public class LustEnemy : Enemy
         nmAgent.SetDestination(player.transform.position);
     }
 
+    void HitPlayerState()
+    {
+        nmAgent.speed = 0;
+    }
+
+    void DamageKnockbackState()
+    {
+        if (!invertVelocity){
+            Vector3 origVelocity = nmAgent.velocity;
+            nmAgent.velocity = -(origVelocity);
+            invertVelocity = true;
+        }
+        nmAgent.speed = 5;
+        //transform.LookAt(player.transform);
+    }
+
     // Send damage to player
     void OnCollisionEnter(Collision col){
         if (col.gameObject.tag == "Player"){
             playerHP.ReceiveDamage(10, true);
+            StartCoroutine(HitPlayerStateTimer());
         }
+    }
+
+    IEnumerator HitPlayerStateTimer()
+    {
+        playerHit = true;
+        yield return new WaitForSeconds(1f);
+        playerHit = false;
     }
 }

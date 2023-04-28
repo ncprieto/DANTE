@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 4880307047105348958}
   - component: {fileID: 4880307047105348959}
   - component: {fileID: 4880307047105348896}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: MediumHealthDrop
   m_TagString: MediumHealth
   m_Icon: {fileID: 0}
@@ -109,7 +109,7 @@ GameObject:
   - component: {fileID: 4880307049080600779}
   - component: {fileID: 4880307049080600777}
   - component: {fileID: 4880307049080600778}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: HealthDetectionRadius
   m_TagString: Untagged
   m_Icon: {fileID: 0}

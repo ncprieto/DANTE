@@ -7,15 +7,13 @@ public class PlayerHealth : MonoBehaviour
 
     public bool isInvincible;
     public int playerCurrentHealth = 100;
-    private float dotTimer;
     public UI_Script UI;            //To call function in UI
     public DamageVignette dmgVFX;
 
     // Start is called before the first frame update
     void Start()
     {
-        playerCurrentHealth = 50;
-        dotTimer = 0;
+        playerCurrentHealth = 100;
     }
 
     // Update is called once per frame
