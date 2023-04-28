@@ -40,7 +40,7 @@ public class GunAttributes : MonoBehaviour
     void Update()
     {
         sinceLastFire += Time.deltaTime;
-        if (Input.GetMouseButtonDown(0) && (sinceLastFire > fireRate)){
+        if (Input.GetMouseButton(0) && (sinceLastFire > fireRate)){
             sinceLastFire = 0;
             fireAnim.SetTrigger("FireWeapon");
             shotTrail.SetPosition(0, trailOrigin.position);
@@ -62,7 +62,7 @@ public class GunAttributes : MonoBehaviour
                 }
                 enemyHit.ReceiveDamage(damageToGive);                                                // actually apply damage to the enemy that was hit
                 enemyHit.BloodParticles(hit.transform);
-                gunMovement.ReceiveHitInfo(hitbox.name);
+                gunMovement.ReceiveHitInfo(enemyHit.IsThisDamageLethal(damageToGive) ? "Lethal" : hitbox.name);
             }
             else{
                 gunMovement.ReceiveHitInfo(null);

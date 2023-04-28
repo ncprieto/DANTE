@@ -22813,7 +22813,7 @@ MonoBehaviour:
   groundAccel: 200
   groundDecel: 4
   airAccel: 50
-  airDecel: 100
+  airDecel: 50
   jumpHeight: 8
   isGrounded: 0
   bHopMax: 5
@@ -22823,6 +22823,8 @@ MonoBehaviour:
   grappleSpeed: 20
   grappleRange: 30
   grappleCooldown: 3
+  grappleEndedTime: 1
+  grappleEndedDecel: 100
   grapplePointVerticalBoost: 25
   toggleControl: 1
   lineRen: {fileID: 939103760}
@@ -22876,8 +22878,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   grappleFOVTime: 0.5
   grappleFOVOffset: 25
-  revolverFOVTime: 0.1
-  revolverFOVOffset: 5
+  revolverStartUpTime: 1
+  revolverEndTime: 0.1
+  revolverFOVOffset: 25
   bHopFOVTime: 0.1
   bHopFOVOffset: 2.5
 --- !u!1 &968383367
@@ -41474,7 +41477,7 @@ Camera:
     height: 1
   near clip plane: 0.01
   far clip plane: 1000
-  field of view: 80
+  field of view: 100
   orthographic: 0
   orthographic size: 5
   m_Depth: -1

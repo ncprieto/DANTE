@@ -38,6 +38,8 @@ public class Movement : MonoBehaviour
     public float grappleSpeed;
     public float grappleRange;
     public float grappleCooldown;
+    public float grappleEndedTime;
+    public float grappleEndedDecel;
     public float grapplePointVerticalBoost;
     public bool  toggleControl;
     
@@ -95,6 +97,8 @@ public class Movement : MonoBehaviour
             }
         }
         float decel = isGrounded ? groundDecel : airDecel;
+        decel = grappleJustEnded ? grappleEndedDecel : decel;
+        // Debug.Log("HERE " + decel);
         if(!GetInputs() && rb.velocity.magnitude > 0) rb.velocity -= rb.velocity / decel;
         CapSpeed();
     }
@@ -167,7 +171,10 @@ public class Movement : MonoBehaviour
             RaycastHit hit;
             if(Physics.Raycast(playerCamera.transform.position, playerCamera.transform.forward, out hit, grappleRange))
             {
-                hitGrapplePoint = hit.transform.name == "GrapplePoint" || hit.transform.parent.name == "GrapplePoint" ? true : false;
+                if(hit.transform.parent != null)
+                {
+                    hitGrapplePoint = hit.transform.name == "GrapplePoint" || hit.transform.parent.name == "GrapplePoint" ? true : false;
+                }
                 grapplePoint = hit.point;
                 ToggleGrapple();
                 CalculateReflectVector(hit.normal);
@@ -242,8 +249,17 @@ public class Movement : MonoBehaviour
         LimitGrappleSpeed(baseMoveSpeed, grappleDecelMaxSpeed, grappleDecelerateTime);
         fovVFX.GrappleEndVFX();
         StartCoroutine(StartGrappleCooldown());
+        StartCoroutine(GrappleJustEnded());
 
         Debug.DrawLine(grapplePoint, grapplePoint + horizontal + vertical, Color.cyan, 1f);                     // debug vector that player get launched to
+    }
+
+    bool grappleJustEnded;
+    private IEnumerator GrappleJustEnded()
+    {
+        grappleJustEnded = true;
+        yield return new WaitForSeconds(grappleEndedTime);
+        grappleJustEnded = false;
     }
 
     private IEnumerator StartGrappleCooldown()

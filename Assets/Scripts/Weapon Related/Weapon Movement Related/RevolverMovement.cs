@@ -4,53 +4,74 @@ using UnityEngine;
 
 public class RevolverMovement : GunMovement
 {
-    
     [Header("Movement Effect Variables")]
     public float slowScale;
-    public float maxChainedShots;
-    public float maxTimeBetweenShots;
+    public float baseSlowTime;
+    public float timePerNormal;
+    public float timePerCrit;
 
-    int shotsHit;
+    private float timeToAdd;
+
+    void Awake()
+    {
+        IsToggleable = true;
+    }
+
+    void Update()
+    {
+        if(Input.GetKeyDown(abilityKey))
+        {
+            if(CanActivateAbility())        this.DoMovementAbility();
+            else if(CanDeactivateAbility()) this.EndMovementAbility();
+        } 
+    }
+
+    protected override void DoMovementAbility()
+    {
+        base.DoMovementAbility();
+        Time.timeScale = slowScale;
+        chainShotCoroutine = StartChainShotWindow();
+        StartCoroutine(chainShotCoroutine);
+        fovVFX.RevolverChainShotVFX();
+    }
+
+    protected override void EndMovementAbility()
+    {
+        base.EndMovementAbility();
+        if(abilityState == ABILITY.ACTIVE) StopCoroutine(chainShotCoroutine);
+        Time.timeScale = 1f;
+        fovVFX.UndoRevolverVFX();
+    }
+
     public override void ReceiveHitInfo(string tag)
     {
-        if(tag != null)
+        if(tag == null && abilityState == ABILITY.ACTIVE)                        // if players miss and the ability is active, end the ability
         {
-            shotsHit++;
-            if(shotsHit == 1) StartCountdownCoroutine();           // if player has hit a shot then start the check
-            else if(shotsHit > 1 && ChainShotCoroutine != null)
+            if(CanDeactivateAbility())
             {
-                if(shotsHit < maxChainedShots + 1)
-                {
-                    Time.timeScale -= slowScale;                  // if players has chained shots together they apply slow effect
-                    fovVFX.RevolverChainShotVFX(shotsHit);
-                }
-                StartCountdownCoroutine();
-            }
+                this.EndMovementAbility();
+                return;
+            } 
         }
-        else if(tag == null) UndoSlowAndVFX();
+        base.ReceiveHitInfo(tag);
+        if(tag == "NormalHitbox") timeToAdd = timePerNormal;
+        if(tag == "CritHitbox" || tag == "Lethal")   timeToAdd = timePerCrit;
     }
 
-    IEnumerator ChainShotCoroutine;
-    void StartCountdownCoroutine()
+    IEnumerator chainShotCoroutine;
+    IEnumerator StartChainShotWindow()
     {
-        if(ChainShotCoroutine != null) StopCoroutine(ChainShotCoroutine);
-        ChainShotCoroutine = StartCountdown();
-        StartCoroutine(ChainShotCoroutine);
-    }
-
-    private IEnumerator StartCountdown()
-    {
-        yield return new WaitForSeconds(maxTimeBetweenShots);
-        UndoSlowAndVFX();
-    }
-
-    private void UndoSlowAndVFX()
-    {
-        if(shotsHit > 1)
+        float timeLeft = baseSlowTime;
+        while(timeLeft > 0)
         {
-            fovVFX.UndoRevolverVFX();
-            Time.timeScale = 1f;
-            shotsHit = 0;
+            if(timeToAdd > 0)                      // add time to timer if player chains shots together
+            {
+                timeLeft += timeToAdd;
+                timeToAdd = 0f;
+            }
+            else timeLeft -= Time.deltaTime;
+            yield return null;
         }
+        this.EndMovementAbility();
     }
 }

@@ -277,9 +277,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9d42fbc8d506de440ba6d363cb620b8b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  slowScale: 0.2
-  maxChainedShots: 3
-  maxTimeBetweenShots: 2.5
+  abilityKey: 304
+  abilityCooldown: 5
+  IsToggleable: 1
+  refundForKill: 0.25
+  slowScale: 0.5
+  baseSlowTime: 1.25
+  timePerNormal: 0.2
+  timePerCrit: 0.4
 --- !u!1 &2676563042148244214
 GameObject:
   m_ObjectHideFlags: 0
