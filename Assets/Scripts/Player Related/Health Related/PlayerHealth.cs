@@ -58,11 +58,12 @@ public class PlayerHealth : MonoBehaviour
             
             if (playerCurrentHealth <= 0){
                 playerCurrentHealth = 0;
-                UI.updateHealthUI(playerCurrentHealth);//call UI function
+                
             }
             if (hasIFrames){
                 StartCoroutine(IFrames());
-            }
+            } 
+           UI.updateHealthUI(playerCurrentHealth);//call UI function
         }
     }
 
