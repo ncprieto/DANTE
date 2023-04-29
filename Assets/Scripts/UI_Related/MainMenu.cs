@@ -24,6 +24,7 @@ public class MainMenu : MonoBehaviour
         StartCoroutine(fadeCoroutine);
         fadeCoroutine = FadeTextAlpha(waitForTilFade * 1.75f, fadeDuration, other, 1f, 0f);
         StartCoroutine(fadeCoroutine);
+        UnlockCursor();
     }
 
     void OnAwake()
@@ -64,8 +65,8 @@ public class MainMenu : MonoBehaviour
 
     public void UnlockCursor()
     {
-        Cursor.lockState = CursorLockMode.Locked;
-        Cursor.visible = false;
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
     }
 
     // public void ToggleAllButtons()
