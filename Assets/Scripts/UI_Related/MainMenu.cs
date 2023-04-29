@@ -41,6 +41,21 @@ public class MainMenu : MonoBehaviour
        Application.Quit();
     }
 
+    public void SendToMainMenu()
+    {
+        SceneManager.LoadScene(0);
+    }
+
+    public void SendToVictory()
+    {
+        SceneManager.LoadScene(2);
+    }
+
+    public void SendToLose()
+    {
+        SceneManager.LoadScene(3);
+    }
+
     // public void ToggleAllButtons()
     // {
     //     foreach(GameObject button in other)                                   // disable button click and image on buttons
