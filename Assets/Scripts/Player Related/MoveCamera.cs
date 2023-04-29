@@ -10,9 +10,8 @@ public class MoveCamera : MonoBehaviour
     float xRotation;
     float yRotation;
 
-    // Start is called before the first frame update
-    void Start()
-    {   
+    void OnAwake()
+    {
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
     }

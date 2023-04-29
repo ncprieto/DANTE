@@ -18,8 +18,8 @@ public class SceneTransitionHandler : MonoBehaviour
     void Update()
     {
         if (Input.GetKeyDown(escape)) SceneManager.LoadScene(0);                              // transition to main scene when player exits
-        if (lvlHandler.enemiesKilled >= lvlHandler.enemiesToKill) SceneManager.LoadScene(0);  // transition to temp scene
-        if (playerHealth.playerCurrentHealth <= 0 || ui.timeLeft == -1) SceneManager.LoadScene(0); // go to temp transiton scene
+        if (lvlHandler.enemiesKilled >= lvlHandler.enemiesToKill) SceneManager.LoadScene(2);  // transition to temp scene
+        if (playerHealth.playerCurrentHealth <= 0 || ui.timeLeft == -1) SceneManager.LoadScene(3); // go to temp transiton scene
     }
 
     IEnumerator FadeOverlay(float time, float start, float end)

@@ -10,17 +10,9 @@ public class PlayerHealth : MonoBehaviour
     public UI_Script UI;            //To call function in UI
     public DamageVignette dmgVFX;
 
-    // Start is called before the first frame update
-    void Start()
+    void OnAwake()
     {
         playerCurrentHealth = 100;
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        //Debug.Log("HEALTH: " + playerCurrentHealth);
-        //UI.updateHealthUI(playerCurrentHealth); //Call function in UI
     }
 
     // Health pickups

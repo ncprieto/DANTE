@@ -26,6 +26,11 @@ public class MainMenu : MonoBehaviour
         StartCoroutine(fadeCoroutine);
     }
 
+    void OnAwake()
+    {
+        UnlockCursor();
+    }
+
     void Update()
     {
         // if(Input.GetKeyDown(KeyCode.A)) ToggleAllButtons();
@@ -43,6 +48,7 @@ public class MainMenu : MonoBehaviour
 
     public void SendToMainMenu()
     {
+
         SceneManager.LoadScene(0);
     }
 
@@ -54,6 +60,12 @@ public class MainMenu : MonoBehaviour
     public void SendToLose()
     {
         SceneManager.LoadScene(3);
+    }
+
+    public void UnlockCursor()
+    {
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
     }
 
     // public void ToggleAllButtons()
