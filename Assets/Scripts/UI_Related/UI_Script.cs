@@ -40,11 +40,17 @@ public class UI_Script : MonoBehaviour
     public Slider Grapple;
     private TextMeshProUGUI GrappleText;
 
-    [Header("Revolver Realted")]
+    [Header("Revolver Related")]
     public GameObject Abilityobj;
     public RevolverMovement revolverMovement;
     public Slider Ability;
     private TextMeshProUGUI AbilityText;
+
+    [Header("Objective & Hitmarker Related")]
+    public GameObject objTextObj;
+    private TextMeshProUGUI objectiveText;
+    public LevelHandler lvlHandler;
+    public GameObject hitmarker;
 
     void Start()
     {
@@ -55,6 +61,7 @@ public class UI_Script : MonoBehaviour
         GrappleText = Grappleobj.GetComponent<TextMeshProUGUI>();
         AbilityText = Abilityobj.GetComponent<TextMeshProUGUI>();
         updateHealthUI(health.playerCurrentHealth);
+        objectiveText = objTextObj.GetComponent<TextMeshProUGUI>();
     }
 
     // Update is called once per frame
@@ -80,6 +87,8 @@ public class UI_Script : MonoBehaviour
 
         Ability.value = 1f - (revolverMovement.actualAbilityCooldown / revolverMovement.abilityCooldown);
         AbilityText.text = Mathf.CeilToInt(revolverMovement.actualAbilityCooldown).ToString();
+
+        objectiveText.text = "Demons Slain: " + lvlHandler.enemiesKilled.ToString() + " / " + lvlHandler.enemiesToKill.ToString();
     }
 
     void updateTimerText(float currentTime)             // 80
@@ -111,5 +120,10 @@ public class UI_Script : MonoBehaviour
         healthTextGUI.text = n.ToString();
     }
 
-
+    public IEnumerator DisplayHitmarker()
+    {
+        hitmarker.SetActive(true);
+        yield return new WaitForSeconds(.1f);
+        hitmarker.SetActive(false);
+    }
 }
