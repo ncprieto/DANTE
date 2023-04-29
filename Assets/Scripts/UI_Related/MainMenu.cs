@@ -28,7 +28,7 @@ public class MainMenu : MonoBehaviour
 
     void Update()
     {
-        if(Input.GetKeyDown(KeyCode.A)) ToggleAllButtons();
+        // if(Input.GetKeyDown(KeyCode.A)) ToggleAllButtons();
     }
 
     public void StartGame()
@@ -41,22 +41,22 @@ public class MainMenu : MonoBehaviour
        Application.Quit();
     }
 
-    public void ToggleAllButtons()
-    {
-        foreach(GameObject button in other)                                   // disable button click and image on buttons
-        {
-            Button component = button.GetComponent<Button>();
-            component.enabled = !component.enabled;
-            Image image = button.GetComponent<Image>();
-            image.enabled = !image.enabled;
-        }
+    // public void ToggleAllButtons()
+    // {
+    //     foreach(GameObject button in other)                                   // disable button click and image on buttons
+    //     {
+    //         Button component = button.GetComponent<Button>();
+    //         component.enabled = !component.enabled;
+    //         Image image = button.GetComponent<Image>();
+    //         image.enabled = !image.enabled;
+    //     }
 
-        if(fadeCoroutine != null) StopCoroutine(fadeCoroutine);
-        float start = buttonsEnabled ? 1f : 0f;
-        float end   = buttonsEnabled ? 0f : 1f;
-        fadeCoroutine = FadeTextAlpha(0f, refadeDuration, other, start, end);  // fade button text down or up depending on if they are enabled
-        StartCoroutine(fadeCoroutine);
-    }
+    //     if(fadeCoroutine != null) StopCoroutine(fadeCoroutine);
+    //     float start = buttonsEnabled ? 1f : 0f;
+    //     float end   = buttonsEnabled ? 0f : 1f;
+    //     fadeCoroutine = FadeTextAlpha(0f, refadeDuration, other, start, end);  // fade button text down or up depending on if they are enabled
+    //     StartCoroutine(fadeCoroutine);
+    // }
 
     public IEnumerator FadeTextAlpha(float timeToWait, float duration, List<GameObject> elements, float start, float end)
     {
