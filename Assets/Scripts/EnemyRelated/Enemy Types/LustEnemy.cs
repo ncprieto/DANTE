@@ -16,6 +16,11 @@ public class LustEnemy : Enemy
     // State variables
     public float stalkRange;
     public float chaseRange;
+
+    public float walkSpeed;
+    public float stalkSpeed;
+    public float chaseSpeed;
+
     private bool inStalkRange;
     private bool inChaseRange;
     private bool playerHit;
@@ -47,7 +52,7 @@ public class LustEnemy : Enemy
     // Patrol state functions
     void PatrolState()
     {
-        nmAgent.speed = 3;
+        nmAgent.speed = walkSpeed;
 
         if (!patrolPointSet){
             FindPatrolPoint();
@@ -78,14 +83,14 @@ public class LustEnemy : Enemy
     // Stalk state functions
     void StalkState()
     {
-        nmAgent.speed = 6;
+        nmAgent.speed = stalkSpeed;
         nmAgent.SetDestination(player.transform.position);
     }
 
     // Chase state functions
     void ChaseState()
     {
-        nmAgent.speed = 12;
+        nmAgent.speed = chaseSpeed;
         nmAgent.SetDestination(player.transform.position);
     }
 
@@ -116,7 +121,7 @@ public class LustEnemy : Enemy
     IEnumerator HitPlayerStateTimer()
     {
         playerHit = true;
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(1.5f);
         playerHit = false;
     }
 }
