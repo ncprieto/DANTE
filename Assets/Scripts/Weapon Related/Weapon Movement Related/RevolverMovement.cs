@@ -21,8 +21,8 @@ public class RevolverMovement : GunMovement
     {
         if(Input.GetKeyDown(abilityKey))
         {
-            if(CanActivateAbility())        this.DoMovementAbility();
-            else if(CanDeactivateAbility()) this.EndMovementAbility();
+            if (CanActivateAbility()) this.DoMovementAbility();
+            else if (CanDeactivateAbility()) this.EndMovementAbility();
         } 
     }
 
@@ -38,7 +38,7 @@ public class RevolverMovement : GunMovement
     protected override void EndMovementAbility()
     {
         base.EndMovementAbility();
-        if(abilityState == ABILITY.ACTIVE) StopCoroutine(chainShotCoroutine);
+        if(chainShotCoroutine != null) StopCoroutine(chainShotCoroutine);
         Time.timeScale = 1f;
         fovVFX.UndoRevolverVFX();
     }

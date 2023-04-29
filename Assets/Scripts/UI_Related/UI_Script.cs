@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using UnityEngine.UI;
 
 public class UI_Script : MonoBehaviour
 {
@@ -9,14 +10,14 @@ public class UI_Script : MonoBehaviour
     public GameObject speedText;
 
     //timer stuff
-    [Header("Time Related")]
+    [Header("Timer Related")]
     public GameObject timerText;
     public bool timerOn;
     public float timeLeft;
 
     //in game speed component
-    TextMeshProUGUI gameSpeedText;
-    TextMeshProUGUI gameTimerText;
+    private TextMeshProUGUI gameSpeedText;
+    private TextMeshProUGUI gameTimerText;
     // Start is called before the first frame update
 
     //bhop multiplier stuff
@@ -24,16 +25,32 @@ public class UI_Script : MonoBehaviour
     public Movement movementScript;
     public GameObject multiplierText;
     public int bhopCounter;
-    TextMeshProUGUI moveCounterText;
+    private TextMeshProUGUI moveCounterText;
 
     //Health stuff
     [Header("Health Related")]
     public GameObject healthTextObj;
-    TextMeshProUGUI healthTextGUI;
-
     public PlayerHealth health;
-
     public HealthBarScript healthBar;
+    private TextMeshProUGUI healthTextGUI;
+
+    [Header ("Grapple Cooldown Related")]
+    public GameObject Grappleobj;
+    public Movement Move;
+    public Slider Grapple;
+    private TextMeshProUGUI GrappleText;
+
+    [Header("Revolver Related")]
+    public GameObject Abilityobj;
+    public RevolverMovement revolverMovement;
+    public Slider Ability;
+    private TextMeshProUGUI AbilityText;
+
+    [Header("Objective & Hitmarker Related")]
+    public GameObject objTextObj;
+    private TextMeshProUGUI objectiveText;
+    public LevelHandler lvlHandler;
+    public GameObject hitmarker;
 
     void Start()
     {
@@ -41,8 +58,10 @@ public class UI_Script : MonoBehaviour
         gameSpeedText = speedText.GetComponent<TextMeshProUGUI>();
         gameTimerText = timerText.GetComponent<TextMeshProUGUI>();
         moveCounterText = multiplierText.GetComponent<TextMeshProUGUI>();
+        GrappleText = Grappleobj.GetComponent<TextMeshProUGUI>();
+        AbilityText = Abilityobj.GetComponent<TextMeshProUGUI>();
         updateHealthUI(health.playerCurrentHealth);
-
+        objectiveText = objTextObj.GetComponent<TextMeshProUGUI>();
     }
 
     // Update is called once per frame
@@ -62,6 +81,14 @@ public class UI_Script : MonoBehaviour
             timerOn = timeLeft != -1 ? true : false;
             updateTimerText(timeLeft);
         }
+
+        Grapple.value = 1f - (Move.actualGrappleCooldown / Move.grappleCooldown);
+        GrappleText.text = Mathf.CeilToInt(Move.actualGrappleCooldown).ToString();
+
+        Ability.value = 1f - (revolverMovement.actualAbilityCooldown / revolverMovement.abilityCooldown);
+        AbilityText.text = Mathf.CeilToInt(revolverMovement.actualAbilityCooldown).ToString();
+
+        objectiveText.text = "Demons Slain: " + lvlHandler.enemiesKilled.ToString() + " / " + lvlHandler.enemiesToKill.ToString();
     }
 
     void updateTimerText(float currentTime)             // 80
@@ -91,5 +118,12 @@ public class UI_Script : MonoBehaviour
     {
         healthBar.setSliderHealth(n);
         healthTextGUI.text = n.ToString();
+    }
+
+    public IEnumerator DisplayHitmarker()
+    {
+        hitmarker.SetActive(true);
+        yield return new WaitForSeconds(.1f);
+        hitmarker.SetActive(false);
     }
 }

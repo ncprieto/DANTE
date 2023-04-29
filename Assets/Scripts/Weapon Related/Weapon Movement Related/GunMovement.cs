@@ -7,6 +7,7 @@ public class GunMovement : MonoBehaviour
     [Header ("Base Class Variables")]
     public KeyCode abilityKey;
     public float abilityCooldown;
+    public float actualAbilityCooldown;
     public bool  IsToggleable;
     public float refundForKill;
 
@@ -72,8 +73,10 @@ public class GunMovement : MonoBehaviour
                 refundFactor = 0f;
             }
             timeLeft -= Time.deltaTime;
+            actualAbilityCooldown = timeLeft < 0f ? 0f : timeLeft;
             yield return null;
         }
+        actualAbilityCooldown = 0f;
         abilityState = ABILITY.OFFCOOLDOWN;
     }
 

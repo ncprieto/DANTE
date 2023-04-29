@@ -65,6 +65,7 @@ public class GunAttributes : MonoBehaviour
                 enemyHit.ReceiveDamage(damageToGive);                                                // actually apply damage to the enemy that was hit
                 enemyHit.BloodParticles(hit.transform);
                 gunMovement.ReceiveHitInfo(enemyHit.IsThisDamageLethal(damageToGive) ? "Lethal" : hitbox.name);
+                StartCoroutine(UI.DisplayHitmarker());
             }
             else{
                 gunMovement.ReceiveHitInfo(null);

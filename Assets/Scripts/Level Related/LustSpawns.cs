@@ -25,7 +25,7 @@ public class LustSpawns : LevelHandler
     // Update is called once per frame
     void Update()
     {
-        Debug.Log("EVIL SLAIN: " + enemiesKilled + " / " + enemiesToKill);
+        // Debug.Log("EVIL SLAIN: " + enemiesKilled + " / " + enemiesToKill);
         timer += Time.deltaTime;
         if (timer > spawnRateTime){
             SpawnEnemy(lustEnemy, transform.GetChild(Random.Range(0, transform.childCount - 1)));

@@ -38,6 +38,7 @@ public class Movement : MonoBehaviour
     public float grappleSpeed;
     public float grappleRange;
     public float grappleCooldown;
+    public float actualGrappleCooldown;
     public float grappleEndedTime;
     public float grappleEndedDecel;
     public float grapplePointVerticalBoost;
@@ -264,8 +265,18 @@ public class Movement : MonoBehaviour
 
     private IEnumerator StartGrappleCooldown()
     {
+        // grappleOnCooldown = true;
+        // yield return new WaitForSeconds(grappleCooldown);
+        // grappleOnCooldown= false;
         grappleOnCooldown = true;
-        yield return new WaitForSeconds(grappleCooldown);
+        float timeLeft = grappleCooldown;
+        while(timeLeft > 0f)
+        {
+            timeLeft -= Time.deltaTime;
+            actualGrappleCooldown = timeLeft < 0f ? 0f : timeLeft;
+            yield return null;
+        }
+        actualGrappleCooldown = 0f;
         grappleOnCooldown = false;
     }
 
