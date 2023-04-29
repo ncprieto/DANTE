@@ -11,4 +11,10 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/LustLevel.unity
     guid: daffb4aaea75a714c90fe108088d33a3
+  - enabled: 1
+    path: Assets/Scenes/Test Scenes/VictoryScene.unity
+    guid: 4e29dbb26e87bc84cb319adba60ebe9f
+  - enabled: 1
+    path: Assets/Scenes/Test Scenes/LoseScene.unity
+    guid: 2500082068aaeba458407fceee9c58af
   m_configObjects: {}
