@@ -39,6 +39,7 @@ public class UI_Script : MonoBehaviour
     public Movement Move;
     public Slider Grapple;
     private TextMeshProUGUI GrappleText;
+    public GameObject canGrappleUI;
 
     [Header("Revolver Related")]
     public GameObject Abilityobj;
@@ -83,12 +84,29 @@ public class UI_Script : MonoBehaviour
         }
 
         Grapple.value = 1f - (Move.actualGrappleCooldown / Move.grappleCooldown);
-        GrappleText.text = Mathf.CeilToInt(Move.actualGrappleCooldown).ToString();
+        if (Grapple.value == 1){
+            GrappleText.text = "Ready";
+        }
+        else{
+            GrappleText.text = Mathf.CeilToInt(Move.actualGrappleCooldown).ToString();
+        }
 
         Ability.value = 1f - (revolverMovement.actualAbilityCooldown / revolverMovement.abilityCooldown);
-        AbilityText.text = Mathf.CeilToInt(revolverMovement.actualAbilityCooldown).ToString();
+        if (Ability.value == 1){
+            AbilityText.text = "Ready";
+        }
+        else{
+            AbilityText.text = Mathf.CeilToInt(revolverMovement.actualAbilityCooldown).ToString();
+        }
 
         objectiveText.text = "Demons Slain: " + lvlHandler.enemiesKilled.ToString() + " / " + lvlHandler.enemiesToKill.ToString();
+
+        if(Move.canGrapple && Move.actualGrappleCooldown == 0){
+            canGrappleUI.SetActive(true);
+        }
+        else{
+            canGrappleUI.SetActive(false);
+        }
     }
 
     void updateTimerText(float currentTime)             // 80

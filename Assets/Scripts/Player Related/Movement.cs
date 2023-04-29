@@ -43,6 +43,7 @@ public class Movement : MonoBehaviour
     public float grappleEndedDecel;
     public float grapplePointVerticalBoost;
     public bool  toggleControl;
+    public bool  canGrapple;
     
     public LineRenderer lineRen;
 
@@ -73,6 +74,8 @@ public class Movement : MonoBehaviour
         if(Input.GetKeyDown(jump)) OnJumpPressed();
         if(Input.GetKeyDown(grapple))  OnGrapplePressed();
         if(Input.GetKeyUp(grapple) && !toggleControl) OnGrappleReleased();
+        canGrapple = Physics.Raycast(playerCamera.transform.position, playerCamera.transform.forward, grappleRange);
+        Debug.Log(canGrapple);
     }
 
     void FixedUpdate()

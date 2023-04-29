@@ -8,7 +8,7 @@ public class Settings : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-       Debug.Log("HERE");
+       //Debug.Log("HERE");
        if(PlayerPrefs.GetInt("FirstLoad") == 0)
        {
             PlayerPrefs.SetInt("FirstLoad", 1);
