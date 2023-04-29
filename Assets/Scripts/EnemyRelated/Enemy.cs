@@ -13,6 +13,7 @@ public class Enemy : MonoBehaviour
     protected GameObject player;
     protected PlayerHealth playerHP;
     protected LevelHandler lvlHandler;
+    protected GameObject healthDrops;
 
     private UnityEngine.Object hpDrop;
     private UnityEngine.Object deathParticles;
@@ -22,6 +23,7 @@ public class Enemy : MonoBehaviour
         player = GameObject.Find("Player");
         playerHP = player.GetComponent<PlayerHealth>();
         lvlHandler = GameObject.Find("LevelHandler").GetComponent<LevelHandler>();
+        healthDrops = GameObject.Find("HealthDrops");
     }
 
     void Start()
@@ -49,7 +51,7 @@ public class Enemy : MonoBehaviour
         StartCoroutine(DamageKnockbackStateTimer());
         if (currentHealth > 0) currentHealth -= dmg;
         if (currentHealth <= 0){
-            Instantiate(hpDrop, new Vector3 (this.gameObject.transform.position.x, this.gameObject.transform.position.y + 1, this.gameObject.transform.position.z), Quaternion.identity);
+            Instantiate(hpDrop, new Vector3 (this.gameObject.transform.position.x, this.gameObject.transform.position.y + 1, this.gameObject.transform.position.z), Quaternion.identity, healthDrops.transform);
             Instantiate(deathParticles, new Vector3 (this.gameObject.transform.position.x, this.gameObject.transform.position.y + 3, this.gameObject.transform.position.z), Quaternion.identity);
             Destroy(this.gameObject);
             lvlHandler.enemiesKilled++;
