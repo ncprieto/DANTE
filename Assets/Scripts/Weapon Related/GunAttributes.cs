@@ -42,6 +42,8 @@ public class GunAttributes : MonoBehaviour
         sinceLastFire += Time.deltaTime;
         if (Input.GetMouseButton(0) && (sinceLastFire > fireRate)){
             sinceLastFire = 0;
+            StartCoroutine(DrawTrail());
+            StartCoroutine(FlashMuzzle());
             fireAnim.SetTrigger("FireWeapon");
             shotTrail.SetPosition(0, trailOrigin.position);
             Vector3 rayOrigin = Camera.main.ViewportToWorldPoint(new Vector3(0.5f, 0.5f, 0));
@@ -68,8 +70,6 @@ public class GunAttributes : MonoBehaviour
                 gunMovement.ReceiveHitInfo(null);
                 shotTrail.SetPosition(1, rayOrigin + (Camera.main.transform.forward * weaponRange));
             }
-            StartCoroutine(DrawTrail());
-            StartCoroutine(FlashMuzzle());
             // Quaternion recoilRotation = Camera.main.transform.localRotation;
             // recoilRotation.x -= recoilStrength;
             // recoilRotation.y += recoilStrength;
@@ -88,7 +88,7 @@ public class GunAttributes : MonoBehaviour
     IEnumerator FlashMuzzle()
     {
         muzzleFlash.SetActive(true);
-        yield return new WaitForSeconds(.05f);
+        yield return new WaitForSeconds(.03f);
         muzzleFlash.SetActive(false);
     }
 }
