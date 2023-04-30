@@ -53,6 +53,9 @@ public class UI_Script : MonoBehaviour
     public LevelHandler lvlHandler;
     public GameObject hitmarker;
 
+    private float bpmScale = 1f;
+    private float lastUpdated = 0f;
+
     void Start()
     {
         healthTextGUI = healthTextObj.GetComponent<TextMeshProUGUI>();
@@ -106,6 +109,18 @@ public class UI_Script : MonoBehaviour
         }
         else{
             canGrappleUI.SetActive(false);
+        }
+
+        UpdateBPM();
+    }
+
+    void UpdateBPM()
+    {
+        if(lastUpdated != lvlHandler.enemiesKilled && lvlHandler.enemiesKilled % 10 == 0)
+        {
+            lastUpdated = lvlHandler.enemiesKilled;
+            bpmScale -= 0.1f;
+            OSCHandler.Instance.SendMessageToClient("pd", "/unity/music/changeBPM", bpmScale);
         }
     }
 
