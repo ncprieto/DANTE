@@ -18,7 +18,7 @@ public class OSCInit : MonoBehaviour
 
         //************* Instantiate the OSC Handler...
         OSCHandler.Instance.Init();
-        OSCHandler.Instance.SendMessageToClient("pd", "/unity/music/toggle", 1);
+        OSCHandler.Instance.SendMessageToClient("pd", "/unity/music/toggleMusic", 1);
         OSCHandler.Instance.SendMessageToClient("pd", "/unity/music/changeBPM", 1);
         //*************
     }
@@ -51,6 +51,10 @@ public class OSCInit : MonoBehaviour
             }
         }
         //*************
+    }
+
+    void OnDestroy(){
+        OSCHandler.Instance.SendMessageToClient("pd", "/unity/music/toggleMusic", 0);
     }
 
     // code to send message
