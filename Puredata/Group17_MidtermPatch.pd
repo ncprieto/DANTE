@@ -102,7 +102,7 @@
 #X text 815 639 Global lowpass;
 #X text 656 571 LERP out cutoff;
 #X text 418 572 LERP in cutoff;
-#N canvas 1690 154 2400 1246 gunshot 0;
+#N canvas 1690 154 1920 976 gunshot 0;
 #X obj 223 386 *~;
 #X obj 244 259 vline~;
 #X obj 171 343 osc~;
@@ -200,6 +200,7 @@
 #X text 642 137 Noise Filter Bank Automation;
 #X obj 722 189 loadbang;
 #X text 677 171 Initialize Filter Values;
+#X text 524 73 Trigger Gunshot;
 #X connect 0 0 49 0;
 #X connect 1 0 0 1;
 #X connect 2 0 0 0;
@@ -239,7 +240,7 @@
 #X connect 51 0 28 0;
 #X connect 51 0 29 0;
 #X restore 728 250 pd gunshot;
-#N canvas -751 87 2400 1246 damageEnemy 0;
+#N canvas 1653 87 2400 1246 damageEnemy 0;
 #X floatatom 201 94 5 0 0 0 - - - 0;
 #X obj 519 396 vline~;
 #X obj 292 557 *~;
@@ -288,12 +289,14 @@
 #X obj 291 514 *~;
 #X obj 710 506 *~;
 #X text 409 47 Randomly selects between 2 samples \, and randomizes their pitch., f 29;
-#X text 48 60 Changes volume level based on proximity to enemy., f 19;
+#X text 29 42 Changes volume level based on proximity to enemy., f 19;
 #X text 544 569 Each block of code is similar \, but they must be distinct as they are seperate soundfiles., f 32;
 #X text 991 379 Simple enveloping.;
 #X obj 261 63 r damageEnemy;
 #X obj 292 592 *~ 0.5;
 #X obj 290 637 outlet~;
+#X text 324 96 Trigger SFX, f 29;
+#X text 148 94 Distance, f 29;
 #X connect 0 0 7 0;
 #X connect 1 0 39 1;
 #X connect 2 0 46 0;
@@ -348,7 +351,7 @@
 #X connect 45 0 4 0;
 #X connect 46 0 47 0;
 #X restore 842 251 pd damageEnemy;
-#N canvas 1729 149 1920 976 backgroundMusic 0;
+#N canvas 1729 149 2400 1246 backgroundMusic 0;
 #X obj 119 316 tgl 19 0 empty empty empty 0 -10 0 12 #fcfcfc #000000 #000000 0 1;
 #X obj 326 191 hradio 19 1 0 16 empty empty empty 0 -10 0 12 #fcfcfc #000000 #000000 0;
 #X obj 324 248 select 0 7 1 8 2 9;
