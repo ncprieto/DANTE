@@ -15,15 +15,10 @@ public class MainMenu : MonoBehaviour
     public List<GameObject> title;
     public List<GameObject> other;
 
-    private IEnumerator fadeCoroutine;
-    private bool buttonsEnabled;
-
     void Start()
     {
-        fadeCoroutine = FadeTextAlpha(waitForTilFade, fadeDuration, title, 1f, 0f);
-        StartCoroutine(fadeCoroutine);
-        fadeCoroutine = FadeTextAlpha(waitForTilFade * 1.75f, fadeDuration, other, 1f, 0f);
-        StartCoroutine(fadeCoroutine);
+        FadeElements(title, fadeDuration, waitForTilFade);
+        FadeElements(other, fadeDuration, waitForTilFade * 1.75f);
         UnlockCursor();
     }
 
@@ -34,7 +29,7 @@ public class MainMenu : MonoBehaviour
 
     void Update()
     {
-        // if(Input.GetKeyDown(KeyCode.A)) ToggleAllButtons();
+        
     }
 
     public void StartGame()
@@ -63,32 +58,65 @@ public class MainMenu : MonoBehaviour
         SceneManager.LoadScene(3);
     }
 
-    public void UnlockCursor()
+    private void UnlockCursor()
     {
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
     }
 
-    // public void ToggleAllButtons()
-    // {
-    //     foreach(GameObject button in other)                                   // disable button click and image on buttons
-    //     {
-    //         Button component = button.GetComponent<Button>();
-    //         component.enabled = !component.enabled;
-    //         Image image = button.GetComponent<Image>();
-    //         image.enabled = !image.enabled;
-    //     }
-
-    //     if(fadeCoroutine != null) StopCoroutine(fadeCoroutine);
-    //     float start = buttonsEnabled ? 1f : 0f;
-    //     float end   = buttonsEnabled ? 0f : 1f;
-    //     fadeCoroutine = FadeTextAlpha(0f, refadeDuration, other, start, end);  // fade button text down or up depending on if they are enabled
-    //     StartCoroutine(fadeCoroutine);
-    // }
-
-    public IEnumerator FadeTextAlpha(float timeToWait, float duration, List<GameObject> elements, float start, float end)
+    public void ToggleMenuElements()
     {
-        yield return new WaitForSeconds(timeToWait);                               // wait and then start fading the alpha in
+        FadeElements(title, refadeDuration, 0f);
+        FadeElements(other, refadeDuration, 0f);
+    }
+
+    /* FadeElements() will fade text elements in and out based on if
+     * they are/aren't active in the hierarchy. Accepts a list of elements
+     * to fade, the duration of the fade, and a time to wait before starting the fade.
+     */
+    private void FadeElements(List<GameObject> elements, float fadeTime, float waitTime)
+    {
+        var (start, end) = GetStartAndEndValues(elements);
+        IEnumerator fadeElements = FadeTextAlpha(fadeTime, elements, start, end);
+        StartCoroutine(WaitForThenExecute(waitTime, fadeElements));
+    }
+
+    /* GetStartAndEndValues() returns a tuple that contains the start and
+     * end values used for a linear interpolation. It's primarily used
+     * for fading text elements in and out.
+     */
+    private (float, float) GetStartAndEndValues(List<GameObject> objs)
+    {
+        bool objsActive = AreObjectsActive(objs);
+        float start = objsActive ? 0f : 1f;
+        float end   = objsActive ? 1f : 0f;
+        return (start, end);
+    }
+
+    /* AreObjectsActive() will return a boolean that determins if the GameObjects
+     * in the provided list are active/inactive in the hierarchy.
+     */
+    private bool AreObjectsActive(List<GameObject> toCheck)
+    {
+        foreach(GameObject obj in toCheck) if(obj.activeSelf == false) return false;
+        return true;
+    }
+
+    // WaitForThenExectute() will wait a duration and then execute a coroutine.
+    private IEnumerator WaitForThenExecute(float seconds, IEnumerator coroutine)
+    {
+        yield return new WaitForSeconds(seconds);
+        StartCoroutine(coroutine);
+    }
+
+    /* FadeTextAlpha() will fade the alpha of a text object in or out depending on
+     * the values of the provided floats start and end. It will also disable the
+     * GameObjects provided based on the start and end values.
+     */
+    private IEnumerator FadeTextAlpha(float duration, List<GameObject> elements, float start, float end)
+    {
+        if(start > end) foreach(GameObject parent in elements) parent.SetActive(!parent.activeSelf);
+
         float timeToFade = duration;
         while(timeToFade > 0f)
         {
@@ -101,6 +129,7 @@ public class MainMenu : MonoBehaviour
             timeToFade -= Time.deltaTime;
             yield return null;
         }
-        buttonsEnabled = !buttonsEnabled;
+
+        if(start < end) foreach(GameObject parent in elements) parent.SetActive(!parent.activeSelf);
     }
 }

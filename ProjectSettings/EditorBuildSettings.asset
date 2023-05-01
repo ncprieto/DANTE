@@ -6,7 +6,7 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scenes/Test Scenes/MainMenu.unity
+    path: Assets/Scenes/MainMenu.unity
     guid: 32469be7175421b4487aa9f36b305428
   - enabled: 1
     path: Assets/Scenes/LustLevel.unity

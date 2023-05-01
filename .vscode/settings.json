@@ -1,4 +1,4 @@
-﻿{
+{
     "files.exclude":
     {
         "**/.DS_Store":true,
@@ -50,6 +50,20 @@
         "Obj/":true,
         "ProjectSettings/":true,
         "temp/":true,
-        "Temp/":true
+        "Temp/":true,
+        "*.meta":true,
+        "*/Animations/":true,
+        "*/Audio/":true,
+        "*/Imported/":true,
+        "*/Materials/":true,
+        "*/Models/":true,
+        "*/Plugins/":true,
+        "*/Resources/":true,
+        "*/Samples/":true,
+        "*/Scenes/":true,
+        "*/Settings/":true,
+        "*/StreamingAssets/":true,
+        "*/TextMesh Pro/":true,
+        "*/TutorialInfo/":true
     }
 }
