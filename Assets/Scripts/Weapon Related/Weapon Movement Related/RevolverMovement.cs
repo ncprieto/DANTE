@@ -33,6 +33,9 @@ public class RevolverMovement : GunMovement
         chainShotCoroutine = StartChainShotWindow();
         StartCoroutine(chainShotCoroutine);
         fovVFX.RevolverChainShotVFX();
+
+        // trigger ramp into lop filter
+        OSCHandler.Instance.SendMessageToClient("pd", "/unity/lopCut", 0);
     }
 
     protected override void EndMovementAbility()
@@ -41,6 +44,9 @@ public class RevolverMovement : GunMovement
         if(chainShotCoroutine != null) StopCoroutine(chainShotCoroutine);
         Time.timeScale = 1f;
         fovVFX.UndoRevolverVFX();
+
+        // trigger ramp out of lop filter
+        OSCHandler.Instance.SendMessageToClient("pd", "/unity/lopCut", 1);
     }
 
     public override void ReceiveHitInfo(string tag)

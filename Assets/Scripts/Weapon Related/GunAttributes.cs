@@ -43,6 +43,9 @@ public class GunAttributes : MonoBehaviour
     {
         sinceLastFire += Time.deltaTime;
         if (Input.GetMouseButton(0) && (sinceLastFire > fireRate)){
+            // gunshot sfx
+            OSCHandler.Instance.SendMessageToClient("pd", "/unity/gunshot", 1);
+
             sinceLastFire = 0;
             StartCoroutine(DrawTrail());
             StartCoroutine(FlashMuzzle());
