@@ -240,7 +240,7 @@
 #X connect 51 0 28 0;
 #X connect 51 0 29 0;
 #X restore 728 250 pd gunshot;
-#N canvas 1653 87 2400 1246 damageEnemy 0;
+#N canvas 326 -1304 2400 1246 damageEnemy 1;
 #X floatatom 201 94 5 0 0 0 - - - 0;
 #X obj 519 396 vline~;
 #X obj 292 557 *~;
@@ -297,6 +297,7 @@
 #X obj 290 637 outlet~;
 #X text 324 96 Trigger SFX, f 29;
 #X text 148 94 Distance, f 29;
+#X obj 200 23 loadbang;
 #X connect 0 0 7 0;
 #X connect 1 0 39 1;
 #X connect 2 0 46 0;
@@ -350,6 +351,7 @@
 #X connect 45 0 0 0;
 #X connect 45 0 4 0;
 #X connect 46 0 47 0;
+#X connect 50 0 0 0;
 #X restore 842 251 pd damageEnemy;
 #N canvas 1729 149 2400 1246 backgroundMusic 0;
 #X obj 119 316 tgl 19 0 empty empty empty 0 -10 0 12 #fcfcfc #000000 #000000 0 1;
