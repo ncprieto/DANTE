@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+using UnityOSC;
+
 public class GunAttributes : MonoBehaviour
 {
     [Header ("Base Variables")]
@@ -50,6 +52,9 @@ public class GunAttributes : MonoBehaviour
             RaycastHit hit;
             if (Physics.Raycast(rayOrigin, Camera.main.transform.forward, out hit, weaponRange, hitboxLayer)){
                 shotTrail.SetPosition(1, hit.point);
+
+                //OSC
+                OSCHandler.Instance.SendMessageToClient("pd", "/unity/damageenemy", hit.distance);
 
                 // get correct gameobjects and enemy base script
                 GameObject root    = hit.transform.parent.parent.gameObject;

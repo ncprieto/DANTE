@@ -75,7 +75,7 @@ public class Movement : MonoBehaviour
         if(Input.GetKeyDown(grapple))  OnGrapplePressed();
         if(Input.GetKeyUp(grapple) && !toggleControl) OnGrappleReleased();
         canGrapple = Physics.Raycast(playerCamera.transform.position, playerCamera.transform.forward, grappleRange);
-        Debug.Log(canGrapple);
+        //Debug.Log(canGrapple);
     }
 
     void FixedUpdate()
