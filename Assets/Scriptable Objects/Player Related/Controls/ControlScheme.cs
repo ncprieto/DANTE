@@ -10,45 +10,30 @@ public class ControlScheme : ScriptableObject
     public List<int>    values;
     private Dictionary<string, int> controls = new Dictionary<string, int>();
 
-    public void InitializeControls()
+    public void AddControlsToDictionary()
     {
-        for(int i = 0; i < names.Count; i++) controls.Add(names[i], values[i]);
-    }
-
-    public void WriteToPlayerPrefs()
-    {
-        Debug.Log("WRITING TO PLAYER PREFS");
-        foreach(var (key, value) in controls) PlayerPrefs.SetInt(key, value);
+        controls.Clear();
+        for(int i = 0; i< names.Count; i++) controls.Add(names[i], values[i]);
+        PrintControls();
     }
 
     public void SetControlsFrom(ControlScheme other)
     {
-        Debug.Log("SETTING CONTROLS FROM OTHER SCHEME");
-        this.controls = other.controls;
-        foreach(var (key, value) in other.controls)
-        {
-            int index = names.FindIndex(a => a.Contains(key));
-            Debug.Log(index);
-            values[index] = value;
-        }
-        WriteToPlayerPrefs();
+        names  = other.names;
+        values = other.values;
+        AddControlsToDictionary();
     }
 
-    public void PrintPlayerPrefs()
+    public void PrintControls()
     {
-        foreach(var (key, value) in controls)
-        {
-            KeyCode num = (KeyCode)PlayerPrefs.GetInt(key);
-            Debug.Log(key + " " + num);
-        }
+        foreach(var (key, value) in controls) Debug.Log(key + " " + (KeyCode)value);
     }
 
-    public void UpdateControls(string key, int asciiValue)
+    public void AddKeyBind(string key, int ascii)
     {
-        controls[key] = asciiValue;
-        PlayerPrefs.SetInt(key, asciiValue);
-        int index = names.FindIndex(a => a.Contains(key));
-        values[index] = asciiValue;
-        PrintPlayerPrefs();
+        controls[key] = ascii;
+        int index = name.FindIndex(a => a.Contains(key));
+        Debug.Log("AT INDEX " + index);
+        values[index] = ascii;
     }
 }

@@ -10,34 +10,30 @@ public class Settings : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        if(PlayerPrefs.GetInt("FirstLoad") == 0)
-        {
-            defaultSettings.InitializeControls();
-            playerSettings.InitializeControls();
-            playerSettings.SetControlsFrom(defaultSettings);
-            PlayerPrefs.SetInt("FirstLoad", 1);
-        }
+        Debug.Log("START");
+        Debug.Log(PlayerPrefs.GetInt("FirstLoad"));
+        Debug.Log("SETTING UP DEFAULT CONTROLS");
+        defaultSettings.AddControlsToDictionary();
+        Debug.Log("SETTING UP PLAYER CONTROLS");
+        playerSettings.AddControlsToDictionary();
+        // playerSettings.SetControlsFrom(defaultSettings);
     }
 
     // Update is called once per frame
     void Update()
     {
-        if(Input.GetKeyDown(KeyCode.A)) playerSettings.UpdateControls("Forward", 59);
-        if(Input.GetKeyDown(KeyCode.H)) SetControlsToDefault();
+        if(Input.GetKeyDown(KeyCode.A))
     }
 
     void OnDestroy()
     {
         PlayerPrefs.SetInt("FirstLoad", 0);
+        Debug.Log("DESTORY");
+        Debug.Log(PlayerPrefs.GetInt("FirstLoad"));
     }
 
     public void OpenSettingsMenu()
     {
         Debug.Log("OPENING SETTINGS MENU");
-    }
-
-    public void SetControlsToDefault()
-    {
-        playerSettings.SetControlsFrom(defaultSettings);
     }
 }
