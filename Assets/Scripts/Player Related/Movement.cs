@@ -61,6 +61,7 @@ public class Movement : MonoBehaviour
     {
         groundDecel = groundDecel < 1 ? 1 : groundDecel;                                                      // sets groundDecel to 1 if its less than 1, groundDecel value less than 1 causes bugs
         baseMoveSpeed = moveSpeed;
+        SetupKeyBinds();
     }
 
     bool wasInAir;
@@ -104,6 +105,16 @@ public class Movement : MonoBehaviour
         // Debug.Log("HERE " + decel);
         if(!GetInputs() && rb.velocity.magnitude > 0) rb.velocity -= rb.velocity / decel;
         CapSpeed();
+    }
+
+    void SetupKeyBinds()
+    {
+        forward = (KeyCode)PlayerPrefs.GetInt("Forward");
+        backward = (KeyCode)PlayerPrefs.GetInt("Backward");
+        left = (KeyCode)PlayerPrefs.GetInt("Left");
+        right = (KeyCode)PlayerPrefs.GetInt("Right");
+        jump = (KeyCode)PlayerPrefs.GetInt("Jump");
+        grapple = (KeyCode)PlayerPrefs.GetInt("Grapple");
     }
     
     int fb;

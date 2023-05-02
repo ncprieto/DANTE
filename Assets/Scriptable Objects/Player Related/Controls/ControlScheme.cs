@@ -24,7 +24,31 @@ public class ControlScheme : ScriptableObject
     public void SetControlsFrom(ControlScheme other)
     {
         Debug.Log("SETTING CONTROLS FROM OTHER SCHEME");
-        // this.controls = other.controls;
-        // foreach(var (key, value) in controls) Debug.Log("KEY " + key + " VALUE " + value);
+        this.controls = other.controls;
+        foreach(var (key, value) in other.controls)
+        {
+            int index = names.FindIndex(a => a.Contains(key));
+            Debug.Log(index);
+            values[index] = value;
+        }
+        WriteToPlayerPrefs();
+    }
+
+    public void PrintPlayerPrefs()
+    {
+        foreach(var (key, value) in controls)
+        {
+            KeyCode num = (KeyCode)PlayerPrefs.GetInt(key);
+            Debug.Log(key + " " + num);
+        }
+    }
+
+    public void UpdateControls(string key, int asciiValue)
+    {
+        controls[key] = asciiValue;
+        PlayerPrefs.SetInt(key, asciiValue);
+        int index = names.FindIndex(a => a.Contains(key));
+        values[index] = asciiValue;
+        PrintPlayerPrefs();
     }
 }

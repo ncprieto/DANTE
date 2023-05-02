@@ -36,6 +36,7 @@ public class GunMovement : MonoBehaviour
         fovVFX = player.GetComponent<FOVVFX>();
         gunAttributes = ga;
         abilityState = ABILITY.OFFCOOLDOWN;
+        abilityKey = (KeyCode)PlayerPrefs.GetInt("Weapon Ability");
     }
 
     protected virtual void DoMovementAbility()

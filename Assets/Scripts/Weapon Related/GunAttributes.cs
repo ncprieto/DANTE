@@ -5,6 +5,7 @@ using UnityEngine;
 public class GunAttributes : MonoBehaviour
 {
     [Header ("Base Variables")]
+    public KeyCode shoot;
     public float fireRate;
     public float weaponRange;
     public LayerMask hitboxLayer;
@@ -31,16 +32,20 @@ public class GunAttributes : MonoBehaviour
         fireAnim = GetComponent<Animator>();
         gunMovement.Initialize(GameObject.Find("Player"), this);
         UI = GameObject.Find("Canvas").GetComponent<UI_Script>();
-
         //playerAim = GameObject.Find("Orientation").transform;
         //mainCam = GameObject.Find("Main Camera").transform;
+    }
+
+    void Start()
+    {
+        shoot = (KeyCode)PlayerPrefs.GetInt("Shoot");
     }
 
     // Update is called once per frame
     void Update()
     {
         sinceLastFire += Time.deltaTime;
-        if (Input.GetMouseButton(0) && (sinceLastFire > fireRate)){
+        if (Input.GetKeyDown(shoot) && (sinceLastFire > fireRate)){
             sinceLastFire = 0;
             StartCoroutine(DrawTrail());
             StartCoroutine(FlashMuzzle());
