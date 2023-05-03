@@ -4,36 +4,31 @@ using UnityEngine;
 
 public class Settings : MonoBehaviour
 {
-    public ControlScheme defaultSettings;
-    public ControlScheme playerSettings;
+    public ControlScheme controls;
 
     // Start is called before the first frame update
     void Start()
     {
-        Debug.Log("START");
-        Debug.Log(PlayerPrefs.GetInt("FirstLoad"));
-        Debug.Log("SETTING UP DEFAULT CONTROLS");
-        defaultSettings.AddControlsToDictionary();
-        Debug.Log("SETTING UP PLAYER CONTROLS");
-        playerSettings.AddControlsToDictionary();
-        // playerSettings.SetControlsFrom(defaultSettings);
+        if(PlayerPrefs.GetInt("ControlsInit") == 0)
+        {
+            controls.SetToDefault();
+            PlayerPrefs.SetInt("ControlsInit", 1);
+        }
     }
 
     // Update is called once per frame
     void Update()
     {
-        if(Input.GetKeyDown(KeyCode.A))
-    }
-
-    void OnDestroy()
-    {
-        PlayerPrefs.SetInt("FirstLoad", 0);
-        Debug.Log("DESTORY");
-        Debug.Log(PlayerPrefs.GetInt("FirstLoad"));
+        
     }
 
     public void OpenSettingsMenu()
     {
         Debug.Log("OPENING SETTINGS MENU");
+    }
+
+    public void SetControlsToDefault()
+    {
+        controls.SetToDefault();
     }
 }
