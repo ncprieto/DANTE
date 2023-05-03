@@ -9,15 +9,17 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f440dc8a97354c843ae9f0d8cde016d9, type: 3}
-  m_Name: Player Controls
+  m_Script: {fileID: 11500000, guid: 02a8adbb2dc7a26449a8175c5e52085f, type: 3}
+  m_Name: Controls
   m_EditorClassIdentifier: 
-  names:
+  keyNames:
   - Forward
   - Backward
   - Left
   - Right
-  - Jummp
-  - Grapple
+  - Jump
   - Weapon Ability
-  values: 77000000730000006100000064000000200000004401000030010000
+  - Shoot
+  - Grapple
+  customCodes: 0000000000000000000000000000000000000000000000000000000000000000
+  defaultCodes: 7700000073000000610000006400000020000000300100004301000044010000
