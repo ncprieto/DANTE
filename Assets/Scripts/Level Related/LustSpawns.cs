@@ -15,17 +15,17 @@ public class LustSpawns : LevelHandler
     private bool haveKillsSpawnsHappened;
 
     // Start is called before the first frame update
-    void Start()
+    protected override void Start()
     {
         lustEnemy = Resources.Load("Prefabs/LustEnemy");
         timer = 0f;
         haveKillsSpawnsHappened = false;
+        base.Start();
     }
 
     // Update is called once per frame
-    void Update()
+    protected override void Update()
     {
-        // Debug.Log("EVIL SLAIN: " + enemiesKilled + " / " + enemiesToKill);
         timer += Time.deltaTime;
         if (timer > spawnRateTime){
             SpawnEnemy(lustEnemy, transform.GetChild(Random.Range(0, transform.childCount - 1)));
@@ -41,6 +41,7 @@ public class LustSpawns : LevelHandler
         if (enemiesKilled % spawnRateKills != 0){
             haveKillsSpawnsHappened = false;
         }
+        base.Update();
     }
 
     int FindSpawnPoint()
