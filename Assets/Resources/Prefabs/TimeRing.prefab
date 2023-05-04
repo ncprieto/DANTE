@@ -11722,7 +11722,7 @@ GameObject:
   - component: {fileID: 8525755083415440121}
   - component: {fileID: 8525755083415440120}
   - component: {fileID: 2136691164909180535}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: CylinderHitbox
   m_TagString: Untagged
   m_Icon: {fileID: 0}

@@ -8,6 +8,8 @@ public class LustEnemy : Enemy
     [Header ("Lust Specfic Variables")]
     public NavMeshAgent nmAgent;
 
+    public Animator anims;
+
     // Patrol state vars
     public Vector3 patrolTo;
     bool patrolPointSet;
@@ -24,6 +26,7 @@ public class LustEnemy : Enemy
     private bool inStalkRange;
     private bool inChaseRange;
     private bool playerHit;
+    private Vector3 shotDirection;
 
     // Update is called once per frame
     void Update()
@@ -32,8 +35,18 @@ public class LustEnemy : Enemy
         inStalkRange = Physics.CheckSphere(transform.position, stalkRange, playerLayer);
         inChaseRange = Physics.CheckSphere(transform.position, chaseRange, playerLayer);
 
+        if (nmAgent.isOnOffMeshLink || nmAgent.speed == 0){
+            anims.SetBool("isStill", true);
+        }
+        else if (!damageKnockback || !nmAgent.isOnOffMeshLink){
+            anims.SetBool("isStill", false);
+        }
+
         if (damageKnockback){
             DamageKnockbackState();
+        }
+        else if (antiStuck.pushBackEnemies){
+            AntiStuckEnemyPushbackState();
         }
         else if (playerHit){
             HitPlayerState();
@@ -52,6 +65,7 @@ public class LustEnemy : Enemy
     // Patrol state functions
     void PatrolState()
     {
+        anims.speed = .5f;
         nmAgent.speed = walkSpeed;
 
         if (!patrolPointSet){
@@ -83,6 +97,7 @@ public class LustEnemy : Enemy
     // Stalk state functions
     void StalkState()
     {
+        anims.speed = 1f;
         nmAgent.speed = stalkSpeed;
         nmAgent.SetDestination(player.transform.position);
     }
@@ -90,24 +105,38 @@ public class LustEnemy : Enemy
     // Chase state functions
     void ChaseState()
     {
+        anims.speed = 1.5f;
         nmAgent.speed = chaseSpeed;
         nmAgent.SetDestination(player.transform.position);
     }
 
     void HitPlayerState()
     {
+        anims.speed = 1f;
         nmAgent.speed = 0;
     }
 
     void DamageKnockbackState()
     {
+        anims.speed = 1f;
         if (!invertVelocity){
-            Vector3 origVelocity = nmAgent.velocity;
-            nmAgent.velocity = -(origVelocity);
+            shotDirection = Camera.main.transform.forward * 5;
+            shotDirection.y = nmAgent.velocity.y;
             invertVelocity = true;
         }
+        nmAgent.velocity = shotDirection;
         nmAgent.speed = 5;
-        //transform.LookAt(player.transform);
+        transform.LookAt(player.transform);
+        anims.SetBool("isStill", true);
+    }
+
+    void AntiStuckEnemyPushbackState()
+    {
+        anims.speed = 1f;
+        nmAgent.velocity = -(transform.forward * 7.5f);
+        nmAgent.speed = 5;
+        transform.LookAt(player.transform);
+        anims.SetBool("isStill", true);
     }
 
     // Send damage to player

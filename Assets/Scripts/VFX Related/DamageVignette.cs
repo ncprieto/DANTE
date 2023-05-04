@@ -19,10 +19,10 @@ public class DamageVignette : MonoBehaviour
 
     public IEnumerator DamageVFX()
     {
-        vignette.intensity.Override(0.35f);
+        vignette.intensity.Override(0.5f);
         vignette.smoothness.Override(1f);
         vignette.color.Override(Color.red);
-        yield return new WaitForSeconds(.05f);
+        yield return new WaitForSeconds(.1f);
         vignette.intensity.Override(0.2f);
         vignette.smoothness.Override(0.5f);
         vignette.color.Override(Color.black);

@@ -9,6 +9,7 @@ public class PlayerHealth : MonoBehaviour
     public int playerCurrentHealth = 100;
     public UI_Script UI;            //To call function in UI
     public DamageVignette dmgVFX;
+    public CameraShake camShake;
 
     void OnAwake()
     {
@@ -47,6 +48,7 @@ public class PlayerHealth : MonoBehaviour
         if ((playerCurrentHealth > 0) && !isInvincible){
             playerCurrentHealth -= damageTaken;
             StartCoroutine(dmgVFX.DamageVFX());
+            StartCoroutine(camShake.Shake(0.2f, 0.35f));
             
             if (playerCurrentHealth <= 0){
                 playerCurrentHealth = 0;
