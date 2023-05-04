@@ -4,9 +4,6 @@ using UnityEngine;
 
 public class FOVVFX : MonoBehaviour
 {
-    private float originalFOV;
-    private float currentFOV;
-
     [Header ("Grapple FOV Variables")]
     public float grappleFOVTime;
     public float grappleFOVOffset;
@@ -20,8 +17,18 @@ public class FOVVFX : MonoBehaviour
     public float bHopFOVTime;
     public float bHopFOVOffset;
 
+    private float originalFOV;
+    private float currentFOV;
+
+    void Awake()
+    {
+        Camera.main.fieldOfView = PlayerPrefs.GetInt("FOV", 90);
+        originalFOV = Camera.main.fieldOfView;
+    }
+
     void Start()
     {
+        Camera.main.fieldOfView = PlayerPrefs.GetInt("FOV", 90);
         originalFOV = Camera.main.fieldOfView;
     }
 
@@ -31,63 +38,52 @@ public class FOVVFX : MonoBehaviour
     }
 
     // Grapple Realted FOV Functions
-    float FOVAtGrapple;
-    IEnumerator grappleFOVCoroutine;
+    IEnumerator grappleFOV;
     public void GrappleStartVFX()
     {
-        if(revolverFOVCoroutine != null) return;
-        if(grappleFOVCoroutine  != null) StopCoroutine(grappleFOVCoroutine);
-        grappleFOVCoroutine = LerpFOV(currentFOV + grappleFOVOffset, currentFOV, grappleFOVTime);
-        StartCoroutine(grappleFOVCoroutine);
+        if(IsCoroutineRunning("revolver")) return;
+        grappleFOV = DoFOVVFX(grappleFOV, currentFOV + grappleFOVOffset, currentFOV, grappleFOVTime, "grapple");
     }
 
     public void GrappleEndVFX()
     {
-        if(revolverFOVCoroutine != null) return;
-        if(grappleFOVCoroutine != null) StopCoroutine(grappleFOVCoroutine);
-        grappleFOVCoroutine = LerpFOV(originalFOV, currentFOV, grappleFOVTime);
-        StartCoroutine(grappleFOVCoroutine);
+        if(IsCoroutineRunning("revolver")) return;
+        grappleFOV = DoFOVVFX(grappleFOV, originalFOV, currentFOV, grappleFOVTime, "grapple");
     }
 
     // Revolver Related FOV Functions
-    float FOVAtFirstShot;
-    IEnumerator revolverFOVCoroutine;
+    IEnumerator revolverFOV;
     public void RevolverChainShotVFX()
     {
-        if(grappleFOVCoroutine  != null) StopCoroutine(grappleFOVCoroutine);
-        if(revolverFOVCoroutine != null) StopCoroutine(revolverFOVCoroutine);
-        revolverFOVCoroutine = LerpFOV(currentFOV + revolverFOVOffset, currentFOV, revolverStartUpTime);
-        StartCoroutine(revolverFOVCoroutine);
+        if(IsCoroutineRunning("grapple")) StopCoroutine(grappleFOV);
+        revolverFOV = DoFOVVFX(revolverFOV, currentFOV + revolverFOVOffset, currentFOV, revolverStartUpTime, "revolver");
     }
 
     public void UndoRevolverVFX()
     {
-        if(revolverFOVCoroutine != null) StopCoroutine(revolverFOVCoroutine);
-        revolverFOVCoroutine = LerpFOV(originalFOV, currentFOV, revolverEndTime);
-        StartCoroutine(revolverFOVCoroutine);
+        revolverFOV = DoFOVVFX(revolverFOV, originalFOV, currentFOV, revolverEndTime, "revolver");
     }
 
-    // B Hop Related FOV Functions
-    float FOVAtBHop;
-    IEnumerator bHopFOVCoroutine;
-    public void BHopVFX(int count)
+
+    /* DoFOVVFX() essesntially start and stops the FOV lerp. It stops a coroutine
+     * when it detects that it is already running or will start a coroutine if it
+     * is not running. Return a coroutine which is used to actually start and stop itself.
+     */
+    private IEnumerator DoFOVVFX(IEnumerator lerpCoroutine, float start, float end, float timeFrame, string name)
     {
-        if(count == 1) FOVAtBHop = currentFOV;
-        if(bHopFOVCoroutine != null) StopCoroutine(bHopFOVCoroutine);
-        bHopFOVCoroutine = LerpFOV(currentFOV + bHopFOVOffset, currentFOV, bHopFOVTime);
-        StartCoroutine(bHopFOVCoroutine);
+        if(IsCoroutineRunning(name))
+        {
+            StopCoroutine(lerpCoroutine);
+            SetCoroutine(name, false);
+        }
+        lerpCoroutine = LerpFOV(start, end, timeFrame, name);
+        StartCoroutine(lerpCoroutine);
+        return lerpCoroutine;
     }
 
-    public void UndoBHopVFX()
+    IEnumerator LerpFOV(float start, float end, float timeFrame, string name)
     {
-        if(bHopFOVCoroutine != null) StopCoroutine(bHopFOVCoroutine);
-        float start = currentFOV < FOVAtBHop ? originalFOV : FOVAtBHop;
-        bHopFOVCoroutine = LerpFOV(start, currentFOV, bHopFOVTime);
-        StartCoroutine(bHopFOVCoroutine);
-    }
-
-    IEnumerator LerpFOV(float start, float end, float timeFrame)
-    {
+        SetCoroutine(name, true);
         float timeLeft = timeFrame;
         while(timeLeft > 0)
         {
@@ -95,5 +91,34 @@ public class FOVVFX : MonoBehaviour
             Camera.main.fieldOfView = Mathf.Lerp(start, end, Mathf.Clamp(timeLeft / timeFrame, 0f, 1f));
             yield return null;
         }
+        SetCoroutine(name, false);
+    }
+
+    // Some Boolean tracking functions to tell wheter a coroutine is running
+    bool grappleFOVLerping;
+    bool revolverFOVLerping;
+    private void SetCoroutine(string name, bool state)
+    {
+        switch (name)
+        {
+            case "grapple":
+                grappleFOVLerping = state;
+                break;
+            case "revolver":
+                revolverFOVLerping = state;
+                break;
+        }
+    }
+
+    private bool IsCoroutineRunning(string name)
+    {
+        switch (name)
+        {
+            case "grapple":
+                return grappleFOVLerping;
+            case "revolver":
+                return revolverFOVLerping;
+        }
+        return false;
     }
 }

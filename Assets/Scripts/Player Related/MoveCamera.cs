@@ -10,23 +10,27 @@ public class MoveCamera : MonoBehaviour
     float xRotation;
     float yRotation;
 
+    void Awake()
+    {
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
+        sens = PlayerPrefs.GetFloat("Sensitivity", 5f);
+    }
+
+
     void Start()
     {
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
-    }
-    void OnAwake()
-    {
-        Cursor.lockState = CursorLockMode.Locked;
-        Cursor.visible = false;
+        sens = PlayerPrefs.GetFloat("Sensitivity", 5f);
     }
 
     // Update is called once per frame
     void Update()
     {
         //get mouse input
-        float mouseX = Input.GetAxisRaw("Mouse X") * Time.deltaTime * sens * 100;
-        float mouseY = Input.GetAxisRaw("Mouse Y") * Time.deltaTime * sens * 100;
+        float mouseX = Input.GetAxisRaw("Mouse X") * Time.deltaTime * sens * 25;
+        float mouseY = Input.GetAxisRaw("Mouse Y") * Time.deltaTime * sens * 25;
         
         yRotation += mouseX;
         xRotation -= mouseY;

@@ -32,7 +32,7 @@ public class GunAttributes : MonoBehaviour
         fireAnim = GetComponent<Animator>();
         gunMovement.Initialize(GameObject.Find("Player"), this);
         UI = GameObject.Find("Canvas").GetComponent<UI_Script>();
-        shoot = (KeyCode)PlayerPrefs.GetInt("Shoot");
+        shoot = (KeyCode)PlayerPrefs.GetInt("Shoot", 323);
         //playerAim = GameObject.Find("Orientation").transform;
         //mainCam = GameObject.Find("Main Camera").transform;
     }

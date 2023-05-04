@@ -9,7 +9,6 @@ public class Movement : MonoBehaviour
     public LayerMask ground;
     public FOVVFX fovVFX;
     public GameObject playerCamera;
-    
 
     [Header("Input")]
     public KeyCode forward;
@@ -62,6 +61,7 @@ public class Movement : MonoBehaviour
         groundDecel = groundDecel < 1 ? 1 : groundDecel;                                                      // sets groundDecel to 1 if its less than 1, groundDecel value less than 1 causes bugs
         baseMoveSpeed = moveSpeed;
         SetUpControls();
+        Camera.main.fieldOfView = PlayerPrefs.GetInt("FOV", 90);
     }
 
     bool wasInAir;
@@ -348,11 +348,11 @@ public class Movement : MonoBehaviour
 
     private void SetUpControls()
     {
-        forward  = (KeyCode)PlayerPrefs.GetInt("Forward");
-        backward = (KeyCode)PlayerPrefs.GetInt("Backward");
-        left     = (KeyCode)PlayerPrefs.GetInt("Left");
-        right    = (KeyCode)PlayerPrefs.GetInt("Right");
-        jump     = (KeyCode)PlayerPrefs.GetInt("Jump");
-        grapple  = (KeyCode)PlayerPrefs.GetInt("Grapple");
+        forward  = (KeyCode)PlayerPrefs.GetInt("Forward", 119);
+        backward = (KeyCode)PlayerPrefs.GetInt("Backward", 115);
+        left     = (KeyCode)PlayerPrefs.GetInt("Left", 97);
+        right    = (KeyCode)PlayerPrefs.GetInt("Right", 100);
+        jump     = (KeyCode)PlayerPrefs.GetInt("Jump", 32);
+        grapple  = (KeyCode)PlayerPrefs.GetInt("Grapple", 324);
     }
 }

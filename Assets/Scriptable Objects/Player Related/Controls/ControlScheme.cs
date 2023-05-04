@@ -10,7 +10,12 @@ public class ControlScheme : ScriptableObject
     public List<KeyCode> customCodes;
     public List<KeyCode> defaultCodes;                                                          // list for default key binds DO NOT CHANGE ONLY ADD TO IN EDITOR ONLY ACCESS VALUES FROM defaultValues
     public IReadOnlyList<KeyCode> defaultValues => defaultCodes as IReadOnlyList<KeyCode>;      // makes defaultCodes read only so default controls can't be edited accidentally at runtime
-    public Dictionary<string, KeyCode> controls = new Dictionary<string, KeyCode>();
+
+    public void Awake()
+    {
+        for(int i = 0; i < keyNames.Count; i++) customCodes[i] = (KeyCode)PlayerPrefs.GetInt(keyNames[i], (int)defaultValues[i]);
+        WriteAllToPlayerPrefs();
+    }
 
     /* SetToDefault() will set all values in customCodes to the values within
      * defaultCodes. It accesses defaultValues as a means of accessing the values
@@ -24,27 +29,6 @@ public class ControlScheme : ScriptableObject
             for(int i = 0; i < defaultValues.Count; i++) customCodes.Add(defaultValues[i]);
         }
         else for(int i = 0; i < defaultValues.Count; i++) customCodes[i] = defaultValues[i];    // else set indices to be the same as default
-        UpdateAllEntries();
-    }
-
-    /* InitializeDictionary() grabs values from PlayerPrefs and adds them to
-     * the dictionary so that the player can edit custom keybinds.
-     */
-    public void InitializeDictionary()
-    {
-        for(int i = 0; i < keyNames.Count; i++)
-        {
-            if(!controls.ContainsKey(keyNames[i])) controls.Add(keyNames[i], (KeyCode)PlayerPrefs.GetInt(keyNames[i]));
-        }
-    }
-
-    /* UdateAllEntries() iterates through keyNames and sets its contents to be the
-     * keys in the controls dictionary. It also sets each key to have the correctly
-     * associated KeyCode value.
-     */
-    private void UpdateAllEntries()
-    {
-        for(int i = 0; i < keyNames.Count; i++) controls[keyNames[i]] = customCodes[i];
         WriteAllToPlayerPrefs();
     }
 
@@ -54,11 +38,9 @@ public class ControlScheme : ScriptableObject
      */
     public void ChangeKeyBind(string bindToChange, KeyCode newKeyCode)
     {
-        int index   = keyNames.FindIndex(bind => bind.Contains(bindToChange));
-        bool inDict = controls.ContainsKey(bindToChange);
-        if(index == -1 || !inDict) return;                                                       // if the keybind we want to change isn't in controls of keyNames then exit 
-        controls[bindToChange] = newKeyCode;
-        customCodes[index]     = newKeyCode;
+        int index = keyNames.FindIndex(bind => bind.Contains(bindToChange));
+        if(index == -1) return;     
+        customCodes[index] = newKeyCode;
         WriteSingleToPlayerPrefs(bindToChange, newKeyCode);
     }
 
@@ -68,9 +50,7 @@ public class ControlScheme : ScriptableObject
      */
     private void WriteAllToPlayerPrefs()
     {
-        // Debug.Log("WRITING ALL TO PLAYER PREFS");
-        foreach(var (key, value) in controls) PlayerPrefs.SetInt(key, (int)value);
-        // PrintAllFromPlayerPrefs();
+        for(int i = 0; i < keyNames.Count; i++) WriteSingleToPlayerPrefs(keyNames[i], customCodes[i]);
     }
 
     /* WriteSingleToPlayerPrefs() accepts a string and a KeyCode and sets a
@@ -78,42 +58,6 @@ public class ControlScheme : ScriptableObject
      */
     private void WriteSingleToPlayerPrefs(string key, KeyCode code)
     {
-        // Debug.Log("WRITING SINGLE TO PLAYER PREFS");
         PlayerPrefs.SetInt(key, (int)code);
-        // PrintSingleFromPlayerPrefs(key);
     }
-
-    ///////////////////////////////////////////////////////////////////////////
-    // Functions for printing out the data found in controls and PlayerPrefs.
-    private void PrintDictionary()
-    {
-        Debug.Log("PRINTING DICTIONARY");
-        foreach(var (key, value) in controls) Debug.Log("ACTION: " + key + " KEYCODE: " + value);
-    }
-
-    private void PrintAllFromPlayerPrefs()
-    {
-        Debug.Log("PRINTING ALL FROM PLAYER PREFS");
-        foreach(var (key, value) in controls) Debug.Log("ACTION: " + key + " KEYCODE: " + (KeyCode)PlayerPrefs.GetInt(key, (int)value));
-    }
-
-    private void PrintSingleFromPlayerPrefs(string action)
-    {
-        Debug.Log("PRINTING SINGLE FROM PLAYER PREFS");
-        Debug.Log("ACTION: " + action + " KEYCODE :" + (KeyCode)PlayerPrefs.GetInt(action));
-    }
-
-    // Functions for clearing data in PlayerPrefs
-    private void ClearAllFromPlayerPrefs()
-    {
-        Debug.Log("CLEARING ALL FROM PLAYER PREFS");
-        foreach(var (key, value) in controls) PlayerPrefs.SetInt(key, 0);
-    }
-
-    private void ClearSingleFromPlayerPrefs(string action)
-    {
-        Debug.Log("CLEARING SINGLE FROM PLAYER PREFS");
-        PlayerPrefs.SetInt(action, 0);
-    }
-    ///////////////////////////////////////////////////////////////////////////
 }

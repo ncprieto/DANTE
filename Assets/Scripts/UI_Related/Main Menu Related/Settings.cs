@@ -16,24 +16,18 @@ public class Settings : MonoBehaviour
 
     void Awake()
     {
+        controls.Awake();
         ConvertKeyCodesToReadable();
-        if(PlayerPrefs.GetInt("ControlsInit") == 0)                               // if player has never loaded the game set controls to default
-        {
-            controls.SetToDefault();
-            PlayerPrefs.SetInt("ControlsInit", 1);
-        }
-        else controls.InitializeDictionary();                                     // else initialize dictionary to have custom keybinds
         LoadPrefsIntoText();                                                      // load playerprefs into the text objects
+    }
+
+    void Start()
+    {
+        listenForInput = false;
     }
 
     void Update()
     {
-        if(Input.GetKeyDown(KeyCode.Escape))
-        {
-            listenForInput = false;
-            this.gameObject.SetActive(false);
-            return;
-        }
         if(listenForInput)                                                       // listen for additional mouse buttons because Event.current doesn't read these mouse 3-6
         {
             KeyCode newKey = KeyCode.None;
@@ -43,16 +37,6 @@ public class Settings : MonoBehaviour
             else if(Input.GetKeyDown(KeyCode.Mouse6)) newKey = KeyCode.Mouse6;
             ReceiveInputCode(newKey);
         }
-    }
-
-    public void OpenSettingsMenu()
-    {
-        Debug.Log("OPENING SETTINGS MENU");
-    }
-
-    public void CloseSettingsMenu()
-    {
-        Debug.Log("CLOSING SETTINGS MENU");
     }
 
     /* SetControlsToDefault() call controls.SetToDefault() to reset the controls.
@@ -103,8 +87,7 @@ public class Settings : MonoBehaviour
      */
     private void UpdateButtonText(GameObject button, KeyCode code)
     {
-        TextMeshProUGUI component = button.GetComponentInChildren<TextMeshProUGUI>();
-        component.text = button.name + ": " + buttonNames[code];
+        button.GetComponentInChildren<TextMeshProUGUI>().text = buttonNames[code];
     }
 
     /* ConvertKeyCodesToReadable() converts the KeyCode Enum to more readable
