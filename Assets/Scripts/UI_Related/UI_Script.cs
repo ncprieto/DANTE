@@ -18,6 +18,7 @@ public class UI_Script : MonoBehaviour
     //in game speed component
     private TextMeshProUGUI gameSpeedText;
     private TextMeshProUGUI gameTimerText;
+    private TextMeshProUGUI timeAdditionText;
     // Start is called before the first frame update
 
     //bhop multiplier stuff
@@ -63,6 +64,7 @@ public class UI_Script : MonoBehaviour
         AbilityText = Abilityobj.GetComponent<TextMeshProUGUI>();
         updateHealthUI(health.playerCurrentHealth);
         objectiveText = objTextObj.GetComponent<TextMeshProUGUI>();
+        timeAdditionText = timerText.transform.GetChild(0).gameObject.GetComponent<TextMeshProUGUI>();
     }
 
     // Update is called once per frame
@@ -124,11 +126,13 @@ public class UI_Script : MonoBehaviour
     public void AddTime(float amount)
     {
         timeLeft += amount;
+        timeAdditionText.text = "+ " + amount.ToString() + "s";
+        StartCoroutine(FadeTextToZeroAlpha(2f, timeAdditionText));
     }
 
     void changeBhopText(int count)
     {
-        moveCounterText.text = "X " + count.ToString() + " bHop Chain";
+        moveCounterText.text = "x" + count.ToString() + " bHop Chain";
         multiplierText.SetActive(true);
     }
 
@@ -138,10 +142,21 @@ public class UI_Script : MonoBehaviour
         healthTextGUI.text = n.ToString();
     }
 
-    public IEnumerator DisplayHitmarker()
+    public IEnumerator DisplayHitmarker(string hitboxName)
     {
-        hitmarker.SetActive(true);
+        int index = (hitboxName == "CritHitbox" ? 1 : 0);
+        hitmarker.transform.GetChild(index).gameObject.SetActive(true);
         yield return new WaitForSeconds(.1f);
-        hitmarker.SetActive(false);
+        hitmarker.transform.GetChild(index).gameObject.SetActive(false);
+    }
+
+    public IEnumerator FadeTextToZeroAlpha(float t, TextMeshProUGUI i)
+    {
+        i.color = new Color(i.color.r, i.color.g, i.color.b, 1);
+        while (i.color.a > 0.0f)
+        {
+            i.color = new Color(i.color.r, i.color.g, i.color.b, i.color.a - (Time.deltaTime / t));
+            yield return null;
+        }
     }
 }

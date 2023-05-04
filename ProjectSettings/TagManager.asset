@@ -8,6 +8,7 @@ TagManager:
   - MediumHealth
   - LargeHealth
   - FireDOT
+  - Enemy
   layers:
   - Default
   - TransparentFX

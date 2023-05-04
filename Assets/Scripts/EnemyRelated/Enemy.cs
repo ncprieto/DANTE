@@ -12,6 +12,7 @@ public class Enemy : MonoBehaviour
 
     protected GameObject player;
     protected PlayerHealth playerHP;
+    protected AntiStuck antiStuck;
     protected LevelHandler lvlHandler;
     protected GameObject healthDrops;
 
@@ -22,6 +23,7 @@ public class Enemy : MonoBehaviour
     {
         player = GameObject.Find("Player");
         playerHP = player.GetComponent<PlayerHealth>();
+        antiStuck = player.transform.GetChild(2).gameObject.GetComponent<AntiStuck>();
         lvlHandler = GameObject.Find("LevelHandler").GetComponent<LevelHandler>();
         healthDrops = GameObject.Find("HealthDrops");
     }
@@ -45,7 +47,7 @@ public class Enemy : MonoBehaviour
     // Health System Related Functions
     protected float currentHealth;
     protected bool damageKnockback;
-    protected bool invertVelocity;
+    protected bool invertVelocity = false;
     public void ReceiveDamage(float dmg)
     {
         StartCoroutine(DamageKnockbackStateTimer());
@@ -88,7 +90,7 @@ public class Enemy : MonoBehaviour
     IEnumerator DamageKnockbackStateTimer()
     {
         damageKnockback = true;
-        yield return new WaitForSeconds(.4f);
+        yield return new WaitForSeconds(.75f);
         damageKnockback = false;
         invertVelocity = false;
     }
