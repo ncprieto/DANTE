@@ -41,7 +41,9 @@ public class AntiStuck : MonoBehaviour
 
     void OnTriggerExit(Collider col){
         if (col.gameObject.tag == "Enemy"){
-            enemiesNear--;
+            if (enemiesNear > 0){
+                enemiesNear--;
+            }
         }
     }
 

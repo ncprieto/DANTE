@@ -28882,7 +28882,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8254156876284286250}
   - component: {fileID: 7638366329550967303}
-  m_Layer: 10
+  m_Layer: 0
   m_Name: EnemyNearbyChecker
   m_TagString: Enemy
   m_Icon: {fileID: 0}
@@ -29434,8 +29434,8 @@ MonoBehaviour:
   stalkRange: 25
   chaseRange: 10
   walkSpeed: 3
-  stalkSpeed: 5
-  chaseSpeed: 10
+  stalkSpeed: 6
+  chaseSpeed: 11
 --- !u!136 &8457332974263009586
 CapsuleCollider:
   m_ObjectHideFlags: 0

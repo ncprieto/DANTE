@@ -105,7 +105,7 @@ public class LustEnemy : Enemy
     // Chase state functions
     void ChaseState()
     {
-        anims.speed = 1.5f;
+        anims.speed = 2f;
         nmAgent.speed = chaseSpeed;
         nmAgent.SetDestination(player.transform.position);
     }

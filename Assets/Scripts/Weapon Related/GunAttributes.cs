@@ -26,12 +26,14 @@ public class GunAttributes : MonoBehaviour
     private Animator fireAnim;
     private float sinceLastFire = 0;
     private UI_Script UI;
+    private AntiStuck antiStuckScript;
 
     void Awake(){
         shotTrail = GetComponent<LineRenderer>();
         fireAnim = GetComponent<Animator>();
         gunMovement.Initialize(GameObject.Find("Player"), this);
         UI = GameObject.Find("Canvas").GetComponent<UI_Script>();
+        antiStuckScript = GameObject.Find("AntiStuckCheck").GetComponent<AntiStuck>();
         shoot = (KeyCode)PlayerPrefs.GetInt("Shoot", 323);
         //playerAim = GameObject.Find("Orientation").transform;
         //mainCam = GameObject.Find("Main Camera").transform;
@@ -62,6 +64,7 @@ public class GunAttributes : MonoBehaviour
                 {
                     float timeToAdd = root.GetComponent<Enemy>().GetTimeRewardValue(hitbox.name);
                     UI.AddTime(timeToAdd);
+                    if (antiStuckScript.enemiesNear > 0) antiStuckScript.enemiesNear--;
                 }
                 enemyHit.ReceiveDamage(damageToGive);                                                // actually apply damage to the enemy that was hit
                 enemyHit.BloodParticles(hit.transform);
