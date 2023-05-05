@@ -56,7 +56,7 @@ public class FOVVFX : MonoBehaviour
     public void RevolverChainShotVFX()
     {
         if(IsCoroutineRunning("grapple")) StopCoroutine(grappleFOV);
-        revolverFOV = DoFOVVFX(revolverFOV, currentFOV + revolverFOVOffset, currentFOV, revolverStartUpTime, "revolver");
+        revolverFOV = DoFOVVFX(revolverFOV, currentFOV - revolverFOVOffset, currentFOV, revolverStartUpTime, "revolver");
     }
 
     public void UndoRevolverVFX()

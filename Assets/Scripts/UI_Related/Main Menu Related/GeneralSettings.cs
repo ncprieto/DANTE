@@ -7,8 +7,13 @@ using System;
 
 public class GeneralSettings : MonoBehaviour
 {
+    [Header("FOV")]
     public Slider fovSlider;
+    public TextMeshProUGUI fovNumber;
+
+    [Header("Sensitivity")]
     public Slider sensSlider;
+    public TextMeshProUGUI sensNumber;
 
     void Start()
     {
@@ -19,10 +24,12 @@ public class GeneralSettings : MonoBehaviour
     public void FOVUpdated()
     {
         PlayerPrefs.SetInt("FOV", (int)fovSlider.value);
+        fovNumber.text = fovSlider.value.ToString();
     }
 
     public void SensitivityUpdated()
     {
         PlayerPrefs.SetFloat("Sensitivity", sensSlider.value);
+        sensNumber.text = sensSlider.value.ToString("0.##");
     }
 }
