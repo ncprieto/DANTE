@@ -117,7 +117,7 @@ public class UI_Script : MonoBehaviour
 
         int minutes = Mathf.FloorToInt(currentTime / 60);
         int seconds = Mathf.FloorToInt(currentTime % 60);
-        int milliseconds = Mathf.FloorToInt((currentTime % 60 * 1000) % 1000);
+        int milliseconds = Mathf.FloorToInt((currentTime % 60 * 100) % 100);
 
         //update the text     
         gameTimerText.text = minutes.ToString() + " : " + seconds.ToString() + "." + milliseconds.ToString();
