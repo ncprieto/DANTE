@@ -28882,7 +28882,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8254156876284286250}
   - component: {fileID: 7638366329550967303}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: EnemyNearbyChecker
   m_TagString: Enemy
   m_Icon: {fileID: 0}
@@ -28915,7 +28915,7 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 0.5, y: 0.5, z: 0.5}
+  m_Size: {x: 0.1, y: 0.1, z: 0.1}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &8435643816808417594
 GameObject:
@@ -29449,7 +29449,7 @@ CapsuleCollider:
   m_Radius: 0.27
   m_Height: 1.96
   m_Direction: 1
-  m_Center: {x: 0, y: 0.935, z: 0}
+  m_Center: {x: 0, y: 0.88, z: 0}
 --- !u!65 &3530613485836892359
 BoxCollider:
   m_ObjectHideFlags: 0
