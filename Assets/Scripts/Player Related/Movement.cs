@@ -27,6 +27,11 @@ public class Movement : MonoBehaviour
     public float jumpHeight;
     public bool isGrounded;
 
+    [Header("Coyote Time Variables")]
+    public bool justJumped;
+    public bool canCoyote;
+    public float coyoteWindow;
+
     [Header("B Hop Variables")]
     public int bHopMax;
     public float bHopMultiplier;
@@ -69,7 +74,8 @@ public class Movement : MonoBehaviour
     {
         GetInputs();
         isGrounded = Physics.Raycast(orientation.position, -orientation.up, 1.0001f, ground);                 // check if player is on the ground
-        if(isGrounded && wasInAir) StartBHopCoroutine();
+        if(isGrounded  && wasInAir) StartBHopCoroutine();
+        if(!isGrounded && wasInAir && !justJumped && !justGrappled && canCoyote) StartCoyoteTime();
         wasInAir = rb.velocity.y < 0;
         CapSpeed();
         if(Input.GetKeyDown(jump)) OnJumpPressed();
@@ -160,13 +166,18 @@ public class Movement : MonoBehaviour
 
     void OnJumpPressed()
     {
-        if(isGrounded) rb.AddForce(transform.up * jumpHeight, ForceMode.Impulse);
+        if(isGrounded)
+        {
+            rb.AddForce(transform.up * jumpHeight, ForceMode.Impulse);
+            justJumped = true;
+        }
     }
 
     // OnGrapplePressed() executes functions relating to grapple functionality.
     bool grappling;
     bool grappleOnCooldown;
     bool hitGrapplePoint;
+    bool justGrappled;
     Vector3 grapplePoint;
     void OnGrapplePressed()
     {
@@ -185,6 +196,7 @@ public class Movement : MonoBehaviour
                 int factor = hitGrapplePoint ? 10 : 1;
                 LimitGrappleSpeed(grappleAccelMaxSpeed * factor, baseMoveSpeed, grappleAccelerateTime);
                 fovVFX.GrappleStartVFX();
+                justGrappled = true;
             }
         }
         else if(grappling && toggleControl) DoGrappleEnd(grappleAligned * grappleHorizontalBoost * 2, transform.up * grappleVerticalBoost);
@@ -268,9 +280,6 @@ public class Movement : MonoBehaviour
 
     private IEnumerator StartGrappleCooldown()
     {
-        // grappleOnCooldown = true;
-        // yield return new WaitForSeconds(grappleCooldown);
-        // grappleOnCooldown= false;
         grappleOnCooldown = true;
         float timeLeft = grappleCooldown;
         while(timeLeft > 0f)
@@ -312,6 +321,34 @@ public class Movement : MonoBehaviour
         }
     }
 
+    bool coyoteTimeRunning;
+    IEnumerator coyoteTimeCoroutine;
+    void StartCoyoteTime()
+    {
+        if(coyoteTimeRunning || !canCoyote) return;
+        coyoteTimeCoroutine = CoyoteTimeWindow();
+        StartCoroutine(coyoteTimeCoroutine);
+    }
+
+    IEnumerator CoyoteTimeWindow()
+    {
+        canCoyote = false;
+        coyoteTimeRunning = true;
+        float timer = coyoteWindow;
+        while(timer > 0)
+        {
+            Debug.Log("IN WINDOW");
+            if(Input.GetKeyDown(jump))
+            {
+                rb.AddForce(transform.up * jumpHeight * 2, ForceMode.Impulse);
+                yield break;
+            }
+            timer -= Time.deltaTime;
+            yield return null;
+        }
+        coyoteTimeRunning = false;
+    }
+
     /* StartBHopCoroutine() will stop the bHopCoroutine is it's running
      * and start if it isn't.
      */
@@ -331,18 +368,19 @@ public class Movement : MonoBehaviour
      */
     private IEnumerator CheckBHopWindow()
     {
+        justJumped = false;
+        justGrappled = false;
+        canCoyote = true;
         float timer = bHopWindow;
         while(timer > 0)
         {
             if(Input.GetKeyUp(jump)){
                 bHopCount += bHopCount < bHopMax ? 1 : 0;
-                // if(bHopCount < bHopMax) fovVFX.BHopVFX(bHopCount);
                 yield break;
             };
             timer -= Time.deltaTime;
             yield return null;
         }
-        // if(bHopCount > 1) fovVFX.UndoBHopVFX();
         bHopCount = 0;
     }
 
