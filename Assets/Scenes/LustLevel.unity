@@ -26141,7 +26141,9 @@ MonoBehaviour:
   speedText: {fileID: 1463839937}
   timerText: {fileID: 27730523}
   timerOn: 1
-  timeLeft: 80
+  timeLeft: 50
+  warnPlayerOfTime: 15
+  unlimitedTime: 1
   movementScript: {fileID: 939103761}
   multiplierText: {fileID: 1949848645}
   bhopCounter: 0
@@ -26442,6 +26444,7 @@ MonoBehaviour:
   UI: {fileID: 924419568}
   dmgVFX: {fileID: 604539361}
   camShake: {fileID: 1705315979}
+  unlimitedHealth: 0
 --- !u!120 &939103760
 LineRenderer:
   m_ObjectHideFlags: 0
@@ -26573,6 +26576,9 @@ MonoBehaviour:
   airDecel: 50
   jumpHeight: 8
   isGrounded: 0
+  justJumped: 0
+  canCoyote: 0
+  coyoteWindow: 0
   bHopMax: 5
   bHopMultiplier: 1.25
   bHopWindow: 0.5

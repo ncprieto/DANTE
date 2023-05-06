@@ -10,6 +10,7 @@ public class PlayerHealth : MonoBehaviour
     public UI_Script UI;            //To call function in UI
     public DamageVignette dmgVFX;
     public CameraShake camShake;
+    public bool unlimitedHealth;
 
     void OnAwake()
     {
@@ -41,7 +42,27 @@ public class PlayerHealth : MonoBehaviour
 
     // Called by enemy scripts
     public void ReceiveDamage(int damageTaken, bool hasIFrames){
-        if ((playerCurrentHealth > 0) && !isInvincible){
+        if (!unlimitedHealth)
+        {
+            if ((playerCurrentHealth > 0) && !isInvincible)
+            {
+                playerCurrentHealth -= damageTaken;
+                StartCoroutine(dmgVFX.DamageVFX());
+                StartCoroutine(camShake.Shake(0.2f, 0.35f));
+
+                if (playerCurrentHealth <= 0)
+                {
+                    playerCurrentHealth = 0;
+
+                }
+                if (hasIFrames)
+                {
+                    StartCoroutine(IFrames());
+                }
+                UI.updateHealthUI(playerCurrentHealth);//call UI function
+            }
+        }
+        /*if ((playerCurrentHealth > 0) && !isInvincible){
             playerCurrentHealth -= damageTaken;
             StartCoroutine(dmgVFX.DamageVFX());
             StartCoroutine(camShake.Shake(0.2f, 0.35f));
@@ -54,7 +75,7 @@ public class PlayerHealth : MonoBehaviour
                 StartCoroutine(IFrames());
             } 
            UI.updateHealthUI(playerCurrentHealth);//call UI function
-        }
+        }*/
     }
 
     IEnumerator IFrames()
