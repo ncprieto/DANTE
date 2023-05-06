@@ -14,6 +14,7 @@ public class UI_Script : MonoBehaviour
     public GameObject timerText;
     public bool timerOn;
     public float timeLeft;
+    public int warnPlayerOfTime;
 
     //in game speed component
     private TextMeshProUGUI gameSpeedText;
@@ -71,7 +72,6 @@ public class UI_Script : MonoBehaviour
     void Update()
     {
         gameSpeedText.text = player.velocity.magnitude.ToString("0.##") + " m/s";
-
         //check if timer is on
         if (timerOn)
         {
@@ -83,6 +83,10 @@ public class UI_Script : MonoBehaviour
             timeLeft = timeLeft > -1 ? timeLeft : -1f;
             timerOn = timeLeft != -1 ? true : false;
             updateTimerText(timeLeft);
+            if (timeLeft <= warnPlayerOfTime)
+            {
+                changeTextColor(gameTimerText, timeLeft);
+            }
         }
 
         Grapple.value = 1f - (Move.actualGrappleCooldown / Move.grappleCooldown);
@@ -118,9 +122,12 @@ public class UI_Script : MonoBehaviour
         int minutes = Mathf.FloorToInt(currentTime / 60);
         int seconds = Mathf.FloorToInt(currentTime % 60);
         int milliseconds = Mathf.FloorToInt((currentTime % 60 * 100) % 100);
-
-        //update the text     
-        gameTimerText.text = minutes.ToString() + " : " + seconds.ToString() + "." + milliseconds.ToString();
+        string secStr;
+        string milliStr;
+        secStr = seconds < 10 ? "0" + seconds.ToString() : seconds.ToString();
+        milliStr = milliseconds < 10 ? ".0" + milliseconds.ToString() : "." + milliseconds.ToString();
+        //update the text 
+        gameTimerText.text = minutes.ToString() + " : " + secStr + milliStr;        
     }
 
     public void AddTime(float amount)
@@ -158,5 +165,18 @@ public class UI_Script : MonoBehaviour
             i.color = new Color(i.color.r, i.color.g, i.color.b, i.color.a - (Time.deltaTime / t));
             yield return null;
         }
+    }
+
+    public void changeTextColor( TextMeshProUGUI textmeshproGUI, float t)
+    {   
+        if ((int)t % 2  == 0)
+        {
+            textmeshproGUI.color = Color.white;
+        }
+        else
+        {
+            textmeshproGUI.color= Color.black;
+        }
+        
     }
 }
