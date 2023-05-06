@@ -234,7 +234,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d041c905d4cea6a4da283af9f0f4ee7c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  fireRate: 0.5
+  shoot: 0
+  fireRate: 0.45
   weaponRange: 35
   hitboxLayer:
     serializedVersion: 2
@@ -279,6 +280,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   abilityKey: 304
   abilityCooldown: 5
+  actualAbilityCooldown: 0
   IsToggleable: 1
   refundForKill: 0.25
   slowScale: 0.5

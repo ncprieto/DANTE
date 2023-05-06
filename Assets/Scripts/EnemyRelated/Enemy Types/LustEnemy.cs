@@ -22,11 +22,17 @@ public class LustEnemy : Enemy
     public float walkSpeed;
     public float stalkSpeed;
     public float chaseSpeed;
+    private float origAccel;
 
     private bool inStalkRange;
     private bool inChaseRange;
     private bool playerHit;
     private Vector3 shotDirection;
+
+    void Start()
+    {
+        origAccel = nmAgent.acceleration;
+    }
 
     // Update is called once per frame
     void Update()
@@ -133,8 +139,8 @@ public class LustEnemy : Enemy
     void AntiStuckEnemyPushbackState()
     {
         anims.speed = 1f;
-        nmAgent.velocity = -(transform.forward * 7.5f);
         nmAgent.speed = 5;
+        nmAgent.velocity = -(transform.forward * 10f);
         transform.LookAt(player.transform);
         anims.SetBool("isStill", true);
     }

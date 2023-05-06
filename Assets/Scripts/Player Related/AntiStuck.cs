@@ -9,6 +9,7 @@ public class AntiStuck : MonoBehaviour
     public bool pushBackEnemies;
 
     private float timer;
+    private UnityEngine.Object divineCyl;
 
     // Start is called before the first frame update
     void Start()
@@ -16,6 +17,7 @@ public class AntiStuck : MonoBehaviour
         enemiesNear = 0;
         pushBackEnemies = false;
         timer = 0f;
+        divineCyl = Resources.Load("Prefabs/DivineCylinder");
     }
 
     // Update is called once per frame
@@ -25,6 +27,7 @@ public class AntiStuck : MonoBehaviour
             timer += Time.deltaTime;
             if (timer >= 1f){
                 StartCoroutine(PushEnemiesBackTimer());
+                Instantiate(divineCyl, new Vector3(transform.position.x, transform.position.y + 6, transform.position.z), Quaternion.identity, transform);
                 timer = 0f;
             }
         }
@@ -50,7 +53,7 @@ public class AntiStuck : MonoBehaviour
     IEnumerator PushEnemiesBackTimer()
     {
         pushBackEnemies = true;
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(.5f);
         pushBackEnemies = false;
     } 
 }
