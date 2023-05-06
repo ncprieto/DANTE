@@ -9,6 +9,7 @@ public class Movement : MonoBehaviour
     public LayerMask ground;
     public FOVVFX fovVFX;
     public GameObject playerCamera;
+    public PlayerHealth healthScript;
 
     [Header("Input")]
     public KeyCode forward;
@@ -82,6 +83,18 @@ public class Movement : MonoBehaviour
         if(Input.GetKeyDown(grapple))  OnGrapplePressed();
         if(Input.GetKeyUp(grapple) && !toggleControl) OnGrappleReleased();
         canGrapple = Physics.Raycast(playerCamera.transform.position, playerCamera.transform.forward, grappleRange);
+        if (Input.GetKeyDown(KeyCode.Alpha8))
+        {
+            Debug.Log("hey");
+            if (healthScript.unlimitedHealth)
+            {
+                healthScript.unlimitedHealth = false;
+            }
+            else
+            {
+                healthScript.unlimitedHealth = true;
+            }
+        }
     }
 
     void FixedUpdate()
