@@ -72,6 +72,10 @@ public class UI_Script : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (Input.GetKeyDown(KeyCode.Alpha9))
+        {
+            unlimitedTime = unlimitedTime ? false : true;
+        }
         gameSpeedText.text = player.velocity.magnitude.ToString("0.##") + " m/s";
         //check if timer is on
         if (timerOn)
