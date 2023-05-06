@@ -15,6 +15,7 @@ public class UI_Script : MonoBehaviour
     public bool timerOn;
     public float timeLeft;
     public int warnPlayerOfTime;
+    public bool unlimitedTime;
 
     //in game speed component
     private TextMeshProUGUI gameSpeedText;
@@ -79,14 +80,25 @@ public class UI_Script : MonoBehaviour
             if (bhopCounter > 0) changeBhopText(bhopCounter);
             else multiplierText.SetActive(false);
 
-            timeLeft -= Time.deltaTime;
+            if (!unlimitedTime)
+            {
+                timeLeft -= Time.deltaTime;
+                timeLeft = timeLeft > -1 ? timeLeft : -1f;
+                timerOn = timeLeft != -1 ? true : false;
+                updateTimerText(timeLeft);
+                if (timeLeft <= warnPlayerOfTime)
+                {
+                    changeTextColor(gameTimerText, timeLeft);
+                }
+            }
+            /*timeLeft -= Time.deltaTime;
             timeLeft = timeLeft > -1 ? timeLeft : -1f;
             timerOn = timeLeft != -1 ? true : false;
             updateTimerText(timeLeft);
             if (timeLeft <= warnPlayerOfTime)
             {
                 changeTextColor(gameTimerText, timeLeft);
-            }
+            }*/
         }
 
         Grapple.value = 1f - (Move.actualGrappleCooldown / Move.grappleCooldown);
