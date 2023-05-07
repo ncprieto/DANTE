@@ -91,26 +91,30 @@ public class Movement : MonoBehaviour
 
     void FixedUpdate()
     {
-        MovePlayer();
+        
         if(grappling)
         {
             float speed = baseMoveSpeed > moveSpeed ? baseMoveSpeed : moveSpeed;
-            rb.velocity = VectorToGrapplePoint() * speed;                                            // set velocity towards grapple point with some speed multiplier
+            rb.velocity = GrappleSwingVector() * speed;                                            // set velocity towards grapple point with some speed multiplier
             lineRen.SetPosition(0, grappleStart.position);                                           // set vertex 0 of line renderer to player position
-            float dist = hitGrapplePoint ? 5f : 1.2f;
-            if(Vector3.Distance(grapplePoint, orientation.position) <= dist)
-            {
-                Vector3 horizontal = grappleReflect * grappleHorizontalBoost;
-                Vector3 vertical = transform.up * grappleVerticalBoost;
-                if(hitGrapplePoint)
-                {
-                    horizontal = Vector3.zero;
-                    vertical *= 1.5f;
-                    hitGrapplePoint = false;
-                }
-                DoGrappleEnd(horizontal, vertical);
-            }
+            // float dist = hitGrapplePoint ? 5f : 1.2f;
+            // if(Vector3.Distance(grapplePoint, orientation.position) <= dist)
+            // {
+            //     Vector3 horizontal = grappleReflect * grappleHorizontalBoost;
+            //     Vector3 vertical = transform.up * grappleVerticalBoost;
+            //     if(hitGrapplePoint)
+            //     {
+            //         horizontal = Vector3.zero;
+            //         vertical *= 1.5f;
+            //         hitGrapplePoint = false;
+            //     }
+            //     DoGrappleEnd(horizontal, vertical);
+            // }
+            float angle = Vector3.Angle(grapplePoint.normalized, playerCamera.transform.forward);
+            Debug.Log("ANGLE " + angle);
+            if(angle < -89 || angle > 89) DoGrappleEnd(Vector3.zero, Vector3.zero);
         }
+        else MovePlayer();
         float decel = isGrounded ? groundDecel : airDecel;
         decel = grappleJustEnded ? grappleEndedDecel : decel;
         if(!GetInputs() && rb.velocity.magnitude > 0) rb.velocity -= rb.velocity / decel;
@@ -142,7 +146,6 @@ public class Movement : MonoBehaviour
 
     void MovePlayer()
     {
-        if(grappling) return;
         float acceleration = isGrounded ? groundAccel : airAccel; // controls how fast the player accelerates
 
         // essentially quake 3 movement phyics
@@ -235,6 +238,13 @@ public class Movement : MonoBehaviour
         return dir.normalized;
     }
 
+    private Vector3 GrappleSwingVector()
+    {
+        Vector3 dirWithInput = VectorToGrapplePoint() + GetWishDirection();
+        Vector3 dirWithLook  = Vector3.Slerp(dirWithInput, playerCamera.transform.forward.normalized, 0.5f);
+        return dirWithLook.normalized;
+    }
+
     /* CalculateReflectVector() calculates a vector reflected across the parameter
      * normal. It create a point that has the same y value as the grapple point and an
      * x and z component as the player's x and z position. It then creates the vector from
@@ -262,8 +272,10 @@ public class Movement : MonoBehaviour
     private void DoGrappleEnd(Vector3 horizontal, Vector3 vertical)
     {
         ToggleGrapple();
-        rb.velocity = Vector3.zero;
-        rb.velocity = horizontal + vertical;
+        // rb.velocity = Vector3.zero;
+        // rb.velocity = horizontal + vertical;
+        Vector3 dismountBoost = Vector3.up * 2;
+        rb.velocity = playerCamera.transform.forward * moveSpeed + dismountBoost;
         LimitGrappleSpeed(baseMoveSpeed, grappleDecelMaxSpeed, grappleDecelerateTime);
         fovVFX.GrappleEndVFX();
         StartCoroutine(StartGrappleCooldown());
