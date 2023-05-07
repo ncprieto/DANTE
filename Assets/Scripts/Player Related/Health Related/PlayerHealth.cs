@@ -17,24 +17,17 @@ public class PlayerHealth : MonoBehaviour
         playerCurrentHealth = 100;
     }
 
+    void Update()
+    {
+        if(Input.GetKeyDown(KeyCode.Alpha8)) unlimitedHealth = true;
+    }
+
     public void GainHealth(string tag){
-        if (tag == "SmallHealth"){
-            if(playerCurrentHealth < 100)
-            {
-                playerCurrentHealth += 5;
-            }
-        }
-        else if (tag == "MediumHealth"){
-            if(playerCurrentHealth < 100)
-            {
-                playerCurrentHealth += 10;
-            }
-        }
-        else if (tag == "LargeHealth"){
-            if(playerCurrentHealth < 100)
-            {
-                playerCurrentHealth += 25;
-            }
+        if(playerCurrentHealth < 100)
+        {
+            if      (tag == "SmallHealth")  playerCurrentHealth += 5;
+            else if (tag == "MediumHealth") playerCurrentHealth += 10;
+            else if (tag == "LargeHealth")  playerCurrentHealth += 25;
         }
         playerCurrentHealth = Mathf.Clamp(playerCurrentHealth, 0, 100);
         UI.updateHealthUI(playerCurrentHealth);//call UI function
@@ -42,25 +35,15 @@ public class PlayerHealth : MonoBehaviour
 
     // Called by enemy scripts
     public void ReceiveDamage(int damageTaken, bool hasIFrames){
-        if (!unlimitedHealth)
+        if(unlimitedHealth) return;
+        if ((playerCurrentHealth > 0) && !isInvincible)
         {
-            if ((playerCurrentHealth > 0) && !isInvincible)
-            {
-                playerCurrentHealth -= damageTaken;
-                StartCoroutine(dmgVFX.DamageVFX());
-                StartCoroutine(camShake.Shake(0.2f, 0.35f));
-
-                if (playerCurrentHealth <= 0)
-                {
-                    playerCurrentHealth = 0;
-
-                }
-                if (hasIFrames)
-                {
-                    StartCoroutine(IFrames());
-                }
-                UI.updateHealthUI(playerCurrentHealth);//call UI function
-            }
+            playerCurrentHealth -= damageTaken;
+            StartCoroutine(dmgVFX.DamageVFX());
+            StartCoroutine(camShake.Shake(0.2f, 0.35f));
+            if (playerCurrentHealth <= 0) playerCurrentHealth = 0;
+            if (hasIFrames) StartCoroutine(IFrames());
+            UI.updateHealthUI(playerCurrentHealth); //call UI function
         }
         /*if ((playerCurrentHealth > 0) && !isInvincible){
             playerCurrentHealth -= damageTaken;

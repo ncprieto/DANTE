@@ -9,7 +9,6 @@ public class Movement : MonoBehaviour
     public LayerMask ground;
     public FOVVFX fovVFX;
     public GameObject playerCamera;
-    public PlayerHealth healthScript;
 
     [Header("Input")]
     public KeyCode forward;
@@ -18,6 +17,8 @@ public class Movement : MonoBehaviour
     public KeyCode right;
     public KeyCode jump;
     public KeyCode grapple;
+    public int fb;
+    public int lr;
 
     [Header("Ground Movement Variables")]
     public float moveSpeed;
@@ -32,6 +33,7 @@ public class Movement : MonoBehaviour
     public bool justJumped;
     public bool canCoyote;
     public float coyoteWindow;
+    public float coyoteJumpBoost;
 
     [Header("B Hop Variables")]
     public int bHopMax;
@@ -47,10 +49,12 @@ public class Movement : MonoBehaviour
     public float grappleEndedTime;
     public float grappleEndedDecel;
     public float grapplePointVerticalBoost;
+    
+    [Header ("Other Grapple Variables")]
+    public Transform grappleStart;
+    public LineRenderer lineRen;
     public bool  toggleControl;
     public bool  canGrapple;
-    
-    public LineRenderer lineRen;
 
     [Header("Grapple Start Variables")]
     public float grappleAccelerateTime;
@@ -83,18 +87,6 @@ public class Movement : MonoBehaviour
         if(Input.GetKeyDown(grapple))  OnGrapplePressed();
         if(Input.GetKeyUp(grapple) && !toggleControl) OnGrappleReleased();
         canGrapple = Physics.Raycast(playerCamera.transform.position, playerCamera.transform.forward, grappleRange);
-        if (Input.GetKeyDown(KeyCode.Alpha8))
-        {
-            Debug.Log("hey");
-            if (healthScript.unlimitedHealth)
-            {
-                healthScript.unlimitedHealth = false;
-            }
-            else
-            {
-                healthScript.unlimitedHealth = true;
-            }
-        }
     }
 
     void FixedUpdate()
@@ -103,8 +95,8 @@ public class Movement : MonoBehaviour
         if(grappling)
         {
             float speed = baseMoveSpeed > moveSpeed ? baseMoveSpeed : moveSpeed;
-            rb.velocity = VectorToGrapplePoint() * speed;                                                     // set velocity towards grapple point with some speed multiplier
-            lineRen.SetPosition(0, orientation.position);                                           // set vertex 0 of line renderer to player position
+            rb.velocity = VectorToGrapplePoint() * speed;                                            // set velocity towards grapple point with some speed multiplier
+            lineRen.SetPosition(0, grappleStart.position);                                           // set vertex 0 of line renderer to player position
             float dist = hitGrapplePoint ? 5f : 1.2f;
             if(Vector3.Distance(grapplePoint, orientation.position) <= dist)
             {
@@ -121,13 +113,10 @@ public class Movement : MonoBehaviour
         }
         float decel = isGrounded ? groundDecel : airDecel;
         decel = grappleJustEnded ? grappleEndedDecel : decel;
-        // Debug.Log("HERE " + decel);
         if(!GetInputs() && rb.velocity.magnitude > 0) rb.velocity -= rb.velocity / decel;
         CapSpeed();
     }
     
-    public int fb;
-    public int lr;
     public bool GetInputs()
     {
         // converts inputs into 0, 1, or -1 used for multiplying direction vectors
@@ -240,9 +229,9 @@ public class Movement : MonoBehaviour
     /* VectorToGrapplePoint() returns the normalized vector from the player to
      * the grapplePoint.
      */
-    Vector3 VectorToGrapplePoint()
+    private Vector3 VectorToGrapplePoint()
     {
-        Vector3 dir = grapplePoint - playerCamera.transform.position;
+        Vector3 dir = grapplePoint - orientation.position;
         return dir.normalized;
     }
 
@@ -254,7 +243,7 @@ public class Movement : MonoBehaviour
      */
     Vector3 grappleAligned;
     Vector3 grappleReflect;
-    void CalculateReflectVector(Vector3 normal)
+    private void CalculateReflectVector(Vector3 normal)
     {
         // vector that has same y as the grapple point and x/z of the player
         // is essentially on the same elevation of the grapple point and keeps y component 0
@@ -270,7 +259,7 @@ public class Movement : MonoBehaviour
      * parameters horizontal and vertical. It also starts a coroutine that
      * decelerates the player's velocity.
      */
-    void DoGrappleEnd(Vector3 horizontal, Vector3 vertical)
+    private void DoGrappleEnd(Vector3 horizontal, Vector3 vertical)
     {
         ToggleGrapple();
         rb.velocity = Vector3.zero;
@@ -310,7 +299,7 @@ public class Movement : MonoBehaviour
      * then restarts the coroutine.
      */
     IEnumerator grappleLerpCoroutine;
-    void LimitGrappleSpeed(float start, float end, float timeFrame)
+    private void LimitGrappleSpeed(float start, float end, float timeFrame)
     {
         if(grappleLerpCoroutine != null) StopCoroutine(grappleLerpCoroutine);
         grappleLerpCoroutine = LerpGrappleSpeed(start, end, timeFrame);
@@ -336,24 +325,24 @@ public class Movement : MonoBehaviour
 
     bool coyoteTimeRunning;
     IEnumerator coyoteTimeCoroutine;
-    void StartCoyoteTime()
+    private void StartCoyoteTime()
     {
         if(coyoteTimeRunning || !canCoyote) return;
         coyoteTimeCoroutine = CoyoteTimeWindow();
         StartCoroutine(coyoteTimeCoroutine);
     }
 
-    IEnumerator CoyoteTimeWindow()
+    private IEnumerator CoyoteTimeWindow()
     {
         canCoyote = false;
         coyoteTimeRunning = true;
         float timer = coyoteWindow;
         while(timer > 0)
         {
-            Debug.Log("IN WINDOW");
             if(Input.GetKeyDown(jump))
             {
-                rb.AddForce(transform.up * jumpHeight * 2, ForceMode.Impulse);
+                rb.AddForce(transform.up * jumpHeight * coyoteJumpBoost, ForceMode.Impulse);
+                coyoteTimeRunning = false;
                 yield break;
             }
             timer -= Time.deltaTime;
@@ -366,7 +355,7 @@ public class Movement : MonoBehaviour
      * and start if it isn't.
      */
     IEnumerator bHopCoroutine;
-    void StartBHopCoroutine()
+    private void StartBHopCoroutine()
     {
         if(bHopCoroutine != null) StopCoroutine(bHopCoroutine);
         bHopCoroutine = CheckBHopWindow();
