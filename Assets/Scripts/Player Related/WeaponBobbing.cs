@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class HeadBobbing : MonoBehaviour
+public class WeaponBobbing : MonoBehaviour
 {
 
     public float bobIntensityX;
@@ -26,7 +26,7 @@ public class HeadBobbing : MonoBehaviour
     {
         if(movementScript.GetInputs() && movementScript.isGrounded){
             timer += Time.deltaTime * bobSpeed;
-            transform.localPosition = new Vector3(defaultX + Mathf.Sin(timer) * bobIntensityX, defaultY + Mathf.Sin(timer) * bobIntensityY, transform.localPosition.z);
+            transform.localPosition = new Vector3(transform.localPosition.x + Mathf.Sin(timer) * bobIntensityX, transform.localPosition.y + Mathf.Sin(timer) * bobIntensityY, transform.localPosition.z);
         }
         else
         {

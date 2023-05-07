@@ -29,8 +29,9 @@ public class LustEnemy : Enemy
     private bool playerHit;
     private Vector3 shotDirection;
 
-    void Start()
+    protected override void Start()
     {
+        base.Start();
         origAccel = nmAgent.acceleration;
     }
 

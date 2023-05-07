@@ -28,7 +28,7 @@ public class Enemy : MonoBehaviour
         healthDrops = GameObject.Find("HealthDrops");
     }
 
-    void Start()
+    protected virtual void Start()
     {
         currentHealth = startingHealth;
         int hpDropChance = Random.Range(0, 100);

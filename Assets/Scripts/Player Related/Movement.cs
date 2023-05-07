@@ -126,8 +126,8 @@ public class Movement : MonoBehaviour
         CapSpeed();
     }
     
-    int fb;
-    int lr;
+    public int fb;
+    public int lr;
     public bool GetInputs()
     {
         // converts inputs into 0, 1, or -1 used for multiplying direction vectors
