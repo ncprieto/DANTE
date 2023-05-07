@@ -19,6 +19,8 @@ public class GunAttributes : MonoBehaviour
     public float trailDuration;
     LineRenderer shotTrail;
     public GameObject muzzleFlash;
+    public ParticleSystem vertGunSmoke;
+    public ParticleSystem horizGunSmoke;
 
     [Header ("Gun Movement")]
     public GunMovement gunMovement;
@@ -47,6 +49,8 @@ public class GunAttributes : MonoBehaviour
             sinceLastFire = 0;
             StartCoroutine(DrawTrail());
             StartCoroutine(FlashMuzzle());
+            vertGunSmoke.Play();
+            horizGunSmoke.Play();
             fireAnim.SetTrigger("FireWeapon");
             shotTrail.SetPosition(0, trailOrigin.position);
             Vector3 rayOrigin = Camera.main.ViewportToWorldPoint(new Vector3(0.5f, 0.5f, 0));
