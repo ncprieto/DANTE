@@ -7,8 +7,14 @@ public class MoveCamera : MonoBehaviour
     public float sens;
     public Transform orientation;
 
+    [Header("Camera Tile Related")]
+    public Movement movement;
+    public float tiltAmount;
+    public float maxZTilt;
+
     float xRotation;
     float yRotation;
+    float tiltApplied;
 
     void Awake()
     {
@@ -16,7 +22,6 @@ public class MoveCamera : MonoBehaviour
         Cursor.visible = false;
         sens = PlayerPrefs.GetFloat("Sensitivity", 5f);
     }
-
 
     void Start()
     {
@@ -37,8 +42,22 @@ public class MoveCamera : MonoBehaviour
 
         xRotation = Mathf.Clamp(xRotation, -90f, 90f);
 
+        if(movement.lr != 0)
+        {
+            tiltApplied += tiltAmount * movement.lr * -1;
+            if(Mathf.Abs(tiltApplied) > maxZTilt) tiltApplied = maxZTilt * movement.lr * -1;
+        }
+        if(movement.lr ==  0)
+        {
+            if(tiltApplied < -tiltAmount) tiltApplied += tiltAmount;
+            if(tiltApplied > tiltAmount)  tiltApplied -= tiltAmount;
+            if(tiltApplied > -tiltAmount && tiltApplied < tiltAmount) tiltApplied = 0f;
+        }
+        
         // rotate cam and orientation
-        transform.rotation = Quaternion.Euler(xRotation, yRotation, 0);
+        transform.rotation = Quaternion.Euler(xRotation, yRotation, 0 + tiltApplied);
         orientation.rotation = Quaternion.Euler(0, yRotation, 0);
+
+
     }
 }

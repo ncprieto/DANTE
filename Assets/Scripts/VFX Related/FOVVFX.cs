@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class FOVVFX : MonoBehaviour
 {
+    public Camera overlay;
     [Header ("Grapple FOV Variables")]
     public float grappleFOVTime;
     public float grappleFOVOffset;
@@ -23,12 +24,14 @@ public class FOVVFX : MonoBehaviour
     void Awake()
     {
         Camera.main.fieldOfView = PlayerPrefs.GetInt("FOV", 90);
+        overlay.fieldOfView = PlayerPrefs.GetInt("FOV", 90);
         originalFOV = Camera.main.fieldOfView;
     }
 
     void Start()
     {
         Camera.main.fieldOfView = PlayerPrefs.GetInt("FOV", 90);
+        overlay.fieldOfView = PlayerPrefs.GetInt("FOV", 90);
         originalFOV = Camera.main.fieldOfView;
     }
 
@@ -89,6 +92,7 @@ public class FOVVFX : MonoBehaviour
         {
             timeLeft -= Time.deltaTime;
             Camera.main.fieldOfView = Mathf.Lerp(start, end, Mathf.Clamp(timeLeft / timeFrame, 0f, 1f));
+            overlay.fieldOfView = Camera.main.fieldOfView;
             yield return null;
         }
         SetCoroutine(name, false);

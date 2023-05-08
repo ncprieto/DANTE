@@ -26301,10 +26301,10 @@ MonoBehaviour:
   canGrapple: 0
   grappleAccelerateTime: 0.5
   grappleAccelMaxSpeed: 16
-  grappleEndedTime: 1
-  grappleEndedDecel: 100
   grappleDecelerateTime: 1
   grappleDecelMaxSpeed: 14
+  grappleEndedTime: 1
+  grappleEndedDecel: 100
   dismountBoost: 1.5
 --- !u!136 &939103762
 CapsuleCollider:
@@ -26348,6 +26348,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3a89ac2454ba34f6daf52558c566dada, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  overlay: {fileID: 1754597109}
   grappleFOVTime: 0.5
   grappleFOVOffset: 15
   revolverStartUpTime: 1
@@ -47091,6 +47092,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   sens: 5
   orientation: {fileID: 229158783}
+  movement: {fileID: 939103761}
+  tiltAmount: 0.05
+  maxZTilt: 4.5
 --- !u!114 &1705315974
 MonoBehaviour:
   m_ObjectHideFlags: 0
