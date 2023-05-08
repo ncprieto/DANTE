@@ -26282,6 +26282,7 @@ MonoBehaviour:
   airDecel: 50
   jumpHeight: 8
   isGrounded: 0
+  wasInAir: 0
   justJumped: 0
   canCoyote: 0
   coyoteWindow: 0.35
@@ -26290,23 +26291,21 @@ MonoBehaviour:
   bHopMultiplier: 1.25
   bHopWindow: 0.5
   bHopCount: 0
-  grappleSpeed: 20
   grappleRange: 30
-  grappleCooldown: 3
+  grappleCooldown: 6
   actualGrappleCooldown: 0
-  grappleEndedTime: 1
-  grappleEndedDecel: 100
   grapplePointVerticalBoost: 25
   grappleStart: {fileID: 1939842775}
   lineRen: {fileID: 939103760}
   toggleControl: 1
   canGrapple: 0
   grappleAccelerateTime: 0.5
-  grappleAccelMaxSpeed: 20
-  grappleVerticalBoost: 13
-  grappleHorizontalBoost: 4
+  grappleAccelMaxSpeed: 16
+  grappleEndedTime: 1
+  grappleEndedDecel: 100
   grappleDecelerateTime: 1
-  grappleDecelMaxSpeed: 15
+  grappleDecelMaxSpeed: 14
+  dismountBoost: 1.5
 --- !u!136 &939103762
 CapsuleCollider:
   m_ObjectHideFlags: 0
