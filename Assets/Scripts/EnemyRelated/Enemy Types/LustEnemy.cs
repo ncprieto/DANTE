@@ -33,6 +33,7 @@ public class LustEnemy : Enemy
     {
         base.Start();
         origAccel = nmAgent.acceleration;
+        patrolPointSet = false;
     }
 
     // Update is called once per frame
