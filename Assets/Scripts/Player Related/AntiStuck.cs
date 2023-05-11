@@ -23,7 +23,7 @@ public class AntiStuck : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (enemiesNear >= 5){
+        if (enemiesNear >= 2){
             timer += Time.deltaTime;
             if (timer >= 1f){
                 StartCoroutine(PushEnemiesBackTimer());

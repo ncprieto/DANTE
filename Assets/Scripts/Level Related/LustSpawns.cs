@@ -13,6 +13,7 @@ public class LustSpawns : LevelHandler
     private float timer;
     private List<int> generatedSpawnPoints = new List<int>();
     private bool haveKillsSpawnsHappened;
+    private int enemyCountPreCheck;
 
     // Start is called before the first frame update
     protected override void Start()
@@ -20,6 +21,7 @@ public class LustSpawns : LevelHandler
         lustEnemy = Resources.Load("Prefabs/LustEnemy");
         timer = 0f;
         haveKillsSpawnsHappened = false;
+        enemyCountPreCheck = enemyHolder.transform.childCount;
         base.Start();
     }
 
@@ -32,8 +34,12 @@ public class LustSpawns : LevelHandler
             timer = 0f;
         }
         if ((enemiesKilled % spawnRateKills == 0) && (enemiesKilled != 0) && (!haveKillsSpawnsHappened)){
+            enemyCountPreCheck = enemyHolder.transform.childCount;
             for (int i = 0; i < spawnAmount; i++){
-                SpawnEnemy(lustEnemy, transform.GetChild(FindSpawnPoint()));
+                enemyCountPreCheck++;
+                if (enemyCountPreCheck < maxEnemyCount){
+                    SpawnEnemy(lustEnemy, transform.GetChild(FindSpawnPoint()));
+                }
             }
             generatedSpawnPoints.Clear();
             haveKillsSpawnsHappened = true;

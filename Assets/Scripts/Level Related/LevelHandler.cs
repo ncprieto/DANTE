@@ -13,6 +13,7 @@ public class LevelHandler : MonoBehaviour
     public GameObject timeRingSpawns;
 
     private UnityEngine.Object timeRing;
+    private UnityEngine.Object enemySpawnParticles;
     private int timeRingSpawnerCount;
     private int prevTimeRingLoc;
 
@@ -20,6 +21,7 @@ public class LevelHandler : MonoBehaviour
     protected virtual void Start()
     {
         timeRing = Resources.Load("Prefabs/TimeRing");
+        enemySpawnParticles = Resources.Load("Prefabs/EnemySpawnParticles");
         timeRingSpawnerCount = timeRingSpawns.transform.childCount;
         enemiesKilled = 0;
     }
@@ -39,7 +41,7 @@ public class LevelHandler : MonoBehaviour
     public void SpawnEnemy(UnityEngine.Object enemy, Transform spawnPoint)
     {
         if (enemyHolder.transform.childCount < maxEnemyCount){
-            Instantiate(enemy, spawnPoint.position, Quaternion.identity, enemyHolder.transform);
+            StartCoroutine(SpawnTime(enemy, spawnPoint, 1f));
         }
     }
 
@@ -54,5 +56,11 @@ public class LevelHandler : MonoBehaviour
             FindTimeRingSpawn(timeRingSpawner, prevSpawn);
         }
         return generatedSpawn;
+    }
+
+    IEnumerator SpawnTime(UnityEngine.Object enemy, Transform spawnPoint, float timeTillSpawn){
+        Instantiate(enemySpawnParticles, spawnPoint.position, Quaternion.identity);
+        yield return new WaitForSeconds(timeTillSpawn);
+        Instantiate(enemy, spawnPoint.position, Quaternion.identity, enemyHolder.transform);
     }
 }
