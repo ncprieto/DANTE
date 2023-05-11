@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 252ce4b514e37a44094e594f2916ea9b, type: 3}
   m_Name: Lust TIme Values
   m_EditorClassIdentifier: 
-  baseTimeReward: 0.5
-  critMultiplier: 1.5
+  baseTimeReward: 0.75
+  critMultiplier: 2

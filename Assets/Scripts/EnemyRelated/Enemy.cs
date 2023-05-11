@@ -41,7 +41,7 @@ public class Enemy : MonoBehaviour
         else{
             hpDrop = Resources.Load("Prefabs/LargeHealthDrop");
         }
-        deathParticles = Resources.Load("Prefabs/EnemyDeathParticles");
+        deathParticles = Resources.Load("Prefabs/NewEnemyDeathParticles");
     }
 
     // Health System Related Functions
