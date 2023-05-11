@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using FMODUnity;
 
 public class GunMovement : MonoBehaviour
 {
@@ -10,16 +11,23 @@ public class GunMovement : MonoBehaviour
     public float actualAbilityCooldown;
     public bool  IsToggleable;
     public float refundForKill;
+    public string sfxKey;
 
-    // External stuff
+    // Player Related
     protected GameObject player;
     protected Rigidbody rb;
     protected Camera playerCamera;
     protected Movement movement;
+
+    // Weapon Related
     protected GunAttributes gunAttributes;
     protected FOVVFX fovVFX;
 
-    // Enum for keeping track on the current start of the ability
+    // Sound Related
+    protected FMOD.Studio.EventInstance sfxEvent;
+    protected BGMController bgmController;
+
+    // Ability Start enum
     protected ABILITY abilityState;
     protected enum ABILITY
     {
@@ -27,22 +35,39 @@ public class GunMovement : MonoBehaviour
         ONCOOLDOWN,
         OFFCOOLDOWN
     }
-    
-    public void Initialize(GameObject playerObj, GunAttributes ga)
+
+    protected virtual void OnDestroy()
     {
-        player = playerObj;
-        rb = player.GetComponent<Rigidbody>();
+        sfxEvent.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
+    }
+
+    protected virtual void Update()
+    {
+        if(Input.GetKeyDown(KeyCode.Minus)) abilityCooldown = 0f; // dev tool give no cooldown to weapon ability
+    }
+    
+    public void Initialize(GameObject playerObj, GunAttributes ga, GameObject soundSystem)
+    {
+        // player related
+        player   = playerObj;
+        rb       = player.GetComponent<Rigidbody>();
         movement = player.GetComponent<Movement>();
-        fovVFX = player.GetComponent<FOVVFX>();
+        // weapon related
         gunAttributes = ga;
-        abilityState = ABILITY.OFFCOOLDOWN;
-        abilityKey = (KeyCode)PlayerPrefs.GetInt("Weapon Ability", 304);
+        // fov
+        fovVFX   = player.GetComponent<FOVVFX>();
+        // ability stuff
+        abilityState  = ABILITY.OFFCOOLDOWN;
+        abilityKey    = (KeyCode)PlayerPrefs.GetInt("Weapon Ability", 304);     // get ability key from player prefs
+        // sfx and bgm stuff
+        sfxEvent = RuntimeManager.CreateInstance(sfxKey);
+        bgmController = soundSystem.GetComponent<BGMController>();
     }
 
     protected virtual void DoMovementAbility()
     {
         abilityState = ABILITY.ACTIVE;
-        if(!IsToggleable) StartCoroutine(StartAbilityCooldown());                             // if ability is one time use aka not toggleable start cooldown
+        if(!IsToggleable) StartCoroutine(StartAbilityCooldown());                             // if ability is one time use aka not toggleable start cooldown                                                                 // do sfx
     }
 
     protected virtual void EndMovementAbility()

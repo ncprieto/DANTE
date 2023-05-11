@@ -32,8 +32,8 @@ public class GunAttributes : MonoBehaviour
 
     void Awake(){
         shotTrail = GetComponent<LineRenderer>();
-        fireAnim = GetComponent<Animator>();
-        gunMovement.Initialize(GameObject.Find("Player"), this);
+        fireAnim  = GetComponent<Animator>();
+        gunMovement.Initialize(GameObject.Find("Player"), this, GameObject.Find("SoundSystem"));
         UI = GameObject.Find("Canvas").GetComponent<UI_Script>();
         antiStuckScript = GameObject.Find("AntiStuckCheck").GetComponent<AntiStuck>();
         shoot = (KeyCode)PlayerPrefs.GetInt("Shoot", 323);
@@ -47,21 +47,15 @@ public class GunAttributes : MonoBehaviour
         sinceLastFire += Time.deltaTime;
         if (Input.GetKey(shoot) && (sinceLastFire > fireRate)){
             sinceLastFire = 0;
-            StartCoroutine(DrawTrail());
-            StartCoroutine(FlashMuzzle());
-            vertGunSmoke.Play();
-            horizGunSmoke.Play();
-            fireAnim.SetTrigger("FireWeapon");
-            shotTrail.SetPosition(0, trailOrigin.position);
+            PlayShootVFX();
             Vector3 rayOrigin = Camera.main.ViewportToWorldPoint(new Vector3(0.5f, 0.5f, 0));
             RaycastHit hit;
             if (Physics.Raycast(rayOrigin, Camera.main.transform.forward, out hit, weaponRange, hitboxLayer)){
                 shotTrail.SetPosition(1, hit.point);
-
                 // get correct gameobjects and enemy base script
-                GameObject root    = hit.transform.parent.parent.gameObject;
-                GameObject hitbox  = hit.transform.parent.gameObject;
-                Enemy enemyHit = root.GetComponent<Enemy>();
+                GameObject root   = hit.transform.parent.parent.gameObject;
+                GameObject hitbox = hit.transform.parent.gameObject;
+                Enemy enemyHit    = root.GetComponent<Enemy>();
                 // calculate damage and if necessary update time UI
                 float damageToGive = damageValues.CalculateDamage(hitbox.name);                      // calculate damage that the enemy will take
                 if(enemyHit.IsThisDamageLethal(damageToGive))                                        // if this damage is lethal then update time on the UI
@@ -85,6 +79,16 @@ public class GunAttributes : MonoBehaviour
             // Camera.main.transform.localRotation = recoilRotation;
             //Camera.main.transform.localRotation = Quaternion.Euler(Camera.main.transform.localRotation.x - recoilStrength, Camera.main.transform.localRotation.y + recoilStrength, Camera.main.transform.localRotation.z);
         }
+    }
+
+    void PlayShootVFX()
+    {
+        StartCoroutine(DrawTrail());
+        StartCoroutine(FlashMuzzle());
+        vertGunSmoke.Play();
+        horizGunSmoke.Play();
+        fireAnim.SetTrigger("FireWeapon");
+        shotTrail.SetPosition(0, trailOrigin.position);
     }
 
     IEnumerator DrawTrail()

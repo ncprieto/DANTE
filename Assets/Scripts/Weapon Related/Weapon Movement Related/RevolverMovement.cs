@@ -11,36 +11,51 @@ public class RevolverMovement : GunMovement
     public float timePerCrit;
 
     private float timeToAdd;
+    private float originalGravity;
 
     void Awake()
     {
         IsToggleable = true;
     }
 
-    void Update()
+    protected override void OnDestroy()
     {
+        base.OnDestroy();
+        
+    }
+
+    protected override void Update()
+    {
+        base.Update();
         if(Input.GetKeyDown(abilityKey))
         {
-            if (CanActivateAbility()) this.DoMovementAbility();
+            if      (CanActivateAbility())   this.DoMovementAbility();
             else if (CanDeactivateAbility()) this.EndMovementAbility();
-        } 
+        }
     }
 
     protected override void DoMovementAbility()
     {
         base.DoMovementAbility();
-        Time.timeScale = slowScale;
-        chainShotCoroutine = StartChainShotWindow();
+        Time.timeScale = slowScale;                                           // set time scale
+        chainShotCoroutine = StartChainShotWindow();                          // chain shot window
         StartCoroutine(chainShotCoroutine);
-        fovVFX.RevolverChainShotVFX();
+        originalGravity = Physics.gravity.y;                                  // gravity
+        Physics.gravity = new Vector3(0f, Physics.gravity.y / 2, 0f);
+        fovVFX.RevolverChainShotVFX();                                        // fov
+        sfxEvent.start();                                                     // play SFX
+        bgmController.LerpBGMPitch(0.1f, 1f, 0.1f);                           // change bgm pitch
     }
 
     protected override void EndMovementAbility()
     {
         base.EndMovementAbility();
-        if(chainShotCoroutine != null) StopCoroutine(chainShotCoroutine);
-        Time.timeScale = 1f;
-        fovVFX.UndoRevolverVFX();
+        if(chainShotCoroutine != null) StopCoroutine(chainShotCoroutine);     // stop chain shot
+        Time.timeScale = 1f;                                                  // reset time scale
+        Physics.gravity = new Vector3(0f, originalGravity, 0f);               // reset gravity to original
+        fovVFX.UndoRevolverVFX();                                             // fov
+        sfxEvent.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);                    // stop sfx
+        bgmController.LerpBGMPitch(1f, 0.1f, 0.1f);                           // change bgm pitch
     }
 
     public override void ReceiveHitInfo(string tag)

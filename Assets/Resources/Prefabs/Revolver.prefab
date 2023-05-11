@@ -5109,6 +5109,7 @@ MonoBehaviour:
   actualAbilityCooldown: 0
   IsToggleable: 1
   refundForKill: 0.25
+  sfxKey: '{2d0d076a-8c96-434b-aa57-89f941815cc4}'
   slowScale: 0.5
   baseSlowTime: 1.25
   timePerNormal: 0.2
