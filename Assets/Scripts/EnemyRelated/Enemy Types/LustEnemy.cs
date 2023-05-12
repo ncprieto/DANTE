@@ -12,7 +12,7 @@ public class LustEnemy : Enemy
 
     // Patrol state vars
     public Vector3 patrolTo;
-    bool patrolPointSet;
+    public bool patrolPointSet;
     public float patrolDistance;
 
     // State variables
@@ -29,20 +29,39 @@ public class LustEnemy : Enemy
     private bool playerHit;
     private Vector3 shotDirection;
 
+    private float stalkRotation;
+    private float stalkRandTime;
+    private float stalkRotTimer;
+    private bool enterScatterState;
+
     protected override void Start()
     {
         base.Start();
         origAccel = nmAgent.acceleration;
         patrolPointSet = false;
+        stalkRotation = 0f;
+        stalkRandTime = Random.Range(.5f, 3f);
+        stalkRotTimer = stalkRandTime;
+        enterScatterState = false;
+
     }
 
     // Update is called once per frame
-    void Update()
+    protected override void Update()
     {
+        base.Update();
+
         // State range checks
         inStalkRange = Physics.CheckSphere(transform.position, stalkRange, playerLayer);
         inChaseRange = Physics.CheckSphere(transform.position, chaseRange, playerLayer);
 
+        // Fellow enemies nearby check
+        if (otherEnemiesInRange > 3 && !enterScatterState){
+            enterScatterState = true;
+            StartCoroutine(ScatterStateTimer());
+        }
+
+        // Correct anim plays
         if (nmAgent.isOnOffMeshLink || nmAgent.speed == 0){
             anims.SetBool("isStill", true);
         }
@@ -50,6 +69,7 @@ public class LustEnemy : Enemy
             anims.SetBool("isStill", false);
         }
 
+        // State changes
         if (damageKnockback){
             DamageKnockbackState();
         }
@@ -58,6 +78,9 @@ public class LustEnemy : Enemy
         }
         else if (playerHit){
             HitPlayerState();
+        }
+        else if (enterScatterState){
+            ScatterState();
         }
         else if (!inStalkRange && !inChaseRange){
             PatrolState();
@@ -105,9 +128,15 @@ public class LustEnemy : Enemy
     // Stalk state functions
     void StalkState()
     {
+        stalkRotTimer += Time.deltaTime;
+        if (stalkRotTimer >= stalkRandTime){
+            stalkRotation = Random.value > 0.5f ? Random.Range(-30f, -5f) : Random.Range(5f, 30f);
+            stalkRotTimer = 0f;
+            stalkRandTime = Random.Range(.5f, 3f);
+        }
         anims.speed = 1f;
         nmAgent.speed = stalkSpeed;
-        nmAgent.SetDestination(player.transform.position);
+        nmAgent.SetDestination(Quaternion.AngleAxis(stalkRotation, Vector3.up) * player.transform.position);
     }
 
     // Chase state functions
@@ -146,6 +175,32 @@ public class LustEnemy : Enemy
         transform.LookAt(player.transform);
         anims.SetBool("isStill", true);
     }
+
+    void ScatterState()
+    {
+        anims.speed = 1f;
+        nmAgent.speed = stalkSpeed;
+
+        if (!patrolPointSet){
+            FindPatrolPoint();
+        }
+
+        if (patrolPointSet){
+            nmAgent.SetDestination(patrolTo);
+        }
+
+        Vector3 distFromPatrolPoint = transform.position - patrolTo;
+        if (distFromPatrolPoint.magnitude < 1f){
+            patrolPointSet = false;
+        }
+
+    }
+
+    IEnumerator ScatterStateTimer()
+    {
+        yield return new WaitForSeconds(Random.Range(.5f, 1.5f));
+        enterScatterState = false;
+    } 
 
     // Send damage to player
     void OnCollisionEnter(Collision col){

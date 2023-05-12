@@ -9,6 +9,7 @@ TagManager:
   - LargeHealth
   - FireDOT
   - Enemy
+  - FellowEnemy
   layers:
   - Default
   - TransparentFX

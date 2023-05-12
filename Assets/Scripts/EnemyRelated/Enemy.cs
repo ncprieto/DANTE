@@ -31,6 +31,7 @@ public class Enemy : MonoBehaviour
     protected virtual void Start()
     {
         currentHealth = startingHealth;
+        otherEnemiesInRange = 0;
         int hpDropChance = Random.Range(0, 100);
         if (hpDropChance < 50){
             hpDrop = Resources.Load("Prefabs/SmallHealthDrop");
@@ -44,6 +45,17 @@ public class Enemy : MonoBehaviour
         deathParticles = Resources.Load("Prefabs/NewEnemyDeathParticles");
     }
 
+    protected static bool enemyHasDied;
+    public int otherEnemiesInRange;
+    protected virtual void Update()
+    {
+        if (enemyHasDied) Debug.Log(enemyHasDied);
+        if (otherEnemiesInRange > 0 && enemyHasDied){
+            otherEnemiesInRange--;
+        }
+        enemyHasDied = false;
+    }
+
     // Health System Related Functions
     protected float currentHealth;
     protected bool damageKnockback;
@@ -55,6 +67,7 @@ public class Enemy : MonoBehaviour
         if (currentHealth <= 0){
             Instantiate(hpDrop, new Vector3 (this.gameObject.transform.position.x, this.gameObject.transform.position.y + 1, this.gameObject.transform.position.z), Quaternion.identity, healthDrops.transform);
             Instantiate(deathParticles, new Vector3 (this.gameObject.transform.position.x, this.gameObject.transform.position.y + 3, this.gameObject.transform.position.z), Quaternion.identity);
+            enemyHasDied = true;
             Destroy(this.gameObject);
             lvlHandler.enemiesKilled++;
         }
