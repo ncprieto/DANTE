@@ -76,7 +76,7 @@ public class UI_Script : MonoBehaviour
         {
             unlimitedTime = unlimitedTime ? false : true;
         }
-        gameSpeedText.text = player.velocity.magnitude.ToString("0.##") + " m/s";
+        gameSpeedText.text = player.velocity.magnitude.ToString("0.##") + " m|s";
         //check if timer is on
         if (timerOn)
         {
@@ -121,7 +121,7 @@ public class UI_Script : MonoBehaviour
             AbilityText.text = Mathf.CeilToInt(revolverMovement.actualAbilityCooldown).ToString();
         }
 
-        objectiveText.text = "Demons Slain: " + lvlHandler.enemiesKilled.ToString() + " / " + lvlHandler.enemiesToKill.ToString();
+        objectiveText.text = "Demons Slain: " + lvlHandler.enemiesKilled.ToString() + " | " + lvlHandler.enemiesToKill.ToString();
 
         if(Move.canGrapple && Move.actualGrappleCooldown == 0){
             canGrappleUI.SetActive(true);
@@ -143,7 +143,7 @@ public class UI_Script : MonoBehaviour
         secStr = seconds < 10 ? "0" + seconds.ToString() : seconds.ToString();
         milliStr = milliseconds < 10 ? ".0" + milliseconds.ToString() : "." + milliseconds.ToString();
         //update the text 
-        gameTimerText.text = minutes.ToString() + " : " + secStr + milliStr;        
+        gameTimerText.text = minutes.ToString() + ":" + secStr + milliStr;        
     }
 
     public void AddTime(float amount)
