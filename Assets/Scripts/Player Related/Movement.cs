@@ -87,7 +87,12 @@ public class Movement : MonoBehaviour
         canGrapple = Physics.Raycast(playerCamera.transform.position, playerCamera.transform.forward, grappleRange);
 
         // dev tools
-        if(Input.GetKeyDown(KeyCode.Alpha0)) grappleCooldown = 0f;
+        if(Input.GetKeyDown(KeyCode.Alpha0)) grappleCooldown = 0f; // no grapple cooldown
+        if(Input.GetKeyDown(KeyCode.Equals))                       // add to bHop count
+        {
+            bHopOverride = true;
+            bHopCount += bHopCount < bHopMax ? 1 : 0;
+        }
     }
 
     void FixedUpdate()
@@ -376,6 +381,7 @@ public class Movement : MonoBehaviour
      * and gives the player a small speed increase based on the amount of successfully
      * chained b hops.
      */
+    private bool bHopOverride;
     private IEnumerator CheckBHopWindow()
     {
         justJumped = false;
@@ -390,7 +396,7 @@ public class Movement : MonoBehaviour
             timer -= Time.deltaTime;
             yield return null;
         }
-        bHopCount = 0;
+        if(!bHopOverride) bHopCount = 0;
     }
 
     private void SetUpControls()

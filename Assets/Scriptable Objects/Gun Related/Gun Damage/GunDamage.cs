@@ -7,9 +7,12 @@ public class GunDamage : ScriptableObject
 {
     public float baseDamage;
     public float critMultiplier;
+    public AnimationCurve damageBHopMultiplier;
 
-    public float CalculateDamage(string tag)
+    public float CalculateDamage(string tag, int bHopCount)
     {
-        return tag == "CritHitbox" ? baseDamage * critMultiplier : baseDamage;
+        float damage = tag == "CritHitbox" ? baseDamage * critMultiplier : baseDamage;
+        if(bHopCount != 0) damage = damage * damageBHopMultiplier.Evaluate(bHopCount);
+        return damage;
     }
 }
