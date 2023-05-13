@@ -71,7 +71,6 @@ public class Movement : MonoBehaviour
         groundDecel = groundDecel < 1 ? 1 : groundDecel;                                                      // sets groundDecel to 1 if its less than 1, groundDecel value less than 1 causes bugs
         baseMoveSpeed = moveSpeed;
         SetUpControls();
-        Camera.main.fieldOfView = PlayerPrefs.GetInt("FOV", 90);
     }
 
     void Update()

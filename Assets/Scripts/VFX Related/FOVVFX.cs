@@ -19,52 +19,58 @@ public class FOVVFX : MonoBehaviour
     public float bHopFOVOffset;
 
     private float originalFOV;
-    private float currentFOV;
+    private float mainCurrentFOV;
+    private float overlayCurrentFOV;
 
     void Awake()
     {
-        Camera.main.fieldOfView = PlayerPrefs.GetInt("FOV", 90);
-        overlay.fieldOfView = PlayerPrefs.GetInt("FOV", 90);
+        Camera.main.fieldOfView = PlayerPrefs.GetInt("FOV", 110);
         originalFOV = Camera.main.fieldOfView;
     }
 
     void Start()
     {
-        Camera.main.fieldOfView = PlayerPrefs.GetInt("FOV", 90);
-        overlay.fieldOfView = PlayerPrefs.GetInt("FOV", 90);
+        Camera.main.fieldOfView = PlayerPrefs.GetInt("FOV", 110);
         originalFOV = Camera.main.fieldOfView;
     }
 
     void Update()
     {
-        currentFOV = Camera.main.fieldOfView;
+        mainCurrentFOV = Camera.main.fieldOfView;
+        overlayCurrentFOV = overlay.fieldOfView;
     }
 
     // Grapple Realted FOV Functions
-    IEnumerator grappleFOV;
+    IEnumerator mainGrappleFOV;
+    IEnumerator overlayGrappleFOV;
     public void GrappleStartVFX()
     {
         if(IsCoroutineRunning("revolver")) return;
-        grappleFOV = DoFOVVFX(grappleFOV, currentFOV + grappleFOVOffset, currentFOV, grappleFOVTime, "grapple");
+        mainGrappleFOV = DoFOVVFX(mainGrappleFOV, mainCurrentFOV + grappleFOVOffset, mainCurrentFOV, grappleFOVTime, "grapple-main", Camera.main);
+        overlayGrappleFOV = DoFOVVFX(overlayGrappleFOV, 125f, overlayCurrentFOV, grappleFOVTime, "grapple-overlay", overlay);
     }
 
     public void GrappleEndVFX()
     {
         if(IsCoroutineRunning("revolver")) return;
-        grappleFOV = DoFOVVFX(grappleFOV, originalFOV, currentFOV, grappleFOVTime, "grapple");
+        mainGrappleFOV = DoFOVVFX(mainGrappleFOV, originalFOV, mainCurrentFOV, grappleFOVTime, "grapple-main", Camera.main);
+        overlayGrappleFOV = DoFOVVFX(overlayGrappleFOV, 100f, overlayCurrentFOV, grappleFOVTime, "grapple-overlay", overlay);
     }
 
     // Revolver Related FOV Functions
-    IEnumerator revolverFOV;
+    IEnumerator mainRevolverFOV;
+    IEnumerator overlayRevolverFOV;
     public void RevolverChainShotVFX()
     {
-        if(IsCoroutineRunning("grapple")) StopCoroutine(grappleFOV);
-        revolverFOV = DoFOVVFX(revolverFOV, currentFOV - revolverFOVOffset, currentFOV, revolverStartUpTime, "revolver");
+        if(IsCoroutineRunning("grapple")) StopCoroutine(mainGrappleFOV);
+        mainRevolverFOV = DoFOVVFX(mainRevolverFOV, mainCurrentFOV - revolverFOVOffset, mainCurrentFOV, revolverStartUpTime, "revolver-main", Camera.main);
+        overlayRevolverFOV = DoFOVVFX(overlayRevolverFOV, 79.2f, overlayCurrentFOV, revolverStartUpTime, "revolver-overlay", overlay);
     }
 
     public void UndoRevolverVFX()
     {
-        revolverFOV = DoFOVVFX(revolverFOV, originalFOV, currentFOV, revolverEndTime, "revolver");
+        mainRevolverFOV = DoFOVVFX(mainRevolverFOV, originalFOV, mainCurrentFOV, revolverEndTime, "revolver-main", Camera.main);
+        overlayRevolverFOV = DoFOVVFX(overlayRevolverFOV, 100f, overlayCurrentFOV, revolverEndTime, "revolver-overlay", overlay);
     }
 
 
@@ -72,44 +78,51 @@ public class FOVVFX : MonoBehaviour
      * when it detects that it is already running or will start a coroutine if it
      * is not running. Return a coroutine which is used to actually start and stop itself.
      */
-    private IEnumerator DoFOVVFX(IEnumerator lerpCoroutine, float start, float end, float timeFrame, string name)
+    private IEnumerator DoFOVVFX(IEnumerator lerpCoroutine, float start, float end, float timeFrame, string name, Camera cam)
     {
         if(IsCoroutineRunning(name))
         {
             StopCoroutine(lerpCoroutine);
             SetCoroutine(name, false);
         }
-        lerpCoroutine = LerpFOV(start, end, timeFrame, name);
+        lerpCoroutine = LerpFOV(start, end, timeFrame, name, cam);
         StartCoroutine(lerpCoroutine);
         return lerpCoroutine;
     }
 
-    IEnumerator LerpFOV(float start, float end, float timeFrame, string name)
+    IEnumerator LerpFOV(float start, float end, float timeFrame, string name, Camera cam)
     {
         SetCoroutine(name, true);
         float timeLeft = timeFrame;
         while(timeLeft > 0)
         {
             timeLeft -= Time.deltaTime;
-            Camera.main.fieldOfView = Mathf.Lerp(start, end, Mathf.Clamp(timeLeft / timeFrame, 0f, 1f));
-            overlay.fieldOfView = Camera.main.fieldOfView;
+            cam.fieldOfView = Mathf.Lerp(start, end, Mathf.Clamp(timeLeft / timeFrame, 0f, 1f));
             yield return null;
         }
         SetCoroutine(name, false);
     }
 
     // Some Boolean tracking functions to tell wheter a coroutine is running
-    bool grappleFOVLerping;
-    bool revolverFOVLerping;
+    bool mainGrappleFOVLerping;
+    bool overlayGrappleFOVLerping;
+    bool mainRevolverFOVLerping;
+    bool overlayRevolverFOVLerping;
     private void SetCoroutine(string name, bool state)
     {
         switch (name)
         {
-            case "grapple":
-                grappleFOVLerping = state;
+            case "grapple-main":
+                mainGrappleFOVLerping = state;
                 break;
-            case "revolver":
-                revolverFOVLerping = state;
+            case "grapple-overlay":
+                overlayGrappleFOVLerping = state;
+                break;
+            case "revolver-main":
+                mainRevolverFOVLerping = state;
+                break;
+            case "revolver-overlay":
+                overlayRevolverFOVLerping = state;
                 break;
         }
     }
@@ -118,10 +131,14 @@ public class FOVVFX : MonoBehaviour
     {
         switch (name)
         {
-            case "grapple":
-                return grappleFOVLerping;
-            case "revolver":
-                return revolverFOVLerping;
+            case "grapple-main":
+                return mainGrappleFOVLerping;
+            case "grapple-overlay":
+                return overlayGrappleFOVLerping;
+            case "revolver-main":
+                return mainRevolverFOVLerping;
+            case "revolver-overlay":
+                return overlayRevolverFOVLerping;
         }
         return false;
     }
