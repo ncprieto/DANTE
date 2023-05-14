@@ -6,6 +6,7 @@ public class TimeRing : MonoBehaviour
 {
 
     public float timeRingTimeAdded;
+    public int waypointSystemIndex;
 
     private UI_Script UI;
     private WaypointSystem ringWaypoint;
@@ -14,7 +15,7 @@ public class TimeRing : MonoBehaviour
     void Start()
     {
         UI = GameObject.Find("Canvas").GetComponent<UI_Script>();
-        ringWaypoint = Camera.main.GetComponent<WaypointSystem>();
+        ringWaypoint = Camera.main.GetComponents<WaypointSystem>()[waypointSystemIndex];
         ringWaypoint.target = this.transform;
     }
 

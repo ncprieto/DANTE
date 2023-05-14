@@ -49,7 +49,7 @@ public class Enemy : MonoBehaviour
     public int otherEnemiesInRange;
     protected virtual void Update()
     {
-        if (enemyHasDied) Debug.Log(enemyHasDied);
+        //if (enemyHasDied) Debug.Log(enemyHasDied);
         if (otherEnemiesInRange > 0 && enemyHasDied){
             otherEnemiesInRange--;
         }

@@ -7,15 +7,25 @@ using TMPro;
 public class WaypointSystem : MonoBehaviour
 {
 
+    public GameObject waypointParent;
     public Image img;
     public TextMeshProUGUI distanceText;
     public Transform target;
     public Vector3 offset;
+    public float edgePadding;
+    public TimeRingSpawns trScript;
 
     // Update is called once per frame
     void Update()
     {
-        if (target != null){
+        if (trScript.isRingActive && !waypointParent.activeSelf){
+            waypointParent.SetActive(true);
+        }
+        else if (!trScript.isRingActive && waypointParent.activeSelf){
+            waypointParent.SetActive(false);
+        }
+
+        if (target != null && waypointParent.activeSelf){
             // Constrain waypoint sprite to screen
             float minX = img.GetPixelAdjustedRect().width / 2;
             float maxX = Screen.width - minX;
@@ -35,12 +45,13 @@ public class WaypointSystem : MonoBehaviour
                 }
             }
 
-            targetPos.x = Mathf.Clamp(targetPos.x, minX, maxX);
-            targetPos.y = Mathf.Clamp(targetPos.y, minY, maxY);
+            targetPos.x = Mathf.Clamp(targetPos.x, minX + edgePadding, maxX - edgePadding);
+            targetPos.y = Mathf.Clamp(targetPos.y, minY + edgePadding, maxY - edgePadding);
 
             img.transform.position = targetPos;
 
-            distanceText.text = ((int)Vector3.Distance(target.position, transform.position)).ToString() + "m"; 
+            distanceText.text = ((int)Vector3.Distance(target.position, transform.position)).ToString() + " m";
         }
+
     }
 }
