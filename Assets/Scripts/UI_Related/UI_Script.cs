@@ -76,7 +76,7 @@ public class UI_Script : MonoBehaviour
         {
             unlimitedTime = unlimitedTime ? false : true;
         }
-        gameSpeedText.text = player.velocity.magnitude.ToString("0.##") + " m|s";
+        gameSpeedText.text = player.velocity.magnitude.ToString("0.##") + " M|S";
         //check if timer is on
         if (timerOn)
         {
@@ -149,13 +149,13 @@ public class UI_Script : MonoBehaviour
     public void AddTime(float amount)
     {
         timeLeft += amount;
-        timeAdditionText.text = "+ " + amount.ToString() + "s";
+        timeAdditionText.text = "+ " + amount.ToString() + " S";
         StartCoroutine(FadeTextToZeroAlpha(2f, timeAdditionText));
     }
 
     void changeBhopText(int count)
     {
-        moveCounterText.text = "x" + count.ToString() + " bHop Chain";
+        moveCounterText.text = "x " + count.ToString() + " b-Hop Chain";
         multiplierText.SetActive(true);
     }
 
