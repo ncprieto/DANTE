@@ -1425,7 +1425,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cc08660782f96fc4b8d8f8af2e4bb507, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  waitForTilFade: 3
+  waitForTilFade: 2
   fadeDuration: 3.5
   refadeDuration: 0.25
   title:
@@ -1437,6 +1437,7 @@ MonoBehaviour:
   easy: {fileID: 11400000, guid: 5c89cbee473569b44a0bb8b82d451cf1, type: 2}
   normal: {fileID: 11400000, guid: a238012ea9ddba34080aff9415f148b0, type: 2}
   hard: {fileID: 11400000, guid: e69eb98d84149c345be9adba2334bfa4, type: 2}
+  bgm: {fileID: 2141696683}
 --- !u!1 &443234898
 GameObject:
   m_ObjectHideFlags: 0
@@ -10406,6 +10407,7 @@ GameObject:
   - component: {fileID: 2141696682}
   - component: {fileID: 2141696681}
   - component: {fileID: 2141696679}
+  - component: {fileID: 2141696683}
   m_Layer: 0
   m_Name: Camera
   m_TagString: Untagged
@@ -10504,6 +10506,37 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2141696683
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2141696678}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a6610d2e704f1648819acc8d7460285, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  CollisionTag: 
+  EventReference:
+    Guid:
+      Data1: -1356184072
+      Data2: 1090551848
+      Data3: -763306313
+      Data4: 1361437234
+    Path: event:/MainMenuMusic
+  Event: 
+  PlayEvent: 1
+  StopEvent: 2
+  AllowFadeout: 1
+  TriggerOnce: 0
+  Preload: 0
+  AllowNonRigidbodyDoppler: 0
+  Params: []
+  OverrideAttenuation: 0
+  OverrideMinDistance: 1
+  OverrideMaxDistance: 20
 --- !u!198 &4124417563097415633
 ParticleSystem:
   m_ObjectHideFlags: 0
