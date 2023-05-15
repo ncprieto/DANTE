@@ -17,6 +17,7 @@ public class TimeRing : MonoBehaviour
         UI = GameObject.Find("Canvas").GetComponent<UI_Script>();
         ringWaypoint = Camera.main.GetComponents<WaypointSystem>()[waypointSystemIndex];
         ringWaypoint.target = this.transform;
+        SetUpModifiers();
     }
 
     void OnTriggerEnter(Collider col){
@@ -25,5 +26,20 @@ public class TimeRing : MonoBehaviour
             ringWaypoint.target = null;
             Destroy(this.gameObject.transform.parent.gameObject);
         }
+    }
+
+    private void SetUpModifiers()
+    {
+        ApplyModifier("Time Per Ring", ref timeRingTimeAdded);
+    }
+
+    private void ApplyModifier(string modifierName, ref float value)
+    {
+        value *= PlayerPrefs.GetFloat(modifierName, 1);
+    }
+
+    private void ApplyModifier(string modifierName, ref int value)
+    {
+        value *= (int)PlayerPrefs.GetFloat(modifierName, 1);
     }
 }

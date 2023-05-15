@@ -15,6 +15,10 @@ public class MainMenu : MonoBehaviour
     public List<GameObject> title;
     public List<GameObject> other;
 
+    public DifficultySettings easy;
+    public DifficultySettings normal;
+    public DifficultySettings hard;
+
     void Start()
     {
         FadeElements(title, fadeDuration, waitForTilFade);
@@ -29,7 +33,9 @@ public class MainMenu : MonoBehaviour
 
     void Update()
     {
-        
+        if(Input.GetKeyDown(KeyCode.A)) easy.SaveAllModifiers();
+        if(Input.GetKeyDown(KeyCode.S)) normal.SaveAllModifiers();
+        if(Input.GetKeyDown(KeyCode.D)) hard.SaveAllModifiers();
     }
 
     public void StartGame()
@@ -44,7 +50,6 @@ public class MainMenu : MonoBehaviour
 
     public void SendToMainMenu()
     {
-
         SceneManager.LoadScene(0);
     }
 

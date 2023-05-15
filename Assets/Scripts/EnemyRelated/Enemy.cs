@@ -107,4 +107,19 @@ public class Enemy : MonoBehaviour
         damageKnockback = false;
         invertVelocity = false;
     }
+
+    protected virtual void SetUpModifiers()
+    {
+        // overwritten
+    }
+
+    protected void ApplyModifier(string modifierName, ref float value)
+    {
+        value *= PlayerPrefs.GetFloat(modifierName, 1);
+    }
+
+    protected void ApplyModifier(string modifierName, ref int value)
+    {
+        value *= (int)PlayerPrefs.GetFloat(modifierName, 1);
+    }
 }

@@ -67,6 +67,7 @@ public class UI_Script : MonoBehaviour
         updateHealthUI(health.playerCurrentHealth);
         objectiveText = objTextObj.GetComponent<TextMeshProUGUI>();
         timeAdditionText = timerText.transform.GetChild(0).gameObject.GetComponent<TextMeshProUGUI>();
+        SetUpModifiers();
     }
 
     // Update is called once per frame
@@ -194,5 +195,20 @@ public class UI_Script : MonoBehaviour
             textmeshproGUI.color= Color.black;
         }
         
+    }
+
+    private void SetUpModifiers()
+    {
+        ApplyModifier("Starting Time", ref timeLeft);
+    }
+
+    private void ApplyModifier(string modifierName, ref float value)
+    {
+        value *= PlayerPrefs.GetFloat(modifierName, 1);
+    }
+
+    private void ApplyModifier(string modifierName, ref int value)
+    {
+        value *= (int)PlayerPrefs.GetFloat(modifierName, 1);
     }
 }

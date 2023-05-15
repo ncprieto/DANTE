@@ -7,8 +7,8 @@ public class LustEnemy : Enemy
 {
     [Header ("Lust Specfic Variables")]
     public NavMeshAgent nmAgent;
-
     public Animator anims;
+    public float damagePerHit;
 
     // Patrol state vars
     public Vector3 patrolTo;
@@ -43,7 +43,7 @@ public class LustEnemy : Enemy
         stalkRandTime = Random.Range(.5f, 3f);
         stalkRotTimer = stalkRandTime;
         enterScatterState = false;
-
+        SetUpModifiers();
     }
 
     // Update is called once per frame
@@ -205,7 +205,7 @@ public class LustEnemy : Enemy
     // Send damage to player
     void OnCollisionEnter(Collision col){
         if (col.gameObject.tag == "Player"){
-            playerHP.ReceiveDamage(10, true);
+            playerHP.ReceiveDamage((int)damagePerHit, true);
             StartCoroutine(HitPlayerStateTimer());
         }
     }
@@ -215,5 +215,12 @@ public class LustEnemy : Enemy
         playerHit = true;
         yield return new WaitForSeconds(1.5f);
         playerHit = false;
+    }
+
+    protected override void SetUpModifiers()
+    {
+        ApplyModifier("Enemy Speed",  ref walkSpeed);
+        ApplyModifier("Enemy Speed",  ref stalkSpeed);
+        ApplyModifier("Enemy Speed",  ref chaseSpeed);
     }
 }

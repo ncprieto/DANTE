@@ -29513,6 +29513,7 @@ MonoBehaviour:
   otherEnemiesInRange: 0
   nmAgent: {fileID: 8435643818165358570}
   anims: {fileID: 4783836808374918033}
+  damagePerHit: 10
   patrolTo: {x: 0, y: 0, z: 0}
   patrolPointSet: 0
   patrolDistance: 10
@@ -29521,7 +29522,6 @@ MonoBehaviour:
   walkSpeed: 4
   stalkSpeed: 9
   chaseSpeed: 11
-  whatState: 
 --- !u!136 &8457332974263009586
 CapsuleCollider:
   m_ObjectHideFlags: 0

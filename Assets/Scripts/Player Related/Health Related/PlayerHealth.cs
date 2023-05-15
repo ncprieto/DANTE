@@ -34,31 +34,17 @@ public class PlayerHealth : MonoBehaviour
     }
 
     // Called by enemy scripts
-    public void ReceiveDamage(int damageTaken, bool hasIFrames){
+    public void ReceiveDamage(float damageTaken, bool hasIFrames){
         if(unlimitedHealth) return;
         if ((playerCurrentHealth > 0) && !isInvincible)
         {
-            playerCurrentHealth -= damageTaken;
+            playerCurrentHealth -= (int)(damageTaken * PlayerPrefs.GetFloat("Incoming Damage", 1));
             StartCoroutine(dmgVFX.DamageVFX());
             StartCoroutine(camShake.Shake(0.2f, 0.35f));
             if (playerCurrentHealth <= 0) playerCurrentHealth = 0;
             if (hasIFrames) StartCoroutine(IFrames());
             UI.updateHealthUI(playerCurrentHealth); //call UI function
         }
-        /*if ((playerCurrentHealth > 0) && !isInvincible){
-            playerCurrentHealth -= damageTaken;
-            StartCoroutine(dmgVFX.DamageVFX());
-            StartCoroutine(camShake.Shake(0.2f, 0.35f));
-            
-            if (playerCurrentHealth <= 0){
-                playerCurrentHealth = 0;
-                
-            }
-            if (hasIFrames){
-                StartCoroutine(IFrames());
-            } 
-           UI.updateHealthUI(playerCurrentHealth);//call UI function
-        }*/
     }
 
     IEnumerator IFrames()
