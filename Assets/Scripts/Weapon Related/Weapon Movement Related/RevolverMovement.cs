@@ -45,7 +45,6 @@ public class RevolverMovement : GunMovement
     protected override void OnDestroy()
     {
         base.OnDestroy();
-        
     }
 
     protected override void Update()
@@ -69,9 +68,11 @@ public class RevolverMovement : GunMovement
         fovVFX.RevolverChainShotVFX();                                        // fov
         sfxEvent.start();                                                     // play SFX
         bgmController.LerpBGMPitch(0.1f, 1f, 0.1f);                           // change bgm pitch
-        motionBlur.intensity.Override(0.5f);
+        motionBlur.intensity.Override(0.5f);                                  // post-processing stuff
         globalVignette.intensity.Override(0.5f);
         localVignette.intensity.Override(0.5f);
+        gunAttributes.gunShotSFXEvent.setPitch(slowScale);                    // change gun shot sfx
+        offCDSFXEvent.setPitch(0.1f);                                         // change offcooldown sfx pitch
     }
 
     protected override void EndMovementAbility()
@@ -83,9 +84,11 @@ public class RevolverMovement : GunMovement
         fovVFX.UndoRevolverVFX();                                             // fov
         sfxEvent.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);                    // stop sfx
         bgmController.LerpBGMPitch(1f, 0.1f, 0.1f);                           // change bgm pitch
-        motionBlur.intensity.Override(0f);
+        motionBlur.intensity.Override(0f);                                    // post-processing stuff
         globalVignette.intensity.Override(gVigBaseIntensity);
         localVignette.intensity.Override(lVigBaseIntensity);
+        gunAttributes.gunShotSFXEvent.setPitch(1f);                           // change gun shot sfx pitch
+        offCDSFXEvent.setPitch(1f);                                           // change offcooldown sfx pitch
     }
 
     public override void ReceiveHitInfo(string tag)

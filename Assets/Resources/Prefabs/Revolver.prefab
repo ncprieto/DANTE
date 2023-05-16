@@ -5066,6 +5066,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 256
   damageValues: {fileID: 11400000, guid: 7773607d0c1914da69040a69a74b8cbf, type: 2}
+  gunShotSFXKey: '{1deba48b-e53a-4ae2-845a-e65d233fd76b}'
   trailOrigin: {fileID: 2676563042148244215}
   trailDuration: 0.1
   muzzleFlash: {fileID: 7453677150484124949}
@@ -5111,6 +5112,7 @@ MonoBehaviour:
   IsToggleable: 1
   refundForKill: 0.25
   sfxKey: '{2d0d076a-8c96-434b-aa57-89f941815cc4}'
+  offCDSFXKey: '{60830888-ebeb-4547-a716-dfade380f492}'
   slowScale: 0.5
   baseSlowTime: 1.25
   timePerNormal: 0.2
