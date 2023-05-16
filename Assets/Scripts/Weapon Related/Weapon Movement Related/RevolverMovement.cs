@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Rendering.Universal;
 
 public class RevolverMovement : GunMovement
 {
@@ -13,9 +14,36 @@ public class RevolverMovement : GunMovement
     private float timeToAdd;
     private float originalGravity;
 
+    private UnityEngine.Rendering.VolumeProfile globalVolumeProfile;
+    private UnityEngine.Rendering.VolumeProfile localVolumeProfile;
+    private UnityEngine.Rendering.Universal.Vignette globalVignette;
+    private UnityEngine.Rendering.Universal.Vignette localVignette;
+    private UnityEngine.Rendering.Universal.MotionBlur motionBlur;
+
+    private float gVigBaseIntensity;
+    private Color gVigBaseColor;
+    private float lVigBaseIntensity;
+    private Color lVigBaseColor;
+
     void Awake()
     {
         IsToggleable = true;
+
+        globalVolumeProfile = GameObject.Find("Global Volume").GetComponent<UnityEngine.Rendering.Volume>()?.profile;
+        if(!globalVolumeProfile) throw new System.NullReferenceException(nameof(UnityEngine.Rendering.VolumeProfile));
+        if(!globalVolumeProfile.TryGet(out globalVignette)) throw new System.NullReferenceException(nameof(globalVignette));
+
+        if(!globalVolumeProfile) throw new System.NullReferenceException(nameof(UnityEngine.Rendering.VolumeProfile));
+        if(!globalVolumeProfile.TryGet(out motionBlur)) throw new System.NullReferenceException(nameof(motionBlur));
+
+        localVolumeProfile = GameObject.Find("Local Volume").GetComponent<UnityEngine.Rendering.Volume>()?.profile;
+        if(!localVolumeProfile) throw new System.NullReferenceException(nameof(UnityEngine.Rendering.VolumeProfile));
+        if(!localVolumeProfile.TryGet(out localVignette)) throw new System.NullReferenceException(nameof(localVignette));
+
+        gVigBaseIntensity = globalVignette.intensity.value;
+        gVigBaseColor = globalVignette.color.value;
+        lVigBaseIntensity = localVignette.intensity.value;
+        lVigBaseColor = localVignette.color.value;
     }
 
     protected override void OnDestroy()
@@ -44,6 +72,11 @@ public class RevolverMovement : GunMovement
         fovVFX.RevolverChainShotVFX();                                        // fov
         sfxEvent.start();                                                     // play SFX
         bgmController.LerpBGMPitch(0.1f, 1f, 0.1f);                           // change bgm pitch
+        motionBlur.intensity.Override(0.5f);                                  // post-processing stuff
+        globalVignette.intensity.Override(0.75f);
+        globalVignette.color.Override(Color.yellow);
+        localVignette.intensity.Override(0.75f);
+        localVignette.color.Override(Color.yellow);
         gunAttributes.gunShotSFXEvent.setPitch(slowScale);                    // change gun shot sfx
         offCDSFXEvent.setPitch(0.1f);                                         // change offcooldown sfx pitch
     }
@@ -57,6 +90,11 @@ public class RevolverMovement : GunMovement
         fovVFX.UndoRevolverVFX();                                             // fov
         sfxEvent.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);                    // stop sfx
         bgmController.LerpBGMPitch(1f, 0.1f, 0.1f);                           // change bgm pitch
+        motionBlur.intensity.Override(0f);                                    // post-processing stuff
+        globalVignette.intensity.Override(gVigBaseIntensity);
+        globalVignette.color.Override(gVigBaseColor);
+        localVignette.intensity.Override(lVigBaseIntensity);
+        localVignette.color.Override(lVigBaseColor);
         gunAttributes.gunShotSFXEvent.setPitch(1f);                           // change gun shot sfx pitch
         offCDSFXEvent.setPitch(1f);                                           // change offcooldown sfx pitch
     }
