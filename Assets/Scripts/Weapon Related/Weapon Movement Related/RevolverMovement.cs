@@ -21,7 +21,9 @@ public class RevolverMovement : GunMovement
     private UnityEngine.Rendering.Universal.MotionBlur motionBlur;
 
     private float gVigBaseIntensity;
+    private Color gVigBaseColor;
     private float lVigBaseIntensity;
+    private Color lVigBaseColor;
 
     void Awake()
     {
@@ -39,7 +41,9 @@ public class RevolverMovement : GunMovement
         if(!localVolumeProfile.TryGet(out localVignette)) throw new System.NullReferenceException(nameof(localVignette));
 
         gVigBaseIntensity = globalVignette.intensity.value;
+        gVigBaseColor = globalVignette.color.value;
         lVigBaseIntensity = localVignette.intensity.value;
+        lVigBaseColor = localVignette.color.value;
     }
 
     protected override void OnDestroy()
@@ -69,8 +73,10 @@ public class RevolverMovement : GunMovement
         sfxEvent.start();                                                     // play SFX
         bgmController.LerpBGMPitch(0.1f, 1f, 0.1f);                           // change bgm pitch
         motionBlur.intensity.Override(0.5f);                                  // post-processing stuff
-        globalVignette.intensity.Override(0.5f);
-        localVignette.intensity.Override(0.5f);
+        globalVignette.intensity.Override(0.75f);
+        globalVignette.color.Override(Color.yellow);
+        localVignette.intensity.Override(0.75f);
+        localVignette.color.Override(Color.yellow);
         gunAttributes.gunShotSFXEvent.setPitch(slowScale);                    // change gun shot sfx
         offCDSFXEvent.setPitch(0.1f);                                         // change offcooldown sfx pitch
     }
@@ -86,7 +92,9 @@ public class RevolverMovement : GunMovement
         bgmController.LerpBGMPitch(1f, 0.1f, 0.1f);                           // change bgm pitch
         motionBlur.intensity.Override(0f);                                    // post-processing stuff
         globalVignette.intensity.Override(gVigBaseIntensity);
+        globalVignette.color.Override(gVigBaseColor);
         localVignette.intensity.Override(lVigBaseIntensity);
+        localVignette.color.Override(lVigBaseColor);
         gunAttributes.gunShotSFXEvent.setPitch(1f);                           // change gun shot sfx pitch
         offCDSFXEvent.setPitch(1f);                                           // change offcooldown sfx pitch
     }
