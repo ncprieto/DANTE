@@ -174,7 +174,7 @@ public class Movement : MonoBehaviour
     bool hitGrapplePoint;
     bool justGrappled;
     Vector3 grapplePoint;
-    GameObject grapplePointSpawner;
+    GameObject hitGrappleObject;
     void OnGrapplePressed()
     {
         if(!grappling && !grappleOnCooldown)
@@ -183,18 +183,10 @@ public class Movement : MonoBehaviour
             if(Physics.Raycast(playerCamera.transform.position, playerCamera.transform.forward, out hit, grappleRange))
             {
                 hitGrapplePoint = false;
-                if(hit.transform.parent != null)
+                if(hit.transform.tag == "GrapplePoint")
                 {
-                    if(hit.transform.name == "GrapplePoint")
-                    {
-                        hitGrapplePoint = true;
-                        grapplePointSpawner = hit.transform.parent.gameObject;
-                    }
-                    else if(hit.transform.parent.name == "GrapplePoint")
-                    {
-                        hitGrapplePoint = true;
-                        grapplePointSpawner = hit.transform.parent.parent.gameObject;
-                    }
+                    hitGrapplePoint = true;
+                    hitGrappleObject = hit.transform.parent.gameObject;
                 }
                 grapplePoint = hit.point;
                 ToggleGrapple();
@@ -230,7 +222,7 @@ public class Movement : MonoBehaviour
             fovVFX.GrappleEndVFX();
             LimitGrappleSpeed(baseMoveSpeed, grappleDecelMaxSpeed, grappleDecelerateTime);
             if(!hitGrapplePoint) StartCoroutine(StartGrappleCooldown());
-            else grapplePointSpawner.GetComponent<GrapplePointSpawner>().SpawnNewGrapplePoint();
+            else hitGrappleObject.GetComponent<GrapplePointRespawn>().despawn = true;
             StartCoroutine(GrappleJustEnded());
             hitGrapplePoint = false;
 

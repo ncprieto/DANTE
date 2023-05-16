@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using Unity.Mathematics;
 
 public class WaypointSystem : MonoBehaviour
 {
@@ -14,6 +15,17 @@ public class WaypointSystem : MonoBehaviour
     public Vector3 offset;
     public float edgePadding;
     public TimeRingSpawns trScript;
+
+    public float minFadeDist;
+    public float maxFadeDist;
+
+    private Vector2 screenCenter;
+    private float distFromCenter;
+
+    void Start()
+    {
+        screenCenter = new Vector2(Screen.width / 2, Screen.height / 2);
+    }
 
     // Update is called once per frame
     void Update()
@@ -51,6 +63,17 @@ public class WaypointSystem : MonoBehaviour
             img.transform.position = targetPos;
 
             distanceText.text = ((int)Vector3.Distance(target.position, transform.position)).ToString() + " m";
+
+            distFromCenter = Vector2.Distance(screenCenter, img.transform.position);
+            if (distFromCenter < minFadeDist){
+                float newAlpha = Mathf.Clamp(math.remap(maxFadeDist, minFadeDist, 0.1f, 1f, distFromCenter), 0.1f, 1f);
+                Color tempImgColor = img.color;
+                tempImgColor.a = newAlpha;
+                img.color = tempImgColor;
+                Color tempTextColor = distanceText.color;
+                tempTextColor.a = newAlpha;
+                distanceText.color = tempTextColor;
+            }
         }
 
     }
