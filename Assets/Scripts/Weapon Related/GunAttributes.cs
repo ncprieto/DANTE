@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using FMODUnity;
 
 public class GunAttributes : MonoBehaviour
 {
@@ -10,6 +11,8 @@ public class GunAttributes : MonoBehaviour
     public float weaponRange;
     public LayerMask hitboxLayer;
     public GunDamage damageValues;
+    public string gunShotSFXKey;
+    public FMOD.Studio.EventInstance gunShotSFXEvent;
     //public float recoilStrength;
     //public float damageValue;
 
@@ -31,7 +34,7 @@ public class GunAttributes : MonoBehaviour
     private UI_Script UI;
     private AntiStuck antiStuckScript;
     private Movement movement;
-
+    
     void Awake(){
         shotTrail = GetComponent<LineRenderer>();
         fireAnim  = GetComponent<Animator>();
@@ -44,6 +47,7 @@ public class GunAttributes : MonoBehaviour
         shoot = (KeyCode)PlayerPrefs.GetInt("Shoot", 323);
         //playerAim = GameObject.Find("Orientation").transform;
         //mainCam = GameObject.Find("Main Camera").transform;
+        gunShotSFXEvent = RuntimeManager.CreateInstance(gunShotSFXKey);
     }
 
     // Update is called once per frame
@@ -53,6 +57,7 @@ public class GunAttributes : MonoBehaviour
         if (Input.GetKey(shoot) && (sinceLastFire > fireRate)){
             sinceLastFire = 0;
             PlayShootVFX();
+            gunShotSFXEvent.start();
             Vector3 rayOrigin = Camera.main.ViewportToWorldPoint(new Vector3(0.5f, 0.5f, 0));
             RaycastHit hit;
             if (Physics.Raycast(rayOrigin, Camera.main.transform.forward, out hit, weaponRange, hitboxLayer)){

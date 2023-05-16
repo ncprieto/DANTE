@@ -12,6 +12,7 @@ public class GunMovement : MonoBehaviour
     public bool  IsToggleable;
     public float refundForKill;
     public string sfxKey;
+    public string offCDSFXKey;
 
     // Player Related
     protected GameObject player;
@@ -25,6 +26,7 @@ public class GunMovement : MonoBehaviour
 
     // Sound Related
     protected FMOD.Studio.EventInstance sfxEvent;
+    protected FMOD.Studio.EventInstance offCDSFXEvent;
     protected BGMController bgmController;
 
     // Ability Start enum
@@ -61,6 +63,7 @@ public class GunMovement : MonoBehaviour
         abilityKey    = (KeyCode)PlayerPrefs.GetInt("Weapon Ability", 304);     // get ability key from player prefs
         // sfx and bgm stuff
         sfxEvent = RuntimeManager.CreateInstance(sfxKey);
+        offCDSFXEvent = RuntimeManager.CreateInstance(offCDSFXKey);
         bgmController = soundSystem.GetComponent<BGMController>();
     }
 
@@ -104,6 +107,8 @@ public class GunMovement : MonoBehaviour
         }
         actualAbilityCooldown = 0f;
         abilityState = ABILITY.OFFCOOLDOWN;
+        offCDSFXEvent.start();
+        // play sound effect
     }
 
     private float refundFactor;

@@ -1,11 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <objects serializationModel="Studio.02.02.00">
-	<object class="AudioFile" id="{e99ddf55-4fd0-4b32-b8bf-b7a2fe556f5b}">
+	<object class="AudioFile" id="{a3f3a7f6-6bd9-4a18-948f-1736d4bb7f6e}">
 		<property name="assetPath">
-			<value>potentialmenu2.mp3</value>
-		</property>
-		<property name="isStreaming">
-			<value>true</value>
+			<value>jump.mp3</value>
 		</property>
 		<property name="frequencyInKHz">
 			<value>24</value>
@@ -14,7 +11,7 @@
 			<value>2</value>
 		</property>
 		<property name="length">
-			<value>25.655999999999999</value>
+			<value>0.55200000000000005</value>
 		</property>
 		<relationship name="masterAssetFolder">
 			<destination>{21bbf59d-9958-44f0-a490-3762f6ca4e7a}</destination>

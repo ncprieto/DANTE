@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<objects serializationModel="Studio.02.02.00">
+	<object class="AudioFile" id="{b48b5bbf-6011-4136-8c41-8d21614333d7}">
+		<property name="assetPath">
+			<value>revolveroffcooldown.wav</value>
+		</property>
+		<property name="frequencyInKHz">
+			<value>48</value>
+		</property>
+		<property name="channelCount">
+			<value>2</value>
+		</property>
+		<property name="length">
+			<value>2.2000000000000002</value>
+		</property>
+		<relationship name="masterAssetFolder">
+			<destination>{21bbf59d-9958-44f0-a490-3762f6ca4e7a}</destination>
+		</relationship>
+	</object>
+</objects>
