@@ -10,6 +10,7 @@ TagManager:
   - FireDOT
   - Enemy
   - FellowEnemy
+  - GrapplePoint
   layers:
   - Default
   - TransparentFX

@@ -166,12 +166,20 @@ public class UI_Script : MonoBehaviour
         healthTextGUI.text = n.ToString();
     }
 
-    public IEnumerator DisplayHitmarker(string hitboxName)
+    public void DisplayHitmarker(string hitboxName)
     {
         int index = (hitboxName == "CritHitbox" ? 1 : 0);
-        hitmarker.transform.GetChild(index).gameObject.SetActive(true);
-        yield return new WaitForSeconds(.1f);
-        hitmarker.transform.GetChild(index).gameObject.SetActive(false);
+        StartCoroutine(FadeImageToZeroFrom(.3f, hitmarker.transform.GetChild(index).gameObject.transform.GetComponent<Image>(), .5f));
+    }
+
+    public IEnumerator FadeImageToZeroFrom(float startAlpha, Image i, float t)
+    {
+        i.color = new Color(i.color.r, i.color.g, i.color.b, startAlpha);
+        while (i.color.a > 0.0f)
+        {
+            i.color = new Color(i.color.r, i.color.g, i.color.b, i.color.a - (Time.deltaTime / t));
+            yield return null;
+        }
     }
 
     public IEnumerator FadeTextToZeroAlpha(float t, TextMeshProUGUI i)
