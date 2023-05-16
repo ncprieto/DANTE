@@ -26,6 +26,7 @@ public class GunAttributes : MonoBehaviour
     public GunMovement gunMovement;
     
     private Animator fireAnim;
+    private Animator hammerAnim;
     private float sinceLastFire = 0;
     private UI_Script UI;
     private AntiStuck antiStuckScript;
@@ -34,6 +35,7 @@ public class GunAttributes : MonoBehaviour
     void Awake(){
         shotTrail = GetComponent<LineRenderer>();
         fireAnim  = GetComponent<Animator>();
+        hammerAnim = transform.Find("idlerevolver").GetComponent<Animator>();
         GameObject player = GameObject.Find("Player");
         movement = player.GetComponent<Movement>();
         gunMovement.Initialize(player, this, GameObject.Find("SoundSystem"));
@@ -89,6 +91,7 @@ public class GunAttributes : MonoBehaviour
         vertGunSmoke.Play();
         horizGunSmoke.Play();
         fireAnim.SetTrigger("FireWeapon");
+        hammerAnim.SetTrigger("HammerPull");
         shotTrail.SetPosition(0, trailOrigin.position);
     }
 
