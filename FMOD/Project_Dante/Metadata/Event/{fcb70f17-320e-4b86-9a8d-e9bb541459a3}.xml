@@ -99,7 +99,7 @@
 			<value>-13</value>
 		</property>
 		<property name="pitch">
-			<value>-14.5</value>
+			<value>-15</value>
 		</property>
 		<relationship name="fadeInCurve">
 			<destination>{f84252ac-97dc-4123-85db-e2485189cc95}</destination>
@@ -130,6 +130,7 @@
 	</object>
 	<object class="MixerBusEffectChain" id="{0aeb3bc8-3dc5-4832-877a-c3a83204d304}">
 		<relationship name="effects">
+			<destination>{dab40d0e-7387-4354-a4f6-b25828b51069}</destination>
 			<destination>{938aa81f-9f40-4f2d-81d6-b207ab8df0f1}</destination>
 		</relationship>
 	</object>
@@ -157,6 +158,14 @@
 		</relationship>
 	</object>
 	<object class="MixerBusPanner" id="{1b64154c-f4e0-4443-b9ca-14510eba56c6}" />
+	<object class="LowpassEffect" id="{dab40d0e-7387-4354-a4f6-b25828b51069}">
+		<property name="cutoff">
+			<value>300</value>
+		</property>
+		<property name="resonance">
+			<value>1.69999993</value>
+		</property>
+	</object>
 	<object class="MixerBusFader" id="{938aa81f-9f40-4f2d-81d6-b207ab8df0f1}" />
 	<object class="AutomationPoint" id="{4fe86a81-9504-4eb3-8af4-ca7de689f619}">
 		<property name="position">

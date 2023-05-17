@@ -49,6 +49,7 @@ public class RevolverMovement : GunMovement
     protected override void OnDestroy()
     {
         base.OnDestroy();
+        Time.timeScale = 1f;
     }
 
     protected override void Update()

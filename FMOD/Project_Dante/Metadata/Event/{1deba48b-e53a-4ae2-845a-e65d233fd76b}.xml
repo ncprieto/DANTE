@@ -121,7 +121,9 @@
 	</object>
 	<object class="MixerBusEffectChain" id="{f710c713-867b-440c-a489-3c95ffeefea2}">
 		<relationship name="effects">
+			<destination>{9d6e2e2e-15c9-464d-bdb0-55f30eb17a7a}</destination>
 			<destination>{fe3c331c-26a9-4ccc-914c-f479a8f019ee}</destination>
+			<destination>{0dc264e5-b9a4-405c-ae6e-e045b65c1aa3}</destination>
 		</relationship>
 	</object>
 	<object class="MixerBusPanner" id="{5a7a0c16-b0ad-40ed-bbad-78971a3f67f3}" />
@@ -140,7 +142,26 @@
 		</relationship>
 	</object>
 	<object class="MixerBusPanner" id="{9bd851bf-22a8-472b-bf9b-4ebf49436472}" />
+	<object class="ChorusEffect" id="{9d6e2e2e-15c9-464d-bdb0-55f30eb17a7a}">
+		<property name="rate">
+			<value>0.599999964</value>
+		</property>
+		<property name="depth">
+			<value>8.5</value>
+		</property>
+		<property name="mix">
+			<value>49</value>
+		</property>
+	</object>
 	<object class="MixerBusFader" id="{fe3c331c-26a9-4ccc-914c-f479a8f019ee}" />
+	<object class="LowpassEffect" id="{0dc264e5-b9a4-405c-ae6e-e045b65c1aa3}">
+		<property name="cutoff">
+			<value>11000</value>
+		</property>
+		<property name="resonance">
+			<value>2</value>
+		</property>
+	</object>
 	<object class="AutomationPoint" id="{16d44da8-43dc-4293-98ba-8f2aea70ab8c}">
 		<property name="position">
 			<value>0.35000000000000003</value>

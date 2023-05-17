@@ -246,6 +246,7 @@
 	</object>
 	<object class="MixerBusEffectChain" id="{a8d3829c-1865-4e90-a3ea-a119aeba23a2}">
 		<relationship name="effects">
+			<destination>{05c76af9-c291-4a22-b06c-7a42c11c6a27}</destination>
 			<destination>{5f8efd2b-21e3-4e34-835b-31067146cc57}</destination>
 		</relationship>
 	</object>
@@ -268,6 +269,7 @@
 	</object>
 	<object class="MixerBusEffectChain" id="{7c9ef032-6086-4897-8023-2fea11f91728}">
 		<relationship name="effects">
+			<destination>{2a63c501-400d-4183-9168-9acc5928d728}</destination>
 			<destination>{5b7cadbd-f58e-4b9a-821e-169df67e2f20}</destination>
 		</relationship>
 	</object>
@@ -311,6 +313,14 @@
 			<value>1</value>
 		</property>
 	</object>
+	<object class="LowpassEffect" id="{05c76af9-c291-4a22-b06c-7a42c11c6a27}">
+		<property name="cutoff">
+			<value>1400</value>
+		</property>
+		<property name="resonance">
+			<value>1.69999993</value>
+		</property>
+	</object>
 	<object class="MixerBusFader" id="{5f8efd2b-21e3-4e34-835b-31067146cc57}" />
 	<object class="AutomationPoint" id="{9181ad62-7b30-4dc7-a86b-13c03bdddb01}">
 		<property name="position">
@@ -348,6 +358,14 @@
 		</property>
 		<property name="value">
 			<value>0</value>
+		</property>
+	</object>
+	<object class="LowpassEffect" id="{2a63c501-400d-4183-9168-9acc5928d728}">
+		<property name="cutoff">
+			<value>1400</value>
+		</property>
+		<property name="resonance">
+			<value>1.69999993</value>
 		</property>
 	</object>
 	<object class="MixerBusFader" id="{5b7cadbd-f58e-4b9a-821e-169df67e2f20}" />
