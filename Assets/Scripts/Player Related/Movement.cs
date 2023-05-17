@@ -66,11 +66,17 @@ public class Movement : MonoBehaviour
     public float grappleEndedDecel;
     public float dismountBoost;
 
+    [Header("SFX Keys")]
+    public string jumpSFXPath;
+    public string bHopSFXPath;
+    private string currentJumpSFX;
+
     void Start()
     {
         groundDecel = groundDecel < 1 ? 1 : groundDecel;                                                      // sets groundDecel to 1 if its less than 1, groundDecel value less than 1 causes bugs
         baseMoveSpeed = moveSpeed;
         SetUpControls();
+        currentJumpSFX = jumpSFXPath;
     }
 
     void Update()
@@ -165,6 +171,7 @@ public class Movement : MonoBehaviour
         {
             rb.AddForce(transform.up * jumpHeight, ForceMode.Impulse);
             justJumped = true;
+            FMODUnity.RuntimeManager.PlayOneShot(currentJumpSFX);
         }
     }
 
@@ -348,6 +355,8 @@ public class Movement : MonoBehaviour
             {
                 rb.AddForce(transform.up * jumpHeight * coyoteJumpBoost, ForceMode.Impulse);
                 coyoteTimeRunning = false;
+                FMODUnity.RuntimeManager.PlayOneShot(bHopSFXPath);                             // play sfx
+                bHopCount += bHopCount < bHopMax ? 1 : 0;
                 yield break;
             }
             timer -= Time.deltaTime;
@@ -383,12 +392,14 @@ public class Movement : MonoBehaviour
         {
             if(Input.GetKeyUp(jump)){
                 bHopCount += bHopCount < bHopMax ? 1 : 0;
+                currentJumpSFX = bHopSFXPath;
                 yield break;
             };
             timer -= Time.deltaTime;
             yield return null;
         }
         if(!bHopOverride) bHopCount = 0;
+        currentJumpSFX = jumpSFXPath;
     }
 
     private void SetUpControls()

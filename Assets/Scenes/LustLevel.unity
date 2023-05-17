@@ -32719,6 +32719,8 @@ MonoBehaviour:
   grappleEndedTime: 1
   grappleEndedDecel: 100
   dismountBoost: 1.5
+  jumpSFXPath: event:/Jump
+  bHopSFXPath: event:/BHopChain
 --- !u!136 &939103762
 CapsuleCollider:
   m_ObjectHideFlags: 0
