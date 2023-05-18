@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
+using UnityEngine.UI;
 
 public class RevolverMovement : GunMovement
 {
@@ -25,8 +26,13 @@ public class RevolverMovement : GunMovement
     private float lVigBaseIntensity;
     private Color lVigBaseColor;
 
+    [Header("Ability Cooldown Slider")]
+    public GameObject abilitySliderObj;
+
     void Awake()
     {
+        abilitySliderObj = GameObject.Find("AbilityTimerSlider");
+        abilitySliderObj.SetActive(false);
         IsToggleable = true;
 
         globalVolumeProfile = GameObject.Find("Global Volume").GetComponent<UnityEngine.Rendering.Volume>()?.profile;
@@ -80,6 +86,7 @@ public class RevolverMovement : GunMovement
         localVignette.color.Override(Color.yellow);
         gunAttributes.gunShotSFXEvent.setPitch(slowScale);                    // change gun shot sfx
         offCDSFXEvent.setPitch(0.1f);                                         // change offcooldown sfx pitch
+        abilitySliderObj.SetActive(true);
     }
 
     protected override void EndMovementAbility()
@@ -98,6 +105,7 @@ public class RevolverMovement : GunMovement
         localVignette.color.Override(lVigBaseColor);
         gunAttributes.gunShotSFXEvent.setPitch(1f);                           // change gun shot sfx pitch
         offCDSFXEvent.setPitch(1f);                                           // change offcooldown sfx pitch
+        abilitySliderObj.SetActive(false);
     }
 
     public override void ReceiveHitInfo(string tag)
@@ -119,6 +127,7 @@ public class RevolverMovement : GunMovement
     IEnumerator StartChainShotWindow()
     {
         float timeLeft = baseSlowTime;
+        abilitySliderObj.transform.localScale = new Vector3(baseSlowTime/baseSlowTime, 1, 1);
         while(timeLeft > 0)
         {
             if(timeToAdd > 0)                      // add time to timer if player chains shots together
@@ -127,6 +136,7 @@ public class RevolverMovement : GunMovement
                 timeToAdd = 0f;
             }
             else timeLeft -= Time.deltaTime;
+            abilitySliderObj.transform.localScale = new Vector3(timeLeft / baseSlowTime, 1, 1);
             yield return null;
         }
         this.EndMovementAbility();
