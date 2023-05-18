@@ -12,14 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dd35141d1b88449e2902c6911cc5cde9, type: 3}
   m_Name: Revolver Gun Damage
   m_EditorClassIdentifier: 
-  baseDamage: 50
-  critMultiplier: 2
-  damageBHopMultiplier:
+  falloffCurve:
     serializedVersion: 2
     m_Curve:
     - serializedVersion: 3
-      time: 0.005464554
-      value: 0
+      time: 0
+      value: 50
       inSlope: 0
       outSlope: 0
       tangentMode: 136
@@ -27,44 +25,26 @@ MonoBehaviour:
       inWeight: 0.33333334
       outWeight: 0.33333334
     - serializedVersion: 3
-      time: 1
-      value: 1.05
-      inSlope: 0.100274175
-      outSlope: 0.100274175
+      time: 35
+      value: 50
+      inSlope: 0
+      outSlope: 0
       tangentMode: 136
       weightedMode: 0
       inWeight: 0.33333334
       outWeight: 0.33333334
     - serializedVersion: 3
-      time: 2
-      value: 1.1
-      inSlope: 0.100000024
-      outSlope: 0.100000024
+      time: 50
+      value: 25
+      inSlope: -1.1428572
+      outSlope: -1.1428572
       tangentMode: 136
       weightedMode: 0
       inWeight: 0.33333334
       outWeight: 0.33333334
     - serializedVersion: 3
-      time: 3
-      value: 1.25
-      inSlope: 0.19999999
-      outSlope: 0.19999999
-      tangentMode: 136
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    - serializedVersion: 3
-      time: 4
-      value: 1.5
-      inSlope: 0.375
-      outSlope: 0.375
-      tangentMode: 136
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    - serializedVersion: 3
-      time: 5
-      value: 2
+      time: 70
+      value: 10
       inSlope: 0
       outSlope: 0
       tangentMode: 136
@@ -74,3 +54,56 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+  critMultiplier: 2
+  bHopMultiplier:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 1
+      value: 1.05
+      inSlope: 0.05000007
+      outSlope: 0.05000007
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 2
+      value: 1.1
+      inSlope: 0.100000024
+      outSlope: 0.100000024
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 3
+      value: 1.25
+      inSlope: 0.19999999
+      outSlope: 0.19999999
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 4
+      value: 1.5
+      inSlope: 0.375
+      outSlope: 0.375
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 5
+      value: 2
+      inSlope: 0.5
+      outSlope: 0.5
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  baseDamage: 50

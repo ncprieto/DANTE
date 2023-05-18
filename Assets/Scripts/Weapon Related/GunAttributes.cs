@@ -11,6 +11,8 @@ public class GunAttributes : MonoBehaviour
     public float weaponRange;
     public LayerMask hitboxLayer;
     public GunDamage damageValues;
+
+    [Header ("SFX Key and Events")]
     public string gunShotSFXKey;
     public FMOD.Studio.EventInstance gunShotSFXEvent;
     //public float recoilStrength;
@@ -60,13 +62,13 @@ public class GunAttributes : MonoBehaviour
             gunShotSFXEvent.start();
             Vector3 rayOrigin = Camera.main.ViewportToWorldPoint(new Vector3(0.5f, 0.5f, 0));
             RaycastHit hit;
-            if (Physics.Raycast(rayOrigin, Camera.main.transform.forward, out hit, weaponRange, hitboxLayer)){
+            if (Physics.Raycast(rayOrigin, Camera.main.transform.forward, out hit, Mathf.Infinity, hitboxLayer)){
                 shotTrail.SetPosition(1, hit.point);
                 GameObject root   = hit.transform.parent.parent.gameObject;
                 GameObject hitbox = hit.transform.parent.gameObject;
                 Enemy enemyHit    = root.GetComponent<Enemy>();
-                float damageToGive = damageValues.CalculateDamage(hitbox.name, movement.bHopCount);                      // calculate damage that the enemy will take
-                if(enemyHit.IsThisDamageLethal(damageToGive))                                        // if this damage is lethal then update time on the UI
+                float damageToGive = damageValues.CalculateDamage(hit.distance, movement.bHopCount, hitbox.name);     // calculate damage that the enemy will take
+                if(enemyHit.IsThisDamageLethal(damageToGive))                                                         // if this damage is lethal then update time on the UI
                 {
                     float timeToAdd = root.GetComponent<Enemy>().GetTimeRewardValue(hitbox.name);
                     UI.AddTime(timeToAdd);
