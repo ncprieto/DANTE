@@ -12,14 +12,28 @@ public class PlayerHealth : MonoBehaviour
     public CameraShake camShake;
     public bool unlimitedHealth;
 
+    private bool canHealVFX;
+
     void OnAwake()
     {
         playerCurrentHealth = 100;
     }
 
+    void Start()
+    {
+        canHealVFX = true;
+    }
+
     void Update()
     {
         if(Input.GetKeyDown(KeyCode.Alpha8)) unlimitedHealth = true;
+
+        if (playerCurrentHealth <= 25){
+            dmgVFX.isLowHP = true;
+        }
+        else{
+            dmgVFX.isLowHP = false;
+        }
     }
 
     public void GainHealth(string tag){
@@ -28,6 +42,7 @@ public class PlayerHealth : MonoBehaviour
             if      (tag == "SmallHealth")  playerCurrentHealth += 5;
             else if (tag == "MediumHealth") playerCurrentHealth += 10;
             else if (tag == "LargeHealth")  playerCurrentHealth += 25;
+            if (canHealVFX) StartCoroutine(HealVFXTimer());
         }
         playerCurrentHealth = Mathf.Clamp(playerCurrentHealth, 0, 100);
         UI.updateHealthUI(playerCurrentHealth);//call UI function
@@ -52,6 +67,14 @@ public class PlayerHealth : MonoBehaviour
         isInvincible = true;
         yield return new WaitForSeconds(1f);
         isInvincible = false;
+    }
+
+    IEnumerator HealVFXTimer()
+    {
+        canHealVFX = false;
+        StartCoroutine(dmgVFX.HealVFX());
+        yield return new WaitForSeconds(.25f);
+        canHealVFX = true;
     }
 
 }

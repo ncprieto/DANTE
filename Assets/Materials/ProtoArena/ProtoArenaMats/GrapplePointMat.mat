@@ -519,7 +519,7 @@ Material:
     - _EmissionColor: {r: 0.8468835, g: 0.93697745, b: 0.16216919, a: 1}
     - _EmissiveColor: {r: 0, g: 0, b: 0, a: 1}
     - _EmissiveColorLDR: {r: 0, g: 0, b: 0, a: 1}
-    - _Emissive_Color: {r: 1, g: 0.63251555, b: 0.0047169924, a: 1}
+    - _Emissive_Color: {r: 2.1185474, g: 1.3421164, b: 0.011091871, a: 1}
     - _FirstShadeMaskColor: {r: 0, g: 1, b: 1, a: 1}
     - _HighColor: {r: 0, g: 0, b: 0, a: 1}
     - _HighlightMaskColor: {r: 1, g: 1, b: 0, a: 1}
