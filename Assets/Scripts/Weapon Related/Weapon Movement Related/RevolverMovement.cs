@@ -62,6 +62,7 @@ public class RevolverMovement : GunMovement
     {
         base.OnDestroy();
         Time.timeScale = 1f;
+        Physics.gravity = new Vector3(0f, originalGravity, 0f);
     }
 
     protected override void Update()
