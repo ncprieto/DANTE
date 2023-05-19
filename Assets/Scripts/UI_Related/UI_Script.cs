@@ -82,8 +82,7 @@ public class UI_Script : MonoBehaviour
         if (timerOn)
         {
             bhopCounter = movementScript.bHopCount;
-            if (bhopCounter > 0) changeBhopText(bhopCounter);
-            else multiplierText.SetActive(false);
+            changeBhopText(bhopCounter);
 
             if (!unlimitedTime)
             {
@@ -122,7 +121,7 @@ public class UI_Script : MonoBehaviour
             AbilityText.text = Mathf.CeilToInt(revolverMovement.actualAbilityCooldown).ToString();
         }
 
-        objectiveText.text = "Demons Slain: " + lvlHandler.enemiesKilled.ToString() + " | " + lvlHandler.enemiesToKill.ToString();
+        objectiveText.text = lvlHandler.enemiesKilled.ToString() + " | " + lvlHandler.enemiesToKill.ToString() + "  Slain";
 
         if(Move.canGrapple && Move.actualGrappleCooldown == 0){
             canGrappleUI.SetActive(true);
@@ -157,7 +156,6 @@ public class UI_Script : MonoBehaviour
     void changeBhopText(int count)
     {
         moveCounterText.text = "x " + count.ToString() + " b-Hop Chain";
-        multiplierText.SetActive(true);
     }
 
     public void updateHealthUI(int n)
@@ -200,7 +198,7 @@ public class UI_Script : MonoBehaviour
         }
         else
         {
-            textmeshproGUI.color= Color.black;
+            textmeshproGUI.color= Color.red;
         }
         
     }
