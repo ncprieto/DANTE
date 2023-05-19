@@ -193,7 +193,7 @@ public class Movement : MonoBehaviour
                 if(hit.transform.tag == "GrapplePoint")
                 {
                     hitGrapplePoint = true;
-                    hitGrappleObject = hit.transform.parent.gameObject;
+                    hitGrappleObject = hit.transform.parent.parent.gameObject;
                 }
                 grapplePoint = hit.point;
                 ToggleGrapple();

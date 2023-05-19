@@ -20,11 +20,13 @@ public class RevolverMovement : GunMovement
     private UnityEngine.Rendering.Universal.Vignette globalVignette;
     private UnityEngine.Rendering.Universal.Vignette localVignette;
     private UnityEngine.Rendering.Universal.MotionBlur motionBlur;
+    private UnityEngine.Rendering.Universal.Bloom bloom;
 
     private float gVigBaseIntensity;
     private Color gVigBaseColor;
     private float lVigBaseIntensity;
     private Color lVigBaseColor;
+    private float baseBloomThreshold;
 
     [Header("Ability Cooldown Slider")]
     public GameObject abilitySliderObj;
@@ -42,6 +44,9 @@ public class RevolverMovement : GunMovement
         if(!globalVolumeProfile) throw new System.NullReferenceException(nameof(UnityEngine.Rendering.VolumeProfile));
         if(!globalVolumeProfile.TryGet(out motionBlur)) throw new System.NullReferenceException(nameof(motionBlur));
 
+        if(!globalVolumeProfile) throw new System.NullReferenceException(nameof(UnityEngine.Rendering.VolumeProfile));
+        if(!globalVolumeProfile.TryGet(out bloom)) throw new System.NullReferenceException(nameof(bloom));
+
         localVolumeProfile = GameObject.Find("Local Volume").GetComponent<UnityEngine.Rendering.Volume>()?.profile;
         if(!localVolumeProfile) throw new System.NullReferenceException(nameof(UnityEngine.Rendering.VolumeProfile));
         if(!localVolumeProfile.TryGet(out localVignette)) throw new System.NullReferenceException(nameof(localVignette));
@@ -50,6 +55,7 @@ public class RevolverMovement : GunMovement
         gVigBaseColor = globalVignette.color.value;
         lVigBaseIntensity = localVignette.intensity.value;
         lVigBaseColor = localVignette.color.value;
+        baseBloomThreshold = bloom.threshold.value;
     }
 
     protected override void OnDestroy()
@@ -84,6 +90,7 @@ public class RevolverMovement : GunMovement
         globalVignette.color.Override(Color.yellow);
         localVignette.intensity.Override(0.75f);
         localVignette.color.Override(Color.yellow);
+        bloom.threshold.Override(0.45f);
         gunAttributes.gunShotSFXEvent.setPitch(slowScale);                    // change gun shot sfx
         offCDSFXEvent.setPitch(0.1f);                                         // change offcooldown sfx pitch
         abilitySliderObj.SetActive(true);
@@ -103,6 +110,7 @@ public class RevolverMovement : GunMovement
         globalVignette.color.Override(gVigBaseColor);
         localVignette.intensity.Override(lVigBaseIntensity);
         localVignette.color.Override(lVigBaseColor);
+        bloom.threshold.Override(baseBloomThreshold);
         gunAttributes.gunShotSFXEvent.setPitch(1f);                           // change gun shot sfx pitch
         offCDSFXEvent.setPitch(1f);                                           // change offcooldown sfx pitch
         abilitySliderObj.SetActive(false);
