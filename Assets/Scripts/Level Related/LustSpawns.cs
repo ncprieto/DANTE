@@ -7,7 +7,7 @@ public class LustSpawns : LevelHandler
     [Header ("Lust Level Variables")]
     public float spawnRateTime;
     public int spawnRateKills;
-    public int spawnAmount;
+    public float spawnAmount;
 
     private UnityEngine.Object lustEnemy;
     private float timer;
@@ -22,6 +22,7 @@ public class LustSpawns : LevelHandler
         timer = 0f;
         haveKillsSpawnsHappened = false;
         enemyCountPreCheck = enemyHolder.transform.childCount;
+        SetUpModifiers();
         base.Start();
     }
 
@@ -35,7 +36,7 @@ public class LustSpawns : LevelHandler
         }
         if ((enemiesKilled % spawnRateKills == 0) && (enemiesKilled != 0) && (!haveKillsSpawnsHappened)){
             enemyCountPreCheck = enemyHolder.transform.childCount;
-            for (int i = 0; i < spawnAmount; i++){
+            for (int i = 0; i < (int)spawnAmount; i++){
                 enemyCountPreCheck++;
                 if (enemyCountPreCheck < maxEnemyCount){
                     SpawnEnemy(lustEnemy, transform.GetChild(FindSpawnPoint()));
@@ -61,5 +62,22 @@ public class LustSpawns : LevelHandler
             FindSpawnPoint();
         }
         return generatedSpawn;
+    }
+
+    private void SetUpModifiers()
+    {
+        ApplyModifier("Spawn Rate Time", ref spawnRateTime);
+        ApplyModifier("Spawn Amount", ref spawnAmount);
+        ApplyModifier("Enemies To Kill", ref enemiesToKill);
+    }
+
+    private void ApplyModifier(string modifierName, ref float value)
+    {
+        value *= PlayerPrefs.GetFloat(modifierName, 1);
+    }
+
+    private void ApplyModifier(string modifierName, ref int value)
+    {
+        value *= (int)PlayerPrefs.GetFloat(modifierName, 1);
     }
 }

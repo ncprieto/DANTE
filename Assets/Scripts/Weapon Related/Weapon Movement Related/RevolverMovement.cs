@@ -56,6 +56,8 @@ public class RevolverMovement : GunMovement
         lVigBaseIntensity = localVignette.intensity.value;
         lVigBaseColor = localVignette.color.value;
         baseBloomThreshold = bloom.threshold.value;
+
+        originalGravity = Physics.gravity.y;
     }
 
     protected override void OnDestroy()

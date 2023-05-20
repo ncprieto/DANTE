@@ -14,10 +14,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enemyModifierNames:
   - Enemy Speed
-  - Enemy Damage
+  - Spawn Rate Time
+  - Spawn Amount
   enemyValues:
   - 1.5
-  - 1.5
+  - 0.6
+  - 1.4
   playerModifierNames:
   - Incoming Damage
   playerValues:
@@ -25,6 +27,8 @@ MonoBehaviour:
   generalModifierNames:
   - Time Per Ring
   - Starting Time
+  - Enemies To Kill
   generalValues:
   - 0.75
   - 0.75
+  - 1.5
