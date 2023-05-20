@@ -121,7 +121,7 @@ public class UI_Script : MonoBehaviour
             AbilityText.text = Mathf.CeilToInt(revolverMovement.actualAbilityCooldown).ToString();
         }
 
-        objectiveText.text = lvlHandler.enemiesKilled.ToString() + " | " + lvlHandler.enemiesToKill.ToString() + "  Slain";
+        objectiveText.text = lvlHandler.enemiesKilled.ToString() + " | " + ((int)lvlHandler.enemiesToKill).ToString() + "  Slain";
 
         if(Move.canGrapple && Move.actualGrappleCooldown == 0){
             canGrappleUI.SetActive(true);
