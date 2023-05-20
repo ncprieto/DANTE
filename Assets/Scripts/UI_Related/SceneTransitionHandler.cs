@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
+using TMPro;
 
 public class SceneTransitionHandler : MonoBehaviour
 {
@@ -27,8 +29,16 @@ public class SceneTransitionHandler : MonoBehaviour
     public GameObject weaponBob;
     public GameObject revolver;
 
+    [Header("StatsOverlay")]
+    public GameObject statsOverlay;
+    public LevelHandler levelHandler;
+    private float timePassed;
+    private float currTime;
+
     void Start()
     {
+        currTime = 0f;
+        timePassed = 0f;
         mainCamera.GetComponent<Animator>().enabled = false;
 
         globalVolumeProfile = GameObject.Find("Global Volume").GetComponent<UnityEngine.Rendering.Volume>()?.profile;
@@ -42,9 +52,26 @@ public class SceneTransitionHandler : MonoBehaviour
 
     void Update()
     {
+        
+        timePassed += Time.deltaTime;
+
         if (Input.GetKeyDown(escape)) SceneManager.LoadScene(0);                              // transition to main scene when player exits
-        if (lvlHandler.enemiesKilled >= (int)lvlHandler.enemiesToKill) SceneManager.LoadScene(2);  // transition to temp scene
-        if (playerHealth.playerCurrentHealth <= 0 || ui.timeLeft == -1) StartCoroutine(WaitForDeathAnim()); // go to temp transiton scene
+        if (lvlHandler.enemiesKilled >= (int)lvlHandler.enemiesToKill && currTime == 0f)
+        {
+            currTime = timePassed;
+            UnlockCursor();
+            Time.timeScale = 0;
+            statsOverlay.transform.Find("WinText").gameObject.SetActive(true);
+            statsOverlay.transform.Find("NumKills").gameObject.GetComponent<TextMeshProUGUI>().text = levelHandler.enemiesKilled.ToString();
+            statsOverlay.transform.Find("CurrTime").gameObject.GetComponent<TextMeshProUGUI>().text = currTime.ToString();
+            statsOverlay.SetActive(true);
+            
+        }
+        if ((playerHealth.playerCurrentHealth <= 0 || ui.timeLeft == -1) && currTime == 0f)
+        {
+            currTime = timePassed;
+            StartCoroutine(WaitForDeathAnim()); // go to temp transiton scene
+        }
     }
 
     IEnumerator FadeOverlay(float time, float start, float end)
@@ -71,6 +98,18 @@ public class SceneTransitionHandler : MonoBehaviour
         revolver.GetComponent<GunAttributes>().enabled = false;
         revolver.GetComponent<RevolverMovement>().enabled = false;
         yield return new WaitForSeconds(3f);
-        SceneManager.LoadScene(3);
+        //SceneManager.LoadScene(3);
+        Time.timeScale = 0;
+        UnlockCursor();
+        statsOverlay.transform.Find("LoseText").gameObject.SetActive(true);
+        statsOverlay.transform.Find("NumKills").gameObject.GetComponent<TextMeshProUGUI>().text = levelHandler.enemiesKilled.ToString();
+        statsOverlay.transform.Find("CurrTime").gameObject.GetComponent<TextMeshProUGUI>().text = currTime.ToString();
+        statsOverlay.SetActive(true);
+    }
+
+    private void UnlockCursor()
+    {
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
     }
 }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class UI_Script : MonoBehaviour
 {
@@ -216,5 +217,15 @@ public class UI_Script : MonoBehaviour
     private void ApplyModifier(string modifierName, ref int value)
     {
         value *= (int)PlayerPrefs.GetFloat(modifierName, 1);
+    }
+
+    public void StartGame()
+    {
+        SceneManager.LoadScene(1);
+    }
+
+    public void SendToMainMenu()
+    {
+        SceneManager.LoadScene(0);
     }
 }
