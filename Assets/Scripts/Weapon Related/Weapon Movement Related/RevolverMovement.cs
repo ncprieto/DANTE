@@ -28,13 +28,13 @@ public class RevolverMovement : GunMovement
     private Color lVigBaseColor;
     private float baseBloomThreshold;
 
-    [Header("Ability Cooldown Slider")]
-    public GameObject abilitySliderObj;
+    // [Header("Ability Cooldown Slider")]
+    // public GameObject abilitySliderObj;
 
     void Awake()
     {
-        abilitySliderObj = GameObject.Find("AbilityTimerSlider");
-        abilitySliderObj.SetActive(false);
+        // abilitySliderObj = GameObject.Find("AbilityTimerSlider");
+        // abilitySliderObj.SetActive(false);
         IsToggleable = true;
 
         globalVolumeProfile = GameObject.Find("Global Volume").GetComponent<UnityEngine.Rendering.Volume>()?.profile;
@@ -96,7 +96,7 @@ public class RevolverMovement : GunMovement
         bloom.threshold.Override(0.45f);
         gunAttributes.gunShotSFXEvent.setPitch(slowScale);                    // change gun shot sfx
         offCDSFXEvent.setPitch(0.1f);                                         // change offcooldown sfx pitch
-        abilitySliderObj.SetActive(true);
+        // abilitySliderObj.SetActive(true);
     }
 
     protected override void EndMovementAbility()
@@ -116,7 +116,7 @@ public class RevolverMovement : GunMovement
         bloom.threshold.Override(baseBloomThreshold);
         gunAttributes.gunShotSFXEvent.setPitch(1f);                           // change gun shot sfx pitch
         offCDSFXEvent.setPitch(1f);                                           // change offcooldown sfx pitch
-        abilitySliderObj.SetActive(false);
+        // abilitySliderObj.SetActive(false);
     }
 
     public override void ReceiveHitInfo(string tag)
@@ -138,7 +138,7 @@ public class RevolverMovement : GunMovement
     IEnumerator StartChainShotWindow()
     {
         float timeLeft = baseSlowTime;
-        abilitySliderObj.transform.localScale = new Vector3(baseSlowTime/baseSlowTime, 1, 1);
+        // abilitySliderObj.transform.localScale = new Vector3(baseSlowTime/baseSlowTime, 1, 1);
         while(timeLeft > 0)
         {
             if(timeToAdd > 0)                      // add time to timer if player chains shots together
@@ -147,7 +147,7 @@ public class RevolverMovement : GunMovement
                 timeToAdd = 0f;
             }
             else timeLeft -= Time.deltaTime;
-            abilitySliderObj.transform.localScale = new Vector3(timeLeft / baseSlowTime, 1, 1);
+            // abilitySliderObj.transform.localScale = new Vector3(timeLeft / baseSlowTime, 1, 1);
             yield return null;
         }
         this.EndMovementAbility();

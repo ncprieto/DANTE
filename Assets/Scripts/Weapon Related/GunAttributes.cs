@@ -33,7 +33,7 @@ public class GunAttributes : MonoBehaviour
     private Animator fireAnim;
     private Animator hammerAnim;
     private float sinceLastFire = 0;
-    private UI_Script UI;
+    // private UI_Script UI;
     private AntiStuck antiStuckScript;
     private Movement movement;
     
@@ -44,7 +44,7 @@ public class GunAttributes : MonoBehaviour
         GameObject player = GameObject.Find("Player");
         movement = player.GetComponent<Movement>();
         gunMovement.Initialize(player, this, GameObject.Find("SoundSystem"));
-        UI = GameObject.Find("Canvas").GetComponent<UI_Script>();
+        // UI = GameObject.Find("Canvas").GetComponent<UI_Script>();
         antiStuckScript = GameObject.Find("AntiStuckCheck").GetComponent<AntiStuck>();
         shoot = (KeyCode)PlayerPrefs.GetInt("Shoot", 323);
         //playerAim = GameObject.Find("Orientation").transform;
@@ -71,13 +71,13 @@ public class GunAttributes : MonoBehaviour
                 if(enemyHit.IsThisDamageLethal(damageToGive))                                                         // if this damage is lethal then update time on the UI
                 {
                     float timeToAdd = root.GetComponent<Enemy>().GetTimeRewardValue(hitbox.name);
-                    UI.AddTime(timeToAdd);
+                    // UI.AddTime(timeToAdd);
                     if (antiStuckScript.enemiesNear > 0) antiStuckScript.enemiesNear--;
                 }
                 enemyHit.ReceiveDamage(damageToGive);                                                // actually apply damage to the enemy that was hit
                 enemyHit.BloodParticles(hit.transform);
                 gunMovement.ReceiveHitInfo(enemyHit.IsThisDamageLethal(damageToGive) ? "Lethal" : hitbox.name);
-                UI.DisplayHitmarker(hitbox.name);
+                // UI.DisplayHitmarker(hitbox.name);
             }
             else{
                 gunMovement.ReceiveHitInfo(null);
