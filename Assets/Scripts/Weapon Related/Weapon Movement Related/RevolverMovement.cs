@@ -15,6 +15,7 @@ public class RevolverMovement : GunMovement
     private float timeToAdd;
     private float originalGravity;
 
+    // VFX stuff
     private UnityEngine.Rendering.VolumeProfile globalVolumeProfile;
     private UnityEngine.Rendering.VolumeProfile localVolumeProfile;
     private UnityEngine.Rendering.Universal.Vignette globalVignette;
@@ -28,35 +29,17 @@ public class RevolverMovement : GunMovement
     private Color lVigBaseColor;
     private float baseBloomThreshold;
 
-    // [Header("Ability Cooldown Slider")]
-    // public GameObject abilitySliderObj;
+    [Header("Ability Cooldown Slider")]
+    public GameObject AbilitySliderPrefab;
+    private GameObject AbilitySlider;
 
-    void Awake()
+    public override void Initialize(GameObject playerObj, GunAttributes ga, GameObject soundSystem, GameObject Canvas)
     {
-        // abilitySliderObj = GameObject.Find("AbilityTimerSlider");
-        // abilitySliderObj.SetActive(false);
+        base.Initialize(playerObj, ga, soundSystem, Canvas);
+        AbilitySlider = Instantiate(AbilitySliderPrefab, UICanvas.transform, false);
+        AbilitySlider.SetActive(false);
+        SetUpPostProcessing();
         IsToggleable = true;
-
-        globalVolumeProfile = GameObject.Find("Global Volume").GetComponent<UnityEngine.Rendering.Volume>()?.profile;
-        if(!globalVolumeProfile) throw new System.NullReferenceException(nameof(UnityEngine.Rendering.VolumeProfile));
-        if(!globalVolumeProfile.TryGet(out globalVignette)) throw new System.NullReferenceException(nameof(globalVignette));
-
-        if(!globalVolumeProfile) throw new System.NullReferenceException(nameof(UnityEngine.Rendering.VolumeProfile));
-        if(!globalVolumeProfile.TryGet(out motionBlur)) throw new System.NullReferenceException(nameof(motionBlur));
-
-        if(!globalVolumeProfile) throw new System.NullReferenceException(nameof(UnityEngine.Rendering.VolumeProfile));
-        if(!globalVolumeProfile.TryGet(out bloom)) throw new System.NullReferenceException(nameof(bloom));
-
-        localVolumeProfile = GameObject.Find("Local Volume").GetComponent<UnityEngine.Rendering.Volume>()?.profile;
-        if(!localVolumeProfile) throw new System.NullReferenceException(nameof(UnityEngine.Rendering.VolumeProfile));
-        if(!localVolumeProfile.TryGet(out localVignette)) throw new System.NullReferenceException(nameof(localVignette));
-
-        gVigBaseIntensity = globalVignette.intensity.value;
-        gVigBaseColor = globalVignette.color.value;
-        lVigBaseIntensity = localVignette.intensity.value;
-        lVigBaseColor = localVignette.color.value;
-        baseBloomThreshold = bloom.threshold.value;
-
         originalGravity = Physics.gravity.y;
     }
 
@@ -85,18 +68,9 @@ public class RevolverMovement : GunMovement
         StartCoroutine(chainShotCoroutine);
         originalGravity = Physics.gravity.y;                                  // gravity
         Physics.gravity = new Vector3(0f, Physics.gravity.y / 2, 0f);
-        fovVFX.RevolverChainShotVFX();                                        // fov
-        sfxEvent.start();                                                     // play SFX
-        bgmController.LerpBGMPitch(0.1f, 1f, 0.1f);                           // change bgm pitch
-        motionBlur.intensity.Override(0.5f);                                  // post-processing stuff
-        globalVignette.intensity.Override(0.75f);
-        globalVignette.color.Override(Color.yellow);
-        localVignette.intensity.Override(0.75f);
-        localVignette.color.Override(Color.yellow);
-        bloom.threshold.Override(0.45f);
-        gunAttributes.gunShotSFXEvent.setPitch(slowScale);                    // change gun shot sfx
-        offCDSFXEvent.setPitch(0.1f);                                         // change offcooldown sfx pitch
-        // abilitySliderObj.SetActive(true);
+        DoStartVFX();
+        DoStartSFX();
+        AbilitySlider.SetActive(true);
     }
 
     protected override void EndMovementAbility()
@@ -105,23 +79,14 @@ public class RevolverMovement : GunMovement
         if(chainShotCoroutine != null) StopCoroutine(chainShotCoroutine);     // stop chain shot
         Time.timeScale = 1f;                                                  // reset time scale
         Physics.gravity = new Vector3(0f, originalGravity, 0f);               // reset gravity to original
-        fovVFX.UndoRevolverVFX();                                             // fov
-        sfxEvent.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);                    // stop sfx
-        bgmController.LerpBGMPitch(1f, 0.1f, 0.1f);                           // change bgm pitch
-        motionBlur.intensity.Override(0f);                                    // post-processing stuff
-        globalVignette.intensity.Override(gVigBaseIntensity);
-        globalVignette.color.Override(gVigBaseColor);
-        localVignette.intensity.Override(lVigBaseIntensity);
-        localVignette.color.Override(lVigBaseColor);
-        bloom.threshold.Override(baseBloomThreshold);
-        gunAttributes.gunShotSFXEvent.setPitch(1f);                           // change gun shot sfx pitch
-        offCDSFXEvent.setPitch(1f);                                           // change offcooldown sfx pitch
-        // abilitySliderObj.SetActive(false);
+        DoEndVFX();
+        DoEndSFX();
+        AbilitySlider.SetActive(false);
     }
 
     public override void ReceiveHitInfo(string tag)
     {
-        if(tag == null && abilityState == ABILITY.ACTIVE)                        // if players miss and the ability is active, end the ability
+        if(tag == null && abilityState == ABILITY.ACTIVE)                     // if players miss and the ability is active, end the ability
         {
             if(CanDeactivateAbility())
             {
@@ -138,7 +103,6 @@ public class RevolverMovement : GunMovement
     IEnumerator StartChainShotWindow()
     {
         float timeLeft = baseSlowTime;
-        // abilitySliderObj.transform.localScale = new Vector3(baseSlowTime/baseSlowTime, 1, 1);
         while(timeLeft > 0)
         {
             if(timeToAdd > 0)                      // add time to timer if player chains shots together
@@ -147,9 +111,70 @@ public class RevolverMovement : GunMovement
                 timeToAdd = 0f;
             }
             else timeLeft -= Time.deltaTime;
-            // abilitySliderObj.transform.localScale = new Vector3(timeLeft / baseSlowTime, 1, 1);
+            AbilitySlider.transform.localScale = new Vector3(timeLeft / baseSlowTime, 1, 1);
             yield return null;
         }
         this.EndMovementAbility();
+    }
+
+    private void SetUpPostProcessing()
+    {
+        globalVolumeProfile = GameObject.Find("Global Volume").GetComponent<UnityEngine.Rendering.Volume>()?.profile;
+        if(!globalVolumeProfile) throw new System.NullReferenceException(nameof(UnityEngine.Rendering.VolumeProfile));
+        if(!globalVolumeProfile.TryGet(out globalVignette)) throw new System.NullReferenceException(nameof(globalVignette));
+
+        if(!globalVolumeProfile) throw new System.NullReferenceException(nameof(UnityEngine.Rendering.VolumeProfile));
+        if(!globalVolumeProfile.TryGet(out motionBlur)) throw new System.NullReferenceException(nameof(motionBlur));
+
+        if(!globalVolumeProfile) throw new System.NullReferenceException(nameof(UnityEngine.Rendering.VolumeProfile));
+        if(!globalVolumeProfile.TryGet(out bloom)) throw new System.NullReferenceException(nameof(bloom));
+
+        localVolumeProfile = GameObject.Find("Local Volume").GetComponent<UnityEngine.Rendering.Volume>()?.profile;
+        if(!localVolumeProfile) throw new System.NullReferenceException(nameof(UnityEngine.Rendering.VolumeProfile));
+        if(!localVolumeProfile.TryGet(out localVignette)) throw new System.NullReferenceException(nameof(localVignette));
+
+        gVigBaseIntensity = globalVignette.intensity.value;
+        gVigBaseColor = globalVignette.color.value;
+        lVigBaseIntensity = localVignette.intensity.value;
+        lVigBaseColor = localVignette.color.value;
+        baseBloomThreshold = bloom.threshold.value;
+    }
+
+    private void DoStartVFX()
+    {
+        fovVFX.RevolverChainShotVFX();                                        // fov
+        motionBlur.intensity.Override(0.5f);                                  // post-processing stuff
+        globalVignette.intensity.Override(0.75f);
+        globalVignette.color.Override(Color.yellow);
+        localVignette.intensity.Override(0.75f);
+        localVignette.color.Override(Color.yellow);
+        bloom.threshold.Override(0.45f);
+    }
+
+    private void DoEndVFX()
+    {
+        fovVFX.UndoRevolverVFX();                                             // fov
+        motionBlur.intensity.Override(0f);                                    // post-processing stuff
+        globalVignette.intensity.Override(gVigBaseIntensity);
+        globalVignette.color.Override(gVigBaseColor);
+        localVignette.intensity.Override(lVigBaseIntensity);
+        localVignette.color.Override(lVigBaseColor);
+        bloom.threshold.Override(baseBloomThreshold);
+    }
+
+    private void DoStartSFX()
+    {
+        sfxEvent.start();                                                     // play SFX
+        bgmController.LerpBGMPitch(0.1f, 1f, 0.1f);                           // change bgm pitch
+        gunAttributes.gunShotSFXEvent.setPitch(slowScale);                    // change gun shot sfx
+        offCDSFXEvent.setPitch(0.1f);                                         // change offcooldown sfx pitch
+    }
+
+    private void DoEndSFX()
+    {
+        sfxEvent.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);                    // stop sfx
+        bgmController.LerpBGMPitch(1f, 0.1f, 0.1f);                           // change bgm pitch
+        gunAttributes.gunShotSFXEvent.setPitch(1f);                           // change gun shot sfx pitch
+        offCDSFXEvent.setPitch(1f);                                           // change offcooldown sfx pitch
     }
 }
