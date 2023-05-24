@@ -66,6 +66,14 @@ public class Movement : MonoBehaviour
     public float grappleEndedDecel;
     public float dismountBoost;
 
+    [Header("Grapple UI Elements")]
+    public  GameObject UICanvas;
+    public  GameObject CooldownPrefab;
+    public  GameObject BackgroundPrefab;
+    private GameObject CooldownUI;
+    private GameObject BackgroundUI;
+    private CooldownCircle CooldownUpdater;
+
     [Header("SFX Keys")]
     public string jumpSFXPath;
     public string bHopSFXPath;
@@ -76,6 +84,7 @@ public class Movement : MonoBehaviour
         groundDecel = groundDecel < 1 ? 1 : groundDecel;                                                      // sets groundDecel to 1 if its less than 1, groundDecel value less than 1 causes bugs
         baseMoveSpeed = moveSpeed;
         SetUpControls();
+        SetUpUI();
         currentJumpSFX = jumpSFXPath;
     }
 
@@ -298,12 +307,13 @@ public class Movement : MonoBehaviour
         float timeLeft = grappleCooldown;
         while(timeLeft > 0f)
         {
+            CooldownUpdater.UpdateCooldown(timeLeft, grappleCooldown);
             timeLeft -= Time.deltaTime;
-            actualGrappleCooldown = Mathf.Clamp(timeLeft, 0f, grappleCooldown);
             yield return null;
         }
         actualGrappleCooldown = 0f;
         grappleOnCooldown = false;
+        CooldownUpdater.SetCooldownToReady();
     }
 
     /* LimitGrappleSpeed() keeps track if the grappleLerpCoroutine is running. If
@@ -400,6 +410,26 @@ public class Movement : MonoBehaviour
         }
         if(!bHopOverride) bHopCount = 0;
         currentJumpSFX = jumpSFXPath;
+    }
+
+    private void SetUpUI()
+    {
+        BackgroundUI = Instantiate(BackgroundPrefab, UICanvas.transform, false);
+        CooldownUI   = Instantiate(CooldownPrefab,   UICanvas.transform, false);
+        CooldownUpdater = CooldownUI.GetComponent<CooldownCircle>();
+        CooldownUpdater.InitializeCooldown("Grapple");
+    }
+
+    public void EnableUI()
+    {
+        CooldownUI.SetActive(true);
+        BackgroundUI.SetActive(true);
+    }
+
+    public void DisableUI()
+    {
+        CooldownUI.SetActive(false);
+        BackgroundUI.SetActive(false);
     }
 
     private void SetUpControls()
