@@ -12,6 +12,7 @@ public class GunAttributes : MonoBehaviour
     public float weaponRange;
     public LayerMask hitboxLayer;
     public GunDamage damageValues;
+    public TimeSource Source;
 
     [Header ("SFX Key and Events")]
     public string gunShotSFXKey;
@@ -75,7 +76,7 @@ public class GunAttributes : MonoBehaviour
                 if(enemyHit.IsThisDamageLethal(damageToGive))                                                         // if this damage is lethal then update time on the UI
                 {
                     float timeToAdd = root.GetComponent<Enemy>().GetTimeRewardValue(hitbox.name);
-                    // UI.AddTime(timeToAdd);
+                    Source.ReceiveTimeFromSource(timeToAdd);
                     if (antiStuckScript.enemiesNear > 0) antiStuckScript.enemiesNear--;
                 }
                 enemyHit.ReceiveDamage(damageToGive);                                                // actually apply damage to the enemy that was hit

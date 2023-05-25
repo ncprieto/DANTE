@@ -5066,6 +5066,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 256
   damageValues: {fileID: 11400000, guid: 7773607d0c1914da69040a69a74b8cbf, type: 2}
+  Source: {fileID: 11400000, guid: 79973eb176b0a1a4f8c407a7f2925707, type: 2}
   gunShotSFXKey: '{1deba48b-e53a-4ae2-845a-e65d233fd76b}'
   trailOrigin: {fileID: 2676563042148244215}
   trailDuration: 0.1
