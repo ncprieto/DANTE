@@ -51,7 +51,7 @@ public class GunAttributes : MonoBehaviour
     private AntiStuck antiStuckScript;
     private Movement movement;
     
-    void Awake(){
+    void Start(){
         shotTrail = GetComponent<LineRenderer>();
         fireAnim  = GetComponent<Animator>();
         hammerAnim = transform.Find("idlerevolver").GetComponent<Animator>();
