@@ -136,6 +136,18 @@ public class GunAttributes : MonoBehaviour
         BHopDamageText     = BHopDamage.GetComponent<TextMeshProUGUI>();
     }
 
+    public void EnableUI()
+    {
+        BHopDamage.SetActive(true);
+        Background.SetActive(true);
+    }
+
+    public void EnableUI()
+    {
+        BHopDamage.SetActive(false);
+        Background.SetActive(false);
+    }
+
     private void DisplayHitmarker(string tag)
     {
         Image hitmarker = tag == "CritHitbox" ? CritHitmarkImage : NormalHitmarkImage;

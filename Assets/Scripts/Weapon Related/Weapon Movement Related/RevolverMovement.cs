@@ -117,6 +117,18 @@ public class RevolverMovement : GunMovement
         this.EndMovementAbility();
     }
 
+    public override void EnableUI()
+    {
+        AbilitySlider.SetActive(true);
+        base.EnableUI();
+    }
+
+    public override void DIsableUI()
+    {
+        AbilitySlider.SetActive(false);
+        base.DisableUI();
+    }
+
     private void SetUpPostProcessing()
     {
         globalVolumeProfile = GameObject.Find("Global Volume").GetComponent<UnityEngine.Rendering.Volume>()?.profile;
