@@ -123,7 +123,7 @@ public class RevolverMovement : GunMovement
         base.EnableUI();
     }
 
-    public override void DIsableUI()
+    public override void DisableUI()
     {
         AbilitySlider.SetActive(false);
         base.DisableUI();

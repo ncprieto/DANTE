@@ -142,7 +142,7 @@ public class GunAttributes : MonoBehaviour
         Background.SetActive(true);
     }
 
-    public void EnableUI()
+    public void DisableUI()
     {
         BHopDamage.SetActive(false);
         Background.SetActive(false);
