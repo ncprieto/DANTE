@@ -9,13 +9,18 @@ public class GunDamage : ScriptableObject
     public float critMultiplier;
     public AnimationCurve bHopMultiplier;
 
-    public float CalculateDamage( float distance, int bHopCount, string hitboxTag)
+    public float CalculateDamage(float distance, int bHopCount, string hitboxTag)
     {
         float damage = 0f;
         ApplyDamageFalloff(ref  damage, distance);
         ApplyBHopMultiplier(ref damage, bHopCount);
         ApplyCritMultiplier(ref damage, hitboxTag);
         return damage;
+    }
+
+    public float GetBHopMultiplier(int bHopCount)
+    {
+        return bHopMultiplier.Evaluate(bHopCount);
     }
 
     private void ApplyDamageFalloff(ref float damage, float distance)

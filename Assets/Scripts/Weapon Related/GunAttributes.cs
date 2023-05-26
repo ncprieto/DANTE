@@ -1,7 +1,9 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 using FMODUnity;
 
 public class GunAttributes : MonoBehaviour
@@ -32,11 +34,16 @@ public class GunAttributes : MonoBehaviour
     [Header ("UI Elements")]
     public GameObject NormalHitmarkerPrefab;
     public GameObject CritHitmarkerPrefab;
-    protected GameObject UICanvas;
-    protected GameObject NormalHitmarker;
-    protected GameObject CritHitmarker;
+    public GameObject BackgroundPrefab;
+    public GameObject BHopDamagePrefab;
+    private GameObject UICanvas;
+    private GameObject NormalHitmarker;
+    private GameObject CritHitmarker;
+    private GameObject Background;
+    private GameObject BHopDamage;
     private Image NormalHitmarkImage;
     private Image CritHitmarkImage;
+    private TextMeshProUGUI BHopDamageText;
 
     private Animator fireAnim;
     private Animator hammerAnim;
@@ -89,6 +96,7 @@ public class GunAttributes : MonoBehaviour
                 shotTrail.SetPosition(1, rayOrigin + (Camera.main.transform.forward * weaponRange));
             }
         }
+        BHopDamageText.text = String.Format("{0}x DAMAGE", damageValues.GetBHopMultiplier(movement.bHopCount));
     }
 
     void PlayShootVFX()
@@ -121,8 +129,11 @@ public class GunAttributes : MonoBehaviour
         UICanvas = GameObject.Find("Canvas");
         NormalHitmarker = Instantiate(NormalHitmarkerPrefab, UICanvas.transform, false);
         CritHitmarker   = Instantiate(CritHitmarkerPrefab, UICanvas.transform, false);
+        Background      = Instantiate(BackgroundPrefab, UICanvas.transform, false);
+        BHopDamage      = Instantiate(BHopDamagePrefab, UICanvas.transform, false);
         NormalHitmarkImage = NormalHitmarker.GetComponent<Image>();
         CritHitmarkImage   = CritHitmarker.GetComponent<Image>();
+        BHopDamageText     = BHopDamage.GetComponent<TextMeshProUGUI>();
     }
 
     private void DisplayHitmarker(string tag)

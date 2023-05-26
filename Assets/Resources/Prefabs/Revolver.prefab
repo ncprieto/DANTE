@@ -5078,6 +5078,10 @@ MonoBehaviour:
     type: 3}
   CritHitmarkerPrefab: {fileID: 6797662534319162703, guid: 0fce161335c8aa743a6dd880f6e0d0d0,
     type: 3}
+  BackgroundPrefab: {fileID: 6036663536150041607, guid: 85205977eb95d3f488f69ba322b7c0b3,
+    type: 3}
+  BHopDamagePrefab: {fileID: 6337675767093057554, guid: bc72059cb94afad468539851f1417ab0,
+    type: 3}
 --- !u!95 &2676563041553457557
 Animator:
   serializedVersion: 5
