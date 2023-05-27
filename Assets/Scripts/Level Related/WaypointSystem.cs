@@ -30,11 +30,13 @@ public class WaypointSystem : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (trScript.isRingActive && !waypointParent.activeSelf){
-            waypointParent.SetActive(true);
-        }
-        else if (!trScript.isRingActive && waypointParent.activeSelf){
-            waypointParent.SetActive(false);
+        if (trScript != null){
+            if (trScript.isRingActive && !waypointParent.activeSelf){
+                waypointParent.SetActive(true);
+            }
+            else if (!trScript.isRingActive && waypointParent.activeSelf){
+                waypointParent.SetActive(false);
+            }
         }
 
         if (target != null && waypointParent.activeSelf){

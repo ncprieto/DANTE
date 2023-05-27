@@ -8,6 +8,8 @@ public class LimboTeleport : MonoBehaviour
     public GameObject prevSegment;
     public GameObject nextSegment;
 
+    public LimboHandler limboHandler;
+
     private UnityEngine.Object tpParticles;
 
     // Start is called before the first frame update
@@ -24,6 +26,7 @@ public class LimboTeleport : MonoBehaviour
 
     void OnCollisionEnter(Collision col){
         if (col.gameObject.tag == "Player"){
+            limboHandler.currentLimboObj++;
             col.gameObject.transform.position = tpTo.position;
             Instantiate(tpParticles, col.gameObject.transform.position, Quaternion.Euler(-90f, 0f, 0f), col.gameObject.transform);
             nextSegment.SetActive(true);
