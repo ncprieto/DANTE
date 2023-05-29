@@ -11,8 +11,18 @@ public class GunMovement : MonoBehaviour
     public float actualAbilityCooldown;
     public bool  IsToggleable;
     public float refundForKill;
+
+    [Header("SFX Keys")]
     public string sfxKey;
     public string offCDSFXKey;
+
+    [Header("UI Elements")]
+    public GameObject CooldownPrefab;
+    public GameObject BackgroundPrefab;
+    protected GameObject UICanvas;
+    protected GameObject CooldownUI;
+    protected GameObject BackgroundUI;
+    protected CooldownCircle CooldownUpdater;
 
     // Player Related
     protected GameObject player;
@@ -48,23 +58,20 @@ public class GunMovement : MonoBehaviour
         if(Input.GetKeyDown(KeyCode.Minus)) abilityCooldown = 0f; // dev tool give no cooldown to weapon ability
     }
     
-    public void Initialize(GameObject playerObj, GunAttributes ga, GameObject soundSystem)
+    public virtual void Initialize(GameObject playerObj, GunAttributes ga, GameObject soundSystem, GameObject Canvas)
     {
-        // player related
-        player   = playerObj;
+        player   = playerObj;                                                   // player related
         rb       = player.GetComponent<Rigidbody>();
         movement = player.GetComponent<Movement>();
-        // weapon related
-        gunAttributes = ga;
-        // fov
-        fovVFX   = player.GetComponent<FOVVFX>();
-        // ability stuff
-        abilityState  = ABILITY.OFFCOOLDOWN;
+        gunAttributes = ga;                                                     // weapon related
+        fovVFX        = player.GetComponent<FOVVFX>();                               // fov
+        abilityState  = ABILITY.OFFCOOLDOWN;                                    // ability stuff
         abilityKey    = (KeyCode)PlayerPrefs.GetInt("Weapon Ability", 304);     // get ability key from player prefs
-        // sfx and bgm stuff
-        sfxEvent = RuntimeManager.CreateInstance(sfxKey);
+        sfxEvent      = RuntimeManager.CreateInstance(sfxKey);                       // sfx and bgm stuff
         offCDSFXEvent = RuntimeManager.CreateInstance(offCDSFXKey);
         bgmController = soundSystem.GetComponent<BGMController>();
+        UICanvas      = Canvas;                                                      // UI related
+        SetUpUI();
     }
 
     protected virtual void DoMovementAbility()
@@ -101,14 +108,13 @@ public class GunMovement : MonoBehaviour
                 timeLeft -= refundFactor;
                 refundFactor = 0f;
             }
+            CooldownUpdater.UpdateCooldown(timeLeft, abilityCooldown);
             timeLeft -= Time.deltaTime;
-            actualAbilityCooldown = timeLeft < 0f ? 0f : timeLeft;
             yield return null;
         }
-        actualAbilityCooldown = 0f;
         abilityState = ABILITY.OFFCOOLDOWN;
+        CooldownUpdater.SetCooldownToReady();
         offCDSFXEvent.start();
-        // play sound effect
     }
 
     private float refundFactor;
@@ -121,5 +127,25 @@ public class GunMovement : MonoBehaviour
     public virtual void ReceiveHitInfo(string tag)
     {
         if(tag == "Lethal") GiveCooldownRefund();
+    }
+
+    private void SetUpUI()
+    {
+        BackgroundUI = Instantiate(BackgroundPrefab, UICanvas.transform, false);
+        CooldownUI   = Instantiate(CooldownPrefab,   UICanvas.transform, false);
+        CooldownUpdater = CooldownUI.GetComponent<CooldownCircle>();
+        CooldownUpdater.InitializeCooldown("Ability");
+    }
+
+    public virtual void EnableUI()
+    {
+        CooldownUI.SetActive(true);
+        BackgroundUI.SetActive(true);
+    }
+
+    public virtual void DisableUI()
+    {
+        CooldownUI.SetActive(false);
+        BackgroundUI.SetActive(false);
     }
 }

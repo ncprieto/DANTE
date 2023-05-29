@@ -1,6 +1,9 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
+using TMPro;
 using FMODUnity;
 
 public class GunAttributes : MonoBehaviour
@@ -11,15 +14,13 @@ public class GunAttributes : MonoBehaviour
     public float weaponRange;
     public LayerMask hitboxLayer;
     public GunDamage damageValues;
+    public TimeSource Source;
 
     [Header ("SFX Key and Events")]
     public string gunShotSFXKey;
     public FMOD.Studio.EventInstance gunShotSFXEvent;
-    //public float recoilStrength;
-    //public float damageValue;
 
     [Header ("Bullet Trail/Flash Variables")]
-    //public Transform mainCam;
     public Transform trailOrigin;
     public float trailDuration;
     LineRenderer shotTrail;
@@ -29,26 +30,37 @@ public class GunAttributes : MonoBehaviour
 
     [Header ("Gun Movement")]
     public GunMovement gunMovement;
-    
+
+    [Header ("UI Elements")]
+    public GameObject NormalHitmarkerPrefab;
+    public GameObject CritHitmarkerPrefab;
+    public GameObject BackgroundPrefab;
+    public GameObject BHopDamagePrefab;
+    private GameObject UICanvas;
+    private GameObject NormalHitmarker;
+    private GameObject CritHitmarker;
+    private GameObject Background;
+    private GameObject BHopDamage;
+    private Image NormalHitmarkImage;
+    private Image CritHitmarkImage;
+    private TextMeshProUGUI BHopDamageText;
+
     private Animator fireAnim;
     private Animator hammerAnim;
     private float sinceLastFire = 0;
-    private UI_Script UI;
     private AntiStuck antiStuckScript;
     private Movement movement;
     
-    void Awake(){
+    void Start(){
         shotTrail = GetComponent<LineRenderer>();
         fireAnim  = GetComponent<Animator>();
         hammerAnim = transform.Find("idlerevolver").GetComponent<Animator>();
         GameObject player = GameObject.Find("Player");
         movement = player.GetComponent<Movement>();
-        gunMovement.Initialize(player, this, GameObject.Find("SoundSystem"));
-        UI = GameObject.Find("Canvas").GetComponent<UI_Script>();
+        SetUpUI();
+        gunMovement.Initialize(player, this, GameObject.Find("SoundSystem"), UICanvas);
         antiStuckScript = GameObject.Find("AntiStuckCheck").GetComponent<AntiStuck>();
         shoot = (KeyCode)PlayerPrefs.GetInt("Shoot", 323);
-        //playerAim = GameObject.Find("Orientation").transform;
-        //mainCam = GameObject.Find("Main Camera").transform;
         gunShotSFXEvent = RuntimeManager.CreateInstance(gunShotSFXKey);
     }
 
@@ -71,24 +83,20 @@ public class GunAttributes : MonoBehaviour
                 if(enemyHit.IsThisDamageLethal(damageToGive))                                                         // if this damage is lethal then update time on the UI
                 {
                     float timeToAdd = root.GetComponent<Enemy>().GetTimeRewardValue(hitbox.name);
-                    UI.AddTime(timeToAdd);
+                    if (Source != null) Source.ReceiveTimeFromSource(timeToAdd);
                     if (antiStuckScript.enemiesNear > 0) antiStuckScript.enemiesNear--;
                 }
                 enemyHit.ReceiveDamage(damageToGive);                                                // actually apply damage to the enemy that was hit
                 enemyHit.BloodParticles(hit.transform);
                 gunMovement.ReceiveHitInfo(enemyHit.IsThisDamageLethal(damageToGive) ? "Lethal" : hitbox.name);
-                UI.DisplayHitmarker(hitbox.name);
+                DisplayHitmarker(hitbox.name);
             }
             else{
                 gunMovement.ReceiveHitInfo(null);
                 shotTrail.SetPosition(1, rayOrigin + (Camera.main.transform.forward * weaponRange));
             }
-            // Quaternion recoilRotation = Camera.main.transform.localRotation;
-            // recoilRotation.x -= recoilStrength;
-            // recoilRotation.y += recoilStrength;
-            // Camera.main.transform.localRotation = recoilRotation;
-            //Camera.main.transform.localRotation = Quaternion.Euler(Camera.main.transform.localRotation.x - recoilStrength, Camera.main.transform.localRotation.y + recoilStrength, Camera.main.transform.localRotation.z);
         }
+        BHopDamageText.text = String.Format("{0}x DAMAGE", damageValues.GetBHopMultiplier(movement.bHopCount));
     }
 
     void PlayShootVFX()
@@ -114,5 +122,45 @@ public class GunAttributes : MonoBehaviour
         muzzleFlash.SetActive(true);
         yield return new WaitForSeconds(.03f);
         muzzleFlash.SetActive(false);
+    }
+
+    private void SetUpUI()
+    {
+        UICanvas = GameObject.Find("Canvas");
+        NormalHitmarker = Instantiate(NormalHitmarkerPrefab, UICanvas.transform, false);
+        CritHitmarker   = Instantiate(CritHitmarkerPrefab, UICanvas.transform, false);
+        Background      = Instantiate(BackgroundPrefab, UICanvas.transform, false);
+        BHopDamage      = Instantiate(BHopDamagePrefab, UICanvas.transform, false);
+        NormalHitmarkImage = NormalHitmarker.GetComponent<Image>();
+        CritHitmarkImage   = CritHitmarker.GetComponent<Image>();
+        BHopDamageText     = BHopDamage.GetComponent<TextMeshProUGUI>();
+    }
+
+    public void EnableUI()
+    {
+        BHopDamage.SetActive(true);
+        Background.SetActive(true);
+    }
+
+    public void DisableUI()
+    {
+        BHopDamage.SetActive(false);
+        Background.SetActive(false);
+    }
+
+    private void DisplayHitmarker(string tag)
+    {
+        Image hitmarker = tag == "CritHitbox" ? CritHitmarkImage : NormalHitmarkImage;
+        StartCoroutine(FadeImageToZeroFrom(.3f, hitmarker, .5f));
+    }
+
+    private IEnumerator FadeImageToZeroFrom(float startAlpha, Image i, float t)
+    {
+        i.color = new Color(i.color.r, i.color.g, i.color.b, startAlpha);
+        while (i.color.a > 0.0f)
+        {
+            i.color = new Color(i.color.r, i.color.g, i.color.b, i.color.a - (Time.deltaTime / t));
+            yield return null;
+        }
     }
 }

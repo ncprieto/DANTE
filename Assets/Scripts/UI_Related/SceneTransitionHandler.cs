@@ -17,7 +17,7 @@ public class SceneTransitionHandler : MonoBehaviour
     [Header ("Dependencies")]
     public LevelHandler lvlHandler;
     public PlayerHealth playerHealth;
-    public UI_Script ui;
+    // public UI_Script ui;
 
     [Header ("FadeIn/Out Variables")]
     public float fadeToOverlayTime;
@@ -67,11 +67,11 @@ public class SceneTransitionHandler : MonoBehaviour
             statsOverlay.SetActive(true);
             
         }
-        if ((playerHealth.playerCurrentHealth <= 0 || ui.timeLeft == -1) && currTime == 0f)
-        {
-            currTime = timePassed;
-            StartCoroutine(WaitForDeathAnim()); // go to temp transiton scene
-        }
+        // if ((playerHealth.playerCurrentHealth <= 0 || ui.timeLeft == -1) && currTime == 0f)
+        // {
+        //     currTime = timePassed;
+        //     StartCoroutine(WaitForDeathAnim()); // go to temp transiton scene
+        // }
     }
 
     IEnumerator FadeOverlay(float time, float start, float end)

@@ -5066,6 +5066,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 256
   damageValues: {fileID: 11400000, guid: 7773607d0c1914da69040a69a74b8cbf, type: 2}
+  Source: {fileID: 11400000, guid: 79973eb176b0a1a4f8c407a7f2925707, type: 2}
   gunShotSFXKey: '{1deba48b-e53a-4ae2-845a-e65d233fd76b}'
   trailOrigin: {fileID: 2676563042148244215}
   trailDuration: 0.1
@@ -5073,6 +5074,14 @@ MonoBehaviour:
   vertGunSmoke: {fileID: 8528028881396385578}
   horizGunSmoke: {fileID: 7426507859125824082}
   gunMovement: {fileID: 7727793071097516243}
+  NormalHitmarkerPrefab: {fileID: 3448238443681076156, guid: d5c87d1ccebc8da47b5fc81ecccdaa69,
+    type: 3}
+  CritHitmarkerPrefab: {fileID: 6797662534319162703, guid: 0fce161335c8aa743a6dd880f6e0d0d0,
+    type: 3}
+  BackgroundPrefab: {fileID: 6036663536150041607, guid: 85205977eb95d3f488f69ba322b7c0b3,
+    type: 3}
+  BHopDamagePrefab: {fileID: 6337675767093057554, guid: bc72059cb94afad468539851f1417ab0,
+    type: 3}
 --- !u!95 &2676563041553457557
 Animator:
   serializedVersion: 5
@@ -5113,10 +5122,16 @@ MonoBehaviour:
   refundForKill: 0.25
   sfxKey: '{2d0d076a-8c96-434b-aa57-89f941815cc4}'
   offCDSFXKey: '{60830888-ebeb-4547-a716-dfade380f492}'
+  CooldownPrefab: {fileID: 5957933747230754463, guid: 618b9c4c7aa299b4a84d67ae73674a72,
+    type: 3}
+  BackgroundPrefab: {fileID: 770344841984460150, guid: 2fb5213729db9454c9765f7aa9984f95,
+    type: 3}
   slowScale: 0.5
   baseSlowTime: 1.25
   timePerNormal: 0.2
   timePerCrit: 0.4
+  AbilitySliderPrefab: {fileID: 8185237145600937287, guid: 47ca2f5e351028642af8c1f331a9e883,
+    type: 3}
 --- !u!1 &2676563042148244214
 GameObject:
   m_ObjectHideFlags: 0

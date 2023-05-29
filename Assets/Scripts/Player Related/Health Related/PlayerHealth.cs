@@ -4,15 +4,23 @@ using UnityEngine;
 
 public class PlayerHealth : MonoBehaviour
 {
-
-    public bool isInvincible;
+    [Header("Health Variables")]
     public int playerCurrentHealth = 100;
-    public UI_Script UI;            //To call function in UI
-    public DamageVignette dmgVFX;
-    public CameraShake camShake;
+    public bool isInvincible;
     public bool unlimitedHealth;
 
+    [Header("VFX")]
+    public DamageVignette dmgVFX;
+    public CameraShake camShake;
     private bool canHealVFX;
+
+    [Header("UI Elements")]
+    public  GameObject UICanvas;
+    public  GameObject HealthBarPrefab;
+    public  GameObject BackgroundPrefab;
+    private GameObject HealthBar;
+    private GameObject Background;
+    private BarAndNumber HPBarScript;
 
     void OnAwake()
     {
@@ -21,7 +29,11 @@ public class PlayerHealth : MonoBehaviour
 
     void Start()
     {
-        canHealVFX = true;
+        canHealVFX  = true;
+        Background  = Instantiate(BackgroundPrefab, UICanvas.transform, false);
+        HealthBar   = Instantiate(HealthBarPrefab,  UICanvas.transform, false);
+        HPBarScript = HealthBar.GetComponent<BarAndNumber>();
+        HPBarScript.SetSliderAndNumber(playerCurrentHealth);
     }
 
     void Update()
@@ -34,6 +46,9 @@ public class PlayerHealth : MonoBehaviour
         else{
             dmgVFX.isLowHP = false;
         }
+        
+        if(Input.GetKeyDown(KeyCode.H)) SetHealthTo(50);
+        if(Input.GetKeyDown(KeyCode.J)) EnableUI();
     }
 
     public void GainHealth(string tag){
@@ -45,7 +60,7 @@ public class PlayerHealth : MonoBehaviour
             if (canHealVFX) StartCoroutine(HealVFXTimer());
         }
         playerCurrentHealth = Mathf.Clamp(playerCurrentHealth, 0, 100);
-        UI.updateHealthUI(playerCurrentHealth);//call UI function
+        HPBarScript.SetSliderAndNumber(playerCurrentHealth);
     }
 
     // Called by enemy scripts
@@ -58,8 +73,14 @@ public class PlayerHealth : MonoBehaviour
             StartCoroutine(camShake.Shake(0.2f, 0.35f));
             if (playerCurrentHealth <= 0) playerCurrentHealth = 0;
             if (hasIFrames) StartCoroutine(IFrames());
-            UI.updateHealthUI(playerCurrentHealth); //call UI function
+            HPBarScript.SetSliderAndNumber(playerCurrentHealth);
         }
+    }
+
+    public void SetHealthTo(int amount)
+    {
+        playerCurrentHealth = amount;
+        HPBarScript.SetSliderAndNumber(amount);
     }
 
     IEnumerator IFrames()
@@ -77,4 +98,15 @@ public class PlayerHealth : MonoBehaviour
         canHealVFX = true;
     }
 
+    public void EnableUI()
+    {
+        HealthBar.SetActive(true);
+        Background.SetActive(true);
+    }
+
+    public void DisableUI()
+    {
+        HealthBar.SetActive(false);
+        Background.SetActive(false);
+    }
 }

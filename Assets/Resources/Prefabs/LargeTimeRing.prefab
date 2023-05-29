@@ -18695,3 +18695,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   timeRingTimeAdded: 10
   waypointSystemIndex: 0
+  source: {fileID: 11400000, guid: 6805342b03703774bbe56a3c072d7088, type: 2}

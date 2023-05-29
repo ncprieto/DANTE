@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -10,6 +11,7 @@ public class LevelHandler : MonoBehaviour
     public int enemiesKilled;
     public int maxEnemyCount;
     public GameObject enemyHolder;
+    public ObjectiveSetter Setter;
     
     private UnityEngine.Object enemySpawnParticles;
 
@@ -18,6 +20,7 @@ public class LevelHandler : MonoBehaviour
     {
         enemySpawnParticles = Resources.Load("Prefabs/EnemySpawnParticles");
         enemiesKilled = 0;
+        Setter.SetController(this, Setter);
     }
 
     // Update is called once per frame
@@ -25,6 +28,15 @@ public class LevelHandler : MonoBehaviour
     {
         if (enemiesKilled >= (int)enemiesToKill){
             // win / next scene
+        }
+        UpdateObjective();
+    }
+
+    protected void UpdateObjective()
+    {
+        if(Setter.AmIControlling(this)) 
+        {
+            Setter.SetObjective(String.Format("ENEMIES SLAIN: {0} | {1}", enemiesKilled, enemiesToKill), this);
         }
     }
 
