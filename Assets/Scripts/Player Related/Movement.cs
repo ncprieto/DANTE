@@ -48,6 +48,7 @@ public class Movement : MonoBehaviour
     public float actualGrappleCooldown;
     public float grapplePointSpeed;
     public float grapplePointDismountBoost;
+    public bool  grappleEnabled;
     
     [Header ("Other Grapple Variables")]
     public Transform grappleStart;
@@ -70,8 +71,10 @@ public class Movement : MonoBehaviour
     public  GameObject UICanvas;
     public  GameObject CooldownPrefab;
     public  GameObject BackgroundPrefab;
+    public  GameObject CanGrapplePrefab;
     private GameObject CooldownUI;
     private GameObject BackgroundUI;
+    private GameObject CanGrappleUI;
     private CooldownCircle CooldownUpdater;
 
     [Header("SFX Keys")]
@@ -100,6 +103,7 @@ public class Movement : MonoBehaviour
         if(Input.GetKeyDown(grapple)) OnGrapplePressed();
         if(Input.GetKeyUp(grapple) && !toggleControl) OnGrappleReleased();
         canGrapple = Physics.Raycast(playerCamera.transform.position, playerCamera.transform.forward, grappleRange);
+        if(!grappleOnCooldown && grappleEnabled) CanGrappleUI.SetActive(canGrapple);
 
         // dev tools
         if(Input.GetKeyDown(KeyCode.Alpha0)) grappleCooldown = 0f; // no grapple cooldown
@@ -112,7 +116,6 @@ public class Movement : MonoBehaviour
 
     void FixedUpdate()
     {
-        
         if(grappling) DoActiveGrapple();
         else MovePlayer();
         CapSpeed();
@@ -184,6 +187,16 @@ public class Movement : MonoBehaviour
         }
     }
 
+    public void EnableGrapple()
+    {
+        grappleEnabled = true;
+    }
+
+    public void DisableGrapple()
+    {
+        grappleEnabled = false;
+    }
+
     // OnGrapplePressed() executes functions relating to grapple functionality.
     bool grappling;
     bool grappleOnCooldown;
@@ -193,6 +206,7 @@ public class Movement : MonoBehaviour
     GameObject hitGrappleObject;
     void OnGrapplePressed()
     {
+        if(!grappleEnabled) return;
         if(!grappling && !grappleOnCooldown)
         {
             RaycastHit hit;
@@ -284,8 +298,8 @@ public class Movement : MonoBehaviour
         StopGrapple();
     }
 
-    /* StopGrapple() launches the player is the direction provided by the
-     * parameters horizontal and vertical. It also starts a coroutine that
+    /* StopGrapple() will stop the grapple which applies a small
+     * boost of speed as well. It also starts a coroutine that
      * decelerates the player's velocity.
      */
     private void StopGrapple()
@@ -416,6 +430,7 @@ public class Movement : MonoBehaviour
     {
         BackgroundUI = Instantiate(BackgroundPrefab, UICanvas.transform, false);
         CooldownUI   = Instantiate(CooldownPrefab,   UICanvas.transform, false);
+        CanGrappleUI = Instantiate(CanGrapplePrefab, UICanvas.transform, false);
         CooldownUpdater = CooldownUI.GetComponent<CooldownCircle>();
         CooldownUpdater.InitializeCooldown("Grapple");
     }
