@@ -34,12 +34,10 @@ public class GunAttributes : MonoBehaviour
     [Header ("UI Elements")]
     public GameObject NormalHitmarkerPrefab;
     public GameObject CritHitmarkerPrefab;
-    public GameObject BackgroundPrefab;
     public GameObject BHopDamagePrefab;
     private GameObject UICanvas;
     private GameObject NormalHitmarker;
     private GameObject CritHitmarker;
-    private GameObject Background;
     private GameObject BHopDamage;
     private Image NormalHitmarkImage;
     private Image CritHitmarkImage;
@@ -129,7 +127,6 @@ public class GunAttributes : MonoBehaviour
         UICanvas = GameObject.Find("Canvas");
         NormalHitmarker = Instantiate(NormalHitmarkerPrefab, UICanvas.transform, false);
         CritHitmarker   = Instantiate(CritHitmarkerPrefab, UICanvas.transform, false);
-        Background      = Instantiate(BackgroundPrefab, UICanvas.transform, false);
         BHopDamage      = Instantiate(BHopDamagePrefab, UICanvas.transform, false);
         NormalHitmarkImage = NormalHitmarker.GetComponent<Image>();
         CritHitmarkImage   = CritHitmarker.GetComponent<Image>();
@@ -139,13 +136,11 @@ public class GunAttributes : MonoBehaviour
     public void EnableUI()
     {
         BHopDamage.SetActive(true);
-        Background.SetActive(true);
     }
 
     public void DisableUI()
     {
         BHopDamage.SetActive(false);
-        Background.SetActive(false);
     }
 
     private void DisplayHitmarker(string tag)

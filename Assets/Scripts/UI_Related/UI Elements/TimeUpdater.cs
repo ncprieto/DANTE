@@ -9,8 +9,8 @@ public class TimeUpdater : MonoBehaviour
     [Header ("Variables")]
     public  float startingTime;
     public  float warnPlayerOfTime;
-    private bool  unlimitedTime;
-    private float timeLeft;
+    private bool unlimitedTime;
+    public float timeLeft;
 
     [Header("UI Elements")]
     public  GameObject UICanvas;
@@ -105,4 +105,5 @@ public class TimeUpdater : MonoBehaviour
     {
         value *= (int)PlayerPrefs.GetFloat(modifierName, 1);
     }
+    
 }
