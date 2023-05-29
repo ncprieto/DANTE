@@ -30752,6 +30752,7 @@ GameObject:
   - component: {fileID: 924419568}
   - component: {fileID: 924419573}
   - component: {fileID: 924419574}
+  - component: {fileID: 924419575}
   m_Layer: 5
   m_Name: Canvas
   m_TagString: Untagged
@@ -30905,6 +30906,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c10a30727c76be743bdea5ef7a8c0a31, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  startingTime: 80
+  warnPlayerOfTime: 15
   UICanvas: {fileID: 924419567}
   TimerPrefab: {fileID: 8710423472840804681, guid: 99b17cc38cbd44843993b57bed815ded,
     type: 3}
@@ -30912,10 +30915,25 @@ MonoBehaviour:
     type: 3}
   BackgroundPrefab: {fileID: 4672241123415948875, guid: 7f9ba18095b148844983760aa7476954,
     type: 3}
-  startingTime: 80
-  warnPlayerOfTime: 15
-  fromKills: {fileID: 11400000, guid: 79973eb176b0a1a4f8c407a7f2925707, type: 2}
-  fromTimeRings: {fileID: 11400000, guid: 6805342b03703774bbe56a3c072d7088, type: 2}
+  Sources:
+  - {fileID: 11400000, guid: 79973eb176b0a1a4f8c407a7f2925707, type: 2}
+  - {fileID: 11400000, guid: 6805342b03703774bbe56a3c072d7088, type: 2}
+--- !u!114 &924419575
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 924419567}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b51a37f5dea3d6e4f8b430c525ced322, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  UICanvas: {fileID: 924419567}
+  ObjectivePrefab: {fileID: 3629520320198452568, guid: 5fc4f2d85d74ee6499b8a2e18a73991a,
+    type: 3}
+  Setter: {fileID: 11400000, guid: 9fdbac94097743740bd752657884a169, type: 2}
 --- !u!1 &925069813
 GameObject:
   m_ObjectHideFlags: 0
@@ -30949,6 +30967,7 @@ MonoBehaviour:
   enemiesKilled: 0
   maxEnemyCount: 25
   enemyHolder: {fileID: 1946976623}
+  Setter: {fileID: 11400000, guid: 9fdbac94097743740bd752657884a169, type: 2}
   spawnRateTime: 5
   spawnRateKills: 5
   spawnAmount: 5

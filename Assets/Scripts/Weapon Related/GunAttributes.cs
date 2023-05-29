@@ -83,7 +83,7 @@ public class GunAttributes : MonoBehaviour
                 if(enemyHit.IsThisDamageLethal(damageToGive))                                                         // if this damage is lethal then update time on the UI
                 {
                     float timeToAdd = root.GetComponent<Enemy>().GetTimeRewardValue(hitbox.name);
-                    Source.ReceiveTimeFromSource(timeToAdd);
+                    if (Source != null) Source.ReceiveTimeFromSource(timeToAdd);
                     if (antiStuckScript.enemiesNear > 0) antiStuckScript.enemiesNear--;
                 }
                 enemyHit.ReceiveDamage(damageToGive);                                                // actually apply damage to the enemy that was hit

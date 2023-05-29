@@ -6,17 +6,17 @@ using TMPro;
 
 public class TimeUpdater : MonoBehaviour
 {
-    [Header ("Time Variables")]
-    public  GameObject UICanvas;
-    public  GameObject TimerPrefab;
-    public  GameObject AddTimerPrefab;
-    public  GameObject BackgroundPrefab;
+    [Header ("Variables")]
     public  float startingTime;
     public  float warnPlayerOfTime;
     private bool  unlimitedTime;
     private float timeLeft;
 
-    // UI
+    [Header("UI Elements")]
+    public  GameObject UICanvas;
+    public  GameObject TimerPrefab;
+    public  GameObject AddTimerPrefab;
+    public  GameObject BackgroundPrefab;
     private GameObject Timer;
     private GameObject AddTimer;
     private GameObject Background;
@@ -24,8 +24,7 @@ public class TimeUpdater : MonoBehaviour
     private TextMeshProUGUI AddTimerText;
 
     [Header ("Sources")]
-    public TimeSource fromKills;
-    public TimeSource fromTimeRings;
+    public List<TimeSource> Sources;
 
     void Start()
     {
@@ -89,8 +88,7 @@ public class TimeUpdater : MonoBehaviour
 
     private void InitializeSources()
     {
-        fromKills.Initialize(this);
-        fromTimeRings.Initialize(this);
+        foreach(TimeSource source in Sources) source.Initialize(this);
     }
 
     private void SetUpModifiers()
