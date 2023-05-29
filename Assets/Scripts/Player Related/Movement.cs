@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 public class Movement : MonoBehaviour
 {
@@ -77,6 +78,13 @@ public class Movement : MonoBehaviour
     private GameObject CanGrappleUI;
     private CooldownCircle CooldownUpdater;
 
+    [Header("B-Hop UI Elements")]
+    public GameObject bHopPrefab;
+    private GameObject bHopUI;
+    public GameObject rightBGPrefab;
+    private GameObject rightBGUI;
+    private TextMeshProUGUI bHopChainText;
+
     [Header("SFX Keys")]
     public string jumpSFXPath;
     public string bHopSFXPath;
@@ -112,6 +120,8 @@ public class Movement : MonoBehaviour
             bHopOverride = true;
             bHopCount += bHopCount < bHopMax ? 1 : 0;
         }
+
+        bHopChainText.text = bHopCount + "x b-Hop Chain";
     }
 
     void FixedUpdate()
@@ -302,7 +312,7 @@ public class Movement : MonoBehaviour
      * boost of speed as well. It also starts a coroutine that
      * decelerates the player's velocity.
      */
-    private void StopGrapple()
+    public void StopGrapple()
     {
         if(grappling) ToggleGrapple();
     }
@@ -431,21 +441,37 @@ public class Movement : MonoBehaviour
         BackgroundUI = Instantiate(BackgroundPrefab, UICanvas.transform, false);
         CooldownUI   = Instantiate(CooldownPrefab,   UICanvas.transform, false);
         CanGrappleUI = Instantiate(CanGrapplePrefab, UICanvas.transform, false);
+        rightBGUI    = Instantiate(rightBGPrefab,    UICanvas.transform, false);
+        bHopUI       = Instantiate(bHopPrefab,       UICanvas.transform, false);
         CooldownUpdater = CooldownUI.GetComponent<CooldownCircle>();
         CooldownUpdater.InitializeCooldown("Grapple");
+        bHopChainText = bHopUI.GetComponent<TextMeshProUGUI>();
     }
 
-    public void EnableUI()
+    public void EnableGrappleUI()
     {
         CooldownUI.SetActive(true);
         BackgroundUI.SetActive(true);
     }
 
-    public void DisableUI()
+    public void DisableGrappleUI()
     {
         CooldownUI.SetActive(false);
         BackgroundUI.SetActive(false);
     }
+
+    public void EnableBHopUI()
+    {
+        bHopUI.SetActive(true);
+        rightBGUI.SetActive(true);
+    }
+
+    public void DisableBHopUI()
+    {
+        bHopUI.SetActive(false);
+        rightBGUI.SetActive(false);
+    }
+
 
     private void SetUpControls()
     {

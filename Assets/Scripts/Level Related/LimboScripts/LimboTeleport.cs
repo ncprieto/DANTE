@@ -27,6 +27,7 @@ public class LimboTeleport : MonoBehaviour
     void OnCollisionEnter(Collision col){
         if (col.gameObject.tag == "Player"){
             limboHandler.currentLimboObj++;
+            limboHandler.objChanged = true;
             col.gameObject.transform.position = tpTo.position;
             Instantiate(tpParticles, col.gameObject.transform.position, Quaternion.Euler(-90f, 0f, 0f), col.gameObject.transform);
             nextSegment.SetActive(true);
