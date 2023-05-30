@@ -14,6 +14,8 @@ public class DamageVignette : MonoBehaviour
     private Color prevColor;
 
     public bool isLowHP;
+    public bool enterLowHP;
+    public bool exitLowHP;
 
     // Start is called before the first frame update
     void Start()
@@ -22,14 +24,30 @@ public class DamageVignette : MonoBehaviour
         if(!volumeProfile) throw new System.NullReferenceException(nameof(UnityEngine.Rendering.VolumeProfile));
         if(!volumeProfile.TryGet(out vignette)) throw new System.NullReferenceException(nameof(vignette));
         isLowHP = false;
+        exitLowHP = false;
+        enterLowHP = false;
     }
 
     void Update()
     {
+        if (enterLowHP){
+            enterLowHP = false;
+            if (vignette.color.value == Color.black || vignette.color.value == Color.yellow){
+                prevIntensity = vignette.intensity.value;
+                prevSmoothness = vignette.smoothness.value;
+                prevColor = vignette.color.value;
+            }
+        }
         if (isLowHP){
             vignette.intensity.Override(Mathf.Lerp(0.75f, 0f, Mathf.PingPong(Time.time, 0.5f)));
             vignette.smoothness.Override(1f);
             vignette.color.Override(Color.red);
+        }
+        if (exitLowHP){
+            exitLowHP = false;
+            vignette.intensity.Override(prevIntensity);
+            vignette.smoothness.Override(prevSmoothness);
+            vignette.color.Override(prevColor);
         }
     }
 

@@ -71,18 +71,14 @@ public class Movement : MonoBehaviour
     [Header("Grapple UI Elements")]
     public  GameObject UICanvas;
     public  GameObject CooldownPrefab;
-    public  GameObject BackgroundPrefab;
     public  GameObject CanGrapplePrefab;
     private GameObject CooldownUI;
-    private GameObject BackgroundUI;
     private GameObject CanGrappleUI;
     private CooldownCircle CooldownUpdater;
 
     [Header("B-Hop UI Elements")]
     public GameObject bHopPrefab;
     private GameObject bHopUI;
-    public GameObject rightBGPrefab;
-    private GameObject rightBGUI;
     private TextMeshProUGUI bHopChainText;
 
     [Header("SFX Keys")]
@@ -112,6 +108,7 @@ public class Movement : MonoBehaviour
         if(Input.GetKeyUp(grapple) && !toggleControl) OnGrappleReleased();
         canGrapple = Physics.Raycast(playerCamera.transform.position, playerCamera.transform.forward, grappleRange);
         if(!grappleOnCooldown && grappleEnabled) CanGrappleUI.SetActive(canGrapple);
+        if(grappleOnCooldown) CanGrappleUI.SetActive(false);
 
         // dev tools
         if(Input.GetKeyDown(KeyCode.Alpha0)) grappleCooldown = 0f; // no grapple cooldown
@@ -438,10 +435,8 @@ public class Movement : MonoBehaviour
 
     private void SetUpUI()
     {
-        BackgroundUI = Instantiate(BackgroundPrefab, UICanvas.transform, false);
         CooldownUI   = Instantiate(CooldownPrefab,   UICanvas.transform, false);
         CanGrappleUI = Instantiate(CanGrapplePrefab, UICanvas.transform, false);
-        rightBGUI    = Instantiate(rightBGPrefab,    UICanvas.transform, false);
         bHopUI       = Instantiate(bHopPrefab,       UICanvas.transform, false);
         CooldownUpdater = CooldownUI.GetComponent<CooldownCircle>();
         CooldownUpdater.InitializeCooldown("Grapple");
@@ -451,25 +446,21 @@ public class Movement : MonoBehaviour
     public void EnableGrappleUI()
     {
         CooldownUI.SetActive(true);
-        BackgroundUI.SetActive(true);
     }
 
     public void DisableGrappleUI()
     {
         CooldownUI.SetActive(false);
-        BackgroundUI.SetActive(false);
     }
 
     public void EnableBHopUI()
     {
         bHopUI.SetActive(true);
-        rightBGUI.SetActive(true);
     }
 
     public void DisableBHopUI()
     {
         bHopUI.SetActive(false);
-        rightBGUI.SetActive(false);
     }
 
 

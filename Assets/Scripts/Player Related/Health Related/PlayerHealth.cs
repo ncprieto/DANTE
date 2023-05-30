@@ -8,6 +8,8 @@ public class PlayerHealth : MonoBehaviour
     public int playerCurrentHealth = 100;
     public bool isInvincible;
     public bool unlimitedHealth;
+    public bool isTutorial;
+    private int previousHealth = 100;
 
     [Header("VFX")]
     public DamageVignette dmgVFX;
@@ -17,9 +19,7 @@ public class PlayerHealth : MonoBehaviour
     [Header("UI Elements")]
     public  GameObject UICanvas;
     public  GameObject HealthBarPrefab;
-    public  GameObject BackgroundPrefab;
     private GameObject HealthBar;
-    private GameObject Background;
     private BarAndNumber HPBarScript;
 
     void OnAwake()
@@ -30,15 +30,22 @@ public class PlayerHealth : MonoBehaviour
     void Start()
     {
         canHealVFX  = true;
-        Background  = Instantiate(BackgroundPrefab, UICanvas.transform, false);
         HealthBar   = Instantiate(HealthBarPrefab,  UICanvas.transform, false);
         HPBarScript = HealthBar.GetComponent<BarAndNumber>();
         HPBarScript.SetSliderAndNumber(playerCurrentHealth);
+        if (isTutorial) StartCoroutine(WaitForVignette());
     }
 
     void Update()
     {
         if(Input.GetKeyDown(KeyCode.Alpha8)) unlimitedHealth = true;
+        
+        if (previousHealth > 25 && playerCurrentHealth <= 25){
+            dmgVFX.enterLowHP = true;
+        }
+        else if (previousHealth <= 25 && playerCurrentHealth > 25){
+            dmgVFX.exitLowHP = true;
+        }
 
         if (playerCurrentHealth <= 25){
             dmgVFX.isLowHP = true;
@@ -46,10 +53,8 @@ public class PlayerHealth : MonoBehaviour
         else{
             dmgVFX.isLowHP = false;
         }
-        
-        if(Input.GetKeyDown(KeyCode.H)) SetHealthTo(50);
-        if(Input.GetKeyDown(KeyCode.J)) EnableUI();
-    }
+        previousHealth = playerCurrentHealth;
+    } 
 
     public void GainHealth(string tag){
         if(playerCurrentHealth < 100)
@@ -101,12 +106,17 @@ public class PlayerHealth : MonoBehaviour
     public void EnableUI()
     {
         HealthBar.SetActive(true);
-        Background.SetActive(true);
     }
 
     public void DisableUI()
     {
         HealthBar.SetActive(false);
-        Background.SetActive(false);
+    }
+
+    IEnumerator WaitForVignette()
+    {
+        yield return new WaitForSeconds(.1f);
+        playerCurrentHealth = 25;
+        HPBarScript.SetSliderAndNumber(playerCurrentHealth);
     }
 }

@@ -14,6 +14,10 @@ public class LimboHandler : MonoBehaviour
     [Header ("UI Scripts")]
     public Movement movementScript;
     public TimeUpdater timeUpdaterScript;
+    public BackgroundLoader bgLoaderScript;
+
+    [Header ("Scriptable Objects")]
+    public ObjectiveSetter objSetter;
 
     [Header ("Waypoint Positions")]
     public Transform from1;
@@ -31,6 +35,8 @@ public class LimboHandler : MonoBehaviour
         objChanged = true;
         movementScript.DisableGrappleUI();
         movementScript.DisableBHopUI();
+        objSetter.SetController(this, objSetter);
+        bgLoaderScript.SetAllBackgroundsTo(false);
     }
 
     // Update is called once per frame
@@ -42,15 +48,21 @@ public class LimboHandler : MonoBehaviour
             switch (currentLimboObj){
                 case 1:
                     transform.position = from1.position;
+                    objSetter.SetObjective("Pick up health", this);
+                    bgLoaderScript.SetBackgroundByNameTo("TopLeft", true);
                     break;
                 case 2:
                     transform.position = from2.position;
                     movementScript.EnableBHopUI();
+                    objSetter.SetObjective("BHop to grapple", this);
+                    bgLoaderScript.SetBackgroundByNameTo("TopRight", true);
                     break;
                 case 3:
                     transform.position = from3_1.position;
                     movementScript.EnableGrappleUI();
                     movementScript.grappleEnabled = true;
+                    objSetter.SetObjective("Grapple across", this);
+                    bgLoaderScript.SetBackgroundByNameTo("BottomLeft", true);
                     break;
                 case 4:
                     transform.position = from3_2.position;
@@ -61,6 +73,8 @@ public class LimboHandler : MonoBehaviour
                 case 6:
                     transform.position = from4_1.position;
                     revolverObj.SetActive(true);
+                    objSetter.SetObjective("Shoot all targets", this);
+                    bgLoaderScript.SetBackgroundByNameTo("BottomRight", true);
                     break;
                 case 7:
                     transform.position = from4_2.position;
@@ -68,6 +82,8 @@ public class LimboHandler : MonoBehaviour
                 case 8:
                     transform.position = from5.position;
                     timeUpdaterScript.enabled = true;
+                    objSetter.SetObjective("Race to the exit", this);
+                    bgLoaderScript.SetBackgroundByNameTo("TopCenter", true);
                     break;
                 case 9:
                     transform.position = new Vector3(0, 0, 0);

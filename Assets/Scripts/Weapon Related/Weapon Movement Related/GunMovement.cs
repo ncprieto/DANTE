@@ -18,10 +18,8 @@ public class GunMovement : MonoBehaviour
 
     [Header("UI Elements")]
     public GameObject CooldownPrefab;
-    public GameObject BackgroundPrefab;
     protected GameObject UICanvas;
     protected GameObject CooldownUI;
-    protected GameObject BackgroundUI;
     protected CooldownCircle CooldownUpdater;
 
     // Player Related
@@ -131,7 +129,6 @@ public class GunMovement : MonoBehaviour
 
     private void SetUpUI()
     {
-        BackgroundUI = Instantiate(BackgroundPrefab, UICanvas.transform, false);
         CooldownUI   = Instantiate(CooldownPrefab,   UICanvas.transform, false);
         CooldownUpdater = CooldownUI.GetComponent<CooldownCircle>();
         CooldownUpdater.InitializeCooldown("Ability");
@@ -140,12 +137,10 @@ public class GunMovement : MonoBehaviour
     public virtual void EnableUI()
     {
         CooldownUI.SetActive(true);
-        BackgroundUI.SetActive(true);
     }
 
     public virtual void DisableUI()
     {
         CooldownUI.SetActive(false);
-        BackgroundUI.SetActive(false);
     }
 }
