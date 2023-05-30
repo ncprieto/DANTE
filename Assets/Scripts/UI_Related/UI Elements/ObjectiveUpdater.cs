@@ -9,6 +9,7 @@ public class ObjectiveUpdater : MonoBehaviour
     [Header ("UI Elements")]
     public  GameObject UICanvas;
     public  GameObject ObjectivePrefab;
+    public  bool isVirgil;
     private GameObject Objective;
     private TextMeshProUGUI ObjectiveText;
 
@@ -23,7 +24,12 @@ public class ObjectiveUpdater : MonoBehaviour
     void Start()
     {
         Objective  = Instantiate(ObjectivePrefab, UICanvas.transform, false);
-        ObjectiveText = Objective.GetComponent<TextMeshProUGUI>();
+        if (!isVirgil){
+            ObjectiveText = Objective.GetComponent<TextMeshProUGUI>();
+        }
+        else{
+            ObjectiveText = Objective.transform.GetChild(0).GetComponent<TextMeshProUGUI>();
+        }
     }
 
     public void SetObjectiveTo(string text)
