@@ -34,8 +34,8 @@ public class MoveCamera : MonoBehaviour
     void Update()
     {
         //get mouse input
-        float mouseX = Input.GetAxisRaw("Mouse X") * Time.deltaTime * sens * 25;
-        float mouseY = Input.GetAxisRaw("Mouse Y") * Time.deltaTime * sens * 25;
+        float mouseX = Input.GetAxisRaw("Mouse X") * Time.deltaTime * sens * 50;
+        float mouseY = Input.GetAxisRaw("Mouse Y") * Time.deltaTime * sens * 50;
         
         yRotation += mouseX;
         xRotation -= mouseY;

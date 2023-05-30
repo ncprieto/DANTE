@@ -36,7 +36,7 @@ public class LevelHandler : MonoBehaviour
     {
         if(Setter.AmIControlling(this)) 
         {
-            Setter.SetObjective(String.Format("ENEMIES SLAIN: {0} | {1}", enemiesKilled, enemiesToKill), this);
+            Setter.SetObjective(String.Format("SLAIN: {0} | {1}", enemiesKilled, enemiesToKill), this);
         }
     }
 
