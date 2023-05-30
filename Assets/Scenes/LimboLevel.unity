@@ -14574,7 +14574,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh191746
+  m_Name: pb_Mesh34022
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -17951,6 +17951,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isLowHP: 0
+  enterLowHP: 0
+  exitLowHP: 0
 --- !u!1 &608734451
 GameObject:
   m_ObjectHideFlags: 0
@@ -24931,7 +24933,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh192126
+  m_Name: pb_Mesh34406
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -27250,7 +27252,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh191986
+  m_Name: pb_Mesh34262
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -27743,7 +27745,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh190538
+  m_Name: pb_Mesh32798
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -32509,6 +32511,7 @@ GameObject:
   - component: {fileID: 924419575}
   - component: {fileID: 924419574}
   - component: {fileID: 924419573}
+  - component: {fileID: 924419576}
   m_Layer: 5
   m_Name: Canvas
   m_TagString: Untagged
@@ -32669,6 +32672,22 @@ MonoBehaviour:
   - {fileID: 2067341699}
   - {fileID: 695908505}
   - {fileID: 672928959}
+--- !u!114 &924419576
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 924419567}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b51a37f5dea3d6e4f8b430c525ced322, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  UICanvas: {fileID: 924419567}
+  ObjectivePrefab: {fileID: 3629520320198452568, guid: fd52e8878da0d7f4aa4a9a5b7699ad86,
+    type: 3}
+  Setter: {fileID: 11400000, guid: 3e16302b972da1449b652f007d778655, type: 2}
 --- !u!1 &927323313
 GameObject:
   m_ObjectHideFlags: 0
@@ -34253,7 +34272,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh190956
+  m_Name: pb_Mesh33228
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -55161,6 +55180,7 @@ MonoBehaviour:
   timeUpdaterScript: {fileID: 924419574}
   bgLoaderScript: {fileID: 924419575}
   objSetter: {fileID: 11400000, guid: 9fdbac94097743740bd752657884a169, type: 2}
+  virgilSetter: {fileID: 11400000, guid: 3e16302b972da1449b652f007d778655, type: 2}
   from1: {fileID: 1371321601}
   from2: {fileID: 715745044}
   from3_1: {fileID: 1216278595}
@@ -58765,7 +58785,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh191270
+  m_Name: pb_Mesh33542
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -65096,7 +65116,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh191408
+  m_Name: pb_Mesh33680
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -66498,7 +66518,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh191238
+  m_Name: pb_Mesh33510
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2

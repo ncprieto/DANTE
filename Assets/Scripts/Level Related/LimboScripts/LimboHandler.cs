@@ -18,6 +18,7 @@ public class LimboHandler : MonoBehaviour
 
     [Header ("Scriptable Objects")]
     public ObjectiveSetter objSetter;
+    public ObjectiveSetter virgilSetter;
 
     [Header ("Waypoint Positions")]
     public Transform from1;
@@ -36,6 +37,7 @@ public class LimboHandler : MonoBehaviour
         movementScript.DisableGrappleUI();
         movementScript.DisableBHopUI();
         objSetter.SetController(this, objSetter);
+        virgilSetter.SetController(this, virgilSetter);
         bgLoaderScript.SetAllBackgroundsTo(false);
     }
 
@@ -49,6 +51,7 @@ public class LimboHandler : MonoBehaviour
                 case 1:
                     transform.position = from1.position;
                     objSetter.SetObjective("Pick up health", this);
+                    virgilSetter.SetObjective("Virgil: WRITE TEXT HERE", this);
                     bgLoaderScript.SetBackgroundByNameTo("TopLeft", true);
                     break;
                 case 2:
