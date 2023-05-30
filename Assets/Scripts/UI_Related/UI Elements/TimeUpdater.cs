@@ -16,10 +16,8 @@ public class TimeUpdater : MonoBehaviour
     public  GameObject UICanvas;
     public  GameObject TimerPrefab;
     public  GameObject AddTimerPrefab;
-    public  GameObject BackgroundPrefab;
     private GameObject Timer;
     private GameObject AddTimer;
-    private GameObject Background;
     private TextMeshProUGUI TimerText;
     private TextMeshProUGUI AddTimerText;
 
@@ -29,7 +27,6 @@ public class TimeUpdater : MonoBehaviour
     void Start()
     {
         timeLeft   = startingTime;
-        Background = Instantiate(BackgroundPrefab, UICanvas.transform, false);
         Timer      = Instantiate(TimerPrefab, UICanvas.transform, false);
         AddTimer   = Instantiate(AddTimerPrefab, UICanvas.transform, false);
         TimerText  = Timer.GetComponent<TextMeshProUGUI>();
