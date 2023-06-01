@@ -50,7 +50,7 @@ public class LimboHandler : MonoBehaviour
             switch (currentLimboObj){
                 case 1:
                     transform.position = from1.position;
-                    objSetter.SetObjective("PICK UP HEATLH", this);
+                    objSetter.SetObjective("PICK UP HEALTH", this);
                     virgilSetter.SetObjective("<b><i>Virgil</i></b><br>Get up, Dante. You've got demons to slay... but you're hurt<br>from entering Hell. Pick up that health and get to the portal.<br><br><b>WASD - Move | Space - Jump</b>", this);
                     bgLoaderScript.SetBackgroundByNameTo("TopLeft", true);
                     break;
@@ -71,7 +71,7 @@ public class LimboHandler : MonoBehaviour
                     break;
                 case 4:
                     transform.position = from3_2.position;
-                    virgilSetter.SetObjective("<b><i>Virgil</i></b><br>These holy constructs are gifts to you, imbuing your grapple<br>with the power to being used again immediately after use.<br>Remember to swing by looking where you want to move to.<br><br><b>Grapple points refund your grapple cooldown,<br>but have a respawn time between uses.</b>", this);
+                    virgilSetter.SetObjective("<b><i>Virgil</i></b><br>These glowing constructs are gifts to you, imbuing your grapple<br>with the power to being used again immediately after use.<br>Remember to swing by looking where you want to move to.<br><br><b>When grappled onto, grapple points refund your grapple<br>cooldown, but have a respawn time between uses.</b>", this);
                     break;
                 case 5:
                     transform.position = from3_3.position;
