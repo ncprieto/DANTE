@@ -9,6 +9,7 @@ public class LimboTeleport : MonoBehaviour
     public GameObject nextSegment;
 
     public LimboHandler limboHandler;
+    public LimboOverlays limboOverlays;
 
     private UnityEngine.Object tpParticles;
 
@@ -18,18 +19,13 @@ public class LimboTeleport : MonoBehaviour
         tpParticles = Resources.Load("Prefabs/TeleportSmokeParticles");
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
     void OnCollisionEnter(Collision col){
         if (col.gameObject.tag == "Player"){
             limboHandler.currentLimboObj++;
             limboHandler.objChanged = true;
             col.gameObject.transform.position = tpTo.position;
             Instantiate(tpParticles, col.gameObject.transform.position, Quaternion.Euler(-90f, 0f, 0f), col.gameObject.transform);
+            limboOverlays.runCompleteMat = true;
             nextSegment.SetActive(true);
             prevSegment.SetActive(false);
         }
