@@ -5,30 +5,35 @@ using UnityEngine.SceneManagement;
 
 public class DifficultySelector : MonoBehaviour
 {
+    public List<GameObject> UIElements;
+
     public DifficultySettings easy;
     public DifficultySettings normal;
     public DifficultySettings hard;
+    public DifficultySettings nightmare;
 
     public void SetSettingsToEasy()
     {
-        easy.SaveAllModifiers();
-        StartGame();
+        SaveDifficulty(easy);
     }
 
     public void SetSettingsToNormal()
     {
-        normal.SaveAllModifiers();
-        StartGame();
+        SaveDifficulty(normal);
     }
 
     public void SetSettingsToHard()
     {
-        hard.SaveAllModifiers();
-        StartGame();
+        SaveDifficulty(hard);
     }
 
-    private void StartGame()
+    public void SetSettingsToNightmare()
     {
-        SceneManager.LoadScene(1);
+        SaveDifficulty(nightmare);
+    }
+
+    private void SaveDifficulty(DifficultySettings difficulty)
+    {
+        difficulty.SaveAllModifiers();
     }
 }

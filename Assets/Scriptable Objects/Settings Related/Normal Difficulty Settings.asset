@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4637792a1f8899e419c2c937f9b427cf, type: 3}
   m_Name: Normal Difficulty Settings
   m_EditorClassIdentifier: 
+  difficultyName: Normal
   enemyModifierNames:
   - Enemy Speed
   - Spawn Rate Time
