@@ -29510,6 +29510,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 128
   timeValues: {fileID: 11400000, guid: 11283353a9c15344d8cf43fe5de90466, type: 2}
+  isTarget: 0
   otherEnemiesInRange: 0
   nmAgent: {fileID: 8435643818165358570}
   anims: {fileID: 4783836808374918033}
@@ -39750,6 +39751,21 @@ PrefabInstance:
       propertyPath: m_Name
       value: lust-animated
       objectReference: {fileID: 0}
+    - target: {fileID: 8743813690021804245, guid: cee65b47c76151f428e74e4637de96ba,
+        type: 3}
+      propertyPath: m_Materials.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8743813690021804245, guid: cee65b47c76151f428e74e4637de96ba,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 8e896eadcf5dce14b960e0480aee07ba, type: 2}
+    - target: {fileID: 8743813690021804245, guid: cee65b47c76151f428e74e4637de96ba,
+        type: 3}
+      propertyPath: m_Materials.Array.data[1]
+      value: 
+      objectReference: {fileID: 2100000, guid: dad3991f6df95d24e84ab990bb76017a, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: cee65b47c76151f428e74e4637de96ba, type: 3}
 --- !u!1 &7173779443274720206 stripped
