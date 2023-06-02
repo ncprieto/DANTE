@@ -15,6 +15,7 @@ public class GunAttributes : MonoBehaviour
     public LayerMask hitboxLayer;
     public GunDamage damageValues;
     public TimeSource Source;
+    public bool isLimbo;
 
     [Header ("SFX Key and Events")]
     public string gunShotSFXKey;
@@ -82,10 +83,14 @@ public class GunAttributes : MonoBehaviour
                 {
                     float timeToAdd = root.GetComponent<Enemy>().GetTimeRewardValue(hitbox.name);
                     if (Source != null) Source.ReceiveTimeFromSource(timeToAdd);
-                    if (antiStuckScript.enemiesNear > 0) antiStuckScript.enemiesNear--;
+                    if (!isLimbo){
+                        if (antiStuckScript.enemiesNear > 0) antiStuckScript.enemiesNear--;
+                    }
                 }
                 enemyHit.ReceiveDamage(damageToGive);                                                // actually apply damage to the enemy that was hit
-                enemyHit.BloodParticles(hit.transform);
+                if (!isLimbo){
+                    enemyHit.BloodParticles(hit.transform);
+                }
                 gunMovement.ReceiveHitInfo(enemyHit.IsThisDamageLethal(damageToGive) ? "Lethal" : hitbox.name);
                 DisplayHitmarker(hitbox.name);
             }

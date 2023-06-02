@@ -7,6 +7,8 @@ public class LimboRespawn : MonoBehaviour
 
     public Transform rsPoint;
     public LimboOverlays limboOverlays;
+    public LimboHandler limboHandler;
+    public bool isObj5;
 
     private UnityEngine.Object tpParticles;
 
@@ -21,6 +23,9 @@ public class LimboRespawn : MonoBehaviour
             col.gameObject.transform.position = rsPoint.position;
             Instantiate(tpParticles, col.gameObject.transform.position, Quaternion.Euler(-90f, 0f, 0f), col.gameObject.transform);
             limboOverlays.runRestartMat = true;
+            if (isObj5){
+                limboHandler.restartObj5 = true;
+            }
         }
     }
 }

@@ -33,6 +33,11 @@ public class LimboOverlays : MonoBehaviour
         }
     }
 
+    void OnDisable(){
+        cMat.color = new Color(cMat.color.r, cMat.color.g, cMat.color.b, 0);
+        rMat.color = new Color(rMat.color.r, rMat.color.g, rMat.color.b, 0);
+    }
+
     IEnumerator FadeMatToZeroAlpha(float t, Material i)
     {
         i.color = new Color(i.color.r, i.color.g, i.color.b, 1);

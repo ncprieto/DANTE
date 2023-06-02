@@ -9,12 +9,14 @@ public class Enemy : MonoBehaviour
     public LayerMask groundLayer;
     public LayerMask playerLayer;
     public TimeValues timeValues;
+    public bool isTarget;
 
     protected GameObject player;
     protected PlayerHealth playerHP;
     protected AntiStuck antiStuck;
     protected LevelHandler lvlHandler;
     protected GameObject healthDrops;
+    protected LimboHandler limboHandler;
 
     private UnityEngine.Object hpDrop;
     private UnityEngine.Object deathParticles;
@@ -23,37 +25,48 @@ public class Enemy : MonoBehaviour
     {
         player = GameObject.Find("Player");
         playerHP = player.GetComponent<PlayerHealth>();
-        antiStuck = player.transform.GetChild(2).gameObject.GetComponent<AntiStuck>();
-        lvlHandler = GameObject.Find("LevelHandler").GetComponent<LevelHandler>();
-        healthDrops = GameObject.Find("HealthDrops");
+        if (!isTarget){
+            antiStuck = player.transform.GetChild(2).gameObject.GetComponent<AntiStuck>();
+            lvlHandler = GameObject.Find("LevelHandler").GetComponent<LevelHandler>();
+            healthDrops = GameObject.Find("HealthDrops");
+        }
+        else{
+            limboHandler = GameObject.Find("LimboWaypoint").GetComponent<LimboHandler>();
+        }
     }
 
     protected virtual void Start()
     {
         currentHealth = startingHealth;
-        otherEnemiesInRange = 0;
-        int hpDropChance = Random.Range(0, 100);
-        if (hpDropChance < 50){
-            hpDrop = Resources.Load("Prefabs/SmallHealthDrop");
-        }
-        else if (hpDropChance < 85){
-            hpDrop = Resources.Load("Prefabs/MediumHealthDrop");
+        if (!isTarget){
+            otherEnemiesInRange = 0;
+            int hpDropChance = Random.Range(0, 100);
+            if (hpDropChance < 50){
+                hpDrop = Resources.Load("Prefabs/SmallHealthDrop");
+            }
+            else if (hpDropChance < 85){
+                hpDrop = Resources.Load("Prefabs/MediumHealthDrop");
+            }
+            else{
+                hpDrop = Resources.Load("Prefabs/LargeHealthDrop");
+            }
+            deathParticles = Resources.Load("Prefabs/NewEnemyDeathParticles");
         }
         else{
-            hpDrop = Resources.Load("Prefabs/LargeHealthDrop");
+            deathParticles = Resources.Load("Prefabs/TargetDeathParticles");
         }
-        deathParticles = Resources.Load("Prefabs/NewEnemyDeathParticles");
     }
 
     protected static bool enemyHasDied;
     public int otherEnemiesInRange;
     protected virtual void Update()
     {
-        //if (enemyHasDied) Debug.Log(enemyHasDied);
-        if (otherEnemiesInRange > 0 && enemyHasDied){
-            otherEnemiesInRange--;
+        if (!isTarget){
+            if (otherEnemiesInRange > 0 && enemyHasDied){
+                otherEnemiesInRange--;
+            }
+            enemyHasDied = false;
         }
-        enemyHasDied = false;
     }
 
     // Health System Related Functions
@@ -65,11 +78,17 @@ public class Enemy : MonoBehaviour
         StartCoroutine(DamageKnockbackStateTimer());
         if (currentHealth > 0) currentHealth -= dmg;
         if (currentHealth <= 0){
-            Instantiate(hpDrop, new Vector3 (this.gameObject.transform.position.x, this.gameObject.transform.position.y + 1, this.gameObject.transform.position.z), Quaternion.identity, healthDrops.transform);
-            Instantiate(deathParticles, new Vector3 (this.gameObject.transform.position.x, this.gameObject.transform.position.y + 3, this.gameObject.transform.position.z), Quaternion.identity);
-            enemyHasDied = true;
+            if (!isTarget){
+                Instantiate(hpDrop, new Vector3(this.gameObject.transform.position.x, this.gameObject.transform.position.y + 1, this.gameObject.transform.position.z), Quaternion.identity, healthDrops.transform);
+                Instantiate(deathParticles, new Vector3(this.gameObject.transform.position.x, this.gameObject.transform.position.y + 3, this.gameObject.transform.position.z), Quaternion.identity);
+                enemyHasDied = true;
+                lvlHandler.enemiesKilled++;
+            }
+            else{
+                Instantiate(deathParticles, new Vector3(this.gameObject.transform.position.x, this.gameObject.transform.position.y, this.gameObject.transform.position.z), Quaternion.identity);
+                limboHandler.targetsDestroyed++;
+            }
             Destroy(this.gameObject);
-            lvlHandler.enemiesKilled++;
         }
     }
 
