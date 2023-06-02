@@ -1,20 +1,35 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class LimboHandler : MonoBehaviour
 {
 
     public int currentLimboObj;
     public bool objChanged;
+    public int targetsDestroyed;
+    public bool restartObj5;
 
     [Header ("Game Objects")]
+    public GameObject player;
     public GameObject revolverObj;
+    public GameObject portalLock4_1;
+    public GameObject portalLock4_2;
+    public GameObject portalLock5;
+    public GameObject smallTimeRing;
+    public GameObject largeTimeRing;
+
+    [Header ("Transforms")]
+    public Transform rsPoint5;
+    public Transform smallRingAnchor;
+    public Transform largeRingAnchor;
 
     [Header ("UI Scripts")]
     public Movement movementScript;
     public TimeUpdater timeUpdaterScript;
     public BackgroundLoader bgLoaderScript;
+    public LimboOverlays limboOverlays;
 
     [Header ("Scriptable Objects")]
     public ObjectiveSetter objSetter;
@@ -34,6 +49,8 @@ public class LimboHandler : MonoBehaviour
     {
         currentLimboObj = 1;
         objChanged = true;
+        targetsDestroyed = 0;
+        restartObj5 = false;
         movementScript.DisableGrappleUI();
         movementScript.DisableBHopUI();
         objSetter.SetController(this, objSetter);
@@ -79,27 +96,65 @@ public class LimboHandler : MonoBehaviour
                     break;
                 case 6:
                     transform.position = from4_1.position;
+                    targetsDestroyed = 0;
                     revolverObj.SetActive(true);
                     objSetter.SetObjective("DESTROY TARGETS", this);
-                    virgilSetter.SetObjective("<b><i>Virgil</i></b><br>Your fated revolver... back in your hands once more.<br>You haven't forgotten how to use it, have you?<br><br><b>Left Click - Fire Weapon | Has infinite ammo.</b>", this);
+                    virgilSetter.SetObjective("<b><i>Virgil</i></b><br>Your fated revolver... back in your hands once more.<br>You haven't forgotten how to use it, have you?<br>Destroy these targets to open up the portal.<br><br><b>Left Click - Fire Weapon | Has infinite ammo.</b>", this);
                     bgLoaderScript.SetBackgroundByNameTo("BottomRight", true);
                     break;
                 case 7:
                     transform.position = from4_2.position;
-                    virgilSetter.SetObjective("<b><i>Virgil</i></b><br>The holy ones have given you the ability to slow time<br>as well, ableit breifly and with absolute focus. Take care not<br>to miss a shot, lest that focus breaks.<br><br><b>Left Shift - Time-Slow Ability<br>Extends on hits, immediately ends on misses.</b>", this);
+                    targetsDestroyed = 0;
+                    virgilSetter.SetObjective("<b><i>Virgil</i></b><br>The holy ones have given you the ability to slow time<br>as well, ableit breifly and with absolute focus. Take care not<br>to miss a shot, lest that focus breaks.<br><br><b>Left Shift - Time-Slow Ability / Cancel Ability<br>Extends on hits, immediately ends on misses.</b>", this);
                     break;
                 case 8:
                     transform.position = from5.position;
+                    targetsDestroyed = 0;
+                    Instantiate(smallTimeRing, smallRingAnchor.position, Quaternion.identity, smallRingAnchor);
+                    Instantiate(largeTimeRing, largeRingAnchor.position, Quaternion.identity, largeRingAnchor);
                     timeUpdaterScript.enabled = true;
                     objSetter.SetObjective("RACE TO THE EXIT", this);
                     virgilSetter.SetObjective("<b><i>Virgil</i></b><br>You're closer to the second ring of Hell then ever before.<br>The infernal magicks have made your time alive limited— make haste!<br><br><b>Collect Time-Rings and kill demons to extend your time alive.<br>Green rings give large amounts of time, blue rings give small.</b>", this);
                     bgLoaderScript.SetBackgroundByNameTo("TopCenter", true);
                     break;
                 case 9:
+                    SceneManager.LoadScene("MainMenu");
                     transform.position = new Vector3(0, 0, 0);
                     break;
                 default:
                     break;
+            }
+        }
+
+        if (currentLimboObj == 6){
+            if (targetsDestroyed == 8){
+                portalLock4_1.SetActive(false);
+            }
+        }
+        if (currentLimboObj == 7){
+            if (targetsDestroyed == 3){
+                portalLock4_2.SetActive(false);
+            }
+        }
+        if (currentLimboObj == 8){
+            if (targetsDestroyed == 3){
+                portalLock5.SetActive(false);
+            }
+            if (timeUpdaterScript.timeLeft <= 0f){
+                limboOverlays.runRestartMat = true;
+                restartObj5 = true;
+            }
+        }
+
+        if (restartObj5){
+            restartObj5 = false;
+            timeUpdaterScript.timeLeft = timeUpdaterScript.startingTime;
+            player.transform.position = rsPoint5.position;
+            if (smallRingAnchor.childCount == 0){
+                Instantiate(smallTimeRing, smallRingAnchor.position, Quaternion.identity, smallRingAnchor);
+            }
+            if (largeRingAnchor.childCount == 0){
+                Instantiate(largeTimeRing, largeRingAnchor.position, Quaternion.identity, largeRingAnchor);
             }
         }
     }
