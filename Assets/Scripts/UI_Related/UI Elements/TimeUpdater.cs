@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using FMODUnity;
 
 public class TimeUpdater : MonoBehaviour
 {
@@ -12,7 +13,7 @@ public class TimeUpdater : MonoBehaviour
     private bool unlimitedTime;
     public float timeLeft;
 
-    [Header("UI Elements")]
+    [Header ("UI Elements")]
     public  GameObject UICanvas;
     public  GameObject TimerPrefab;
     public  GameObject AddTimerPrefab;
@@ -20,6 +21,10 @@ public class TimeUpdater : MonoBehaviour
     private GameObject AddTimer;
     private TextMeshProUGUI TimerText;
     private TextMeshProUGUI AddTimerText;
+
+    [Header ("SFX Key and Events")]
+    public string sfxKey;
+    private FMOD.Studio.EventInstance sfxEvent;
 
     [Header ("Sources")]
     public List<TimeSource> Sources;
@@ -31,6 +36,7 @@ public class TimeUpdater : MonoBehaviour
         AddTimer   = Instantiate(AddTimerPrefab, UICanvas.transform, false);
         TimerText  = Timer.GetComponent<TextMeshProUGUI>();
         AddTimerText  = AddTimer.GetComponent<TextMeshProUGUI>();
+        sfxEvent   = RuntimeManager.CreateInstance(sfxKey);
         SetUpModifiers();
         InitializeSources();
     }
@@ -39,11 +45,13 @@ public class TimeUpdater : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Alpha9)) unlimitedTime = true;
         if (unlimitedTime) return;
+        if (timeLeft == -1) return;
 
         timeLeft -= Time.deltaTime;
         timeLeft = timeLeft > -1 ? timeLeft : -1f;
         updateTimerText(timeLeft);
         if (timeLeft <= warnPlayerOfTime) changeTextColor(TimerText, timeLeft);
+        else TimerText.color = Color.white;
     }
 
     public void ReceiveTime(float amount)
@@ -71,6 +79,8 @@ public class TimeUpdater : MonoBehaviour
     public void changeTextColor(TextMeshProUGUI textToChange, float t)
     {   
         textToChange.color = (int)t % 2 == 0 ? Color.white : Color.red;
+        if (t < 0f) textToChange.color = Color.red;
+        if (textToChange.color == Color.white) sfxEvent.start();
     }
 
     public IEnumerator FadeTextToZeroAlpha(float t, TextMeshProUGUI i)

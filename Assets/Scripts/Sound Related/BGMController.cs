@@ -14,6 +14,11 @@ public class BGMController : MonoBehaviour
         BGMEvent.setVolume(1f);
     }
 
+    public void SetVolumeTo(float level)
+    {
+        BGMEvent.setVolume(level);
+    }
+
     public void LerpBGMPitch(float start, float end, float timeFrame)
     {
         if(BGMPitchLerp != null) StopCoroutine(BGMPitchLerp);
