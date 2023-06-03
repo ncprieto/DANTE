@@ -15,10 +15,6 @@ public class MainMenu : MonoBehaviour
     public List<GameObject> title;
     public List<GameObject> other;
 
-    public DifficultySettings easy;
-    public DifficultySettings normal;
-    public DifficultySettings hard;
-
     void Start()
     {
         FadeElements(title, fadeDuration, waitForTilFade);
@@ -31,18 +27,6 @@ public class MainMenu : MonoBehaviour
         UnlockCursor();
     }
 
-    void Update()
-    {
-        if(Input.GetKeyDown(KeyCode.A)) easy.SaveAllModifiers();
-        if(Input.GetKeyDown(KeyCode.S)) normal.SaveAllModifiers();
-        if(Input.GetKeyDown(KeyCode.D)) hard.SaveAllModifiers();
-    }
-
-    public void StartGame()
-    {
-        SceneManager.LoadScene(1);
-    }
-
     public void QuitGame()
     {
        Application.Quit();
@@ -51,16 +35,6 @@ public class MainMenu : MonoBehaviour
     public void SendToMainMenu()
     {
         SceneManager.LoadScene(0);
-    }
-
-    public void SendToVictory()
-    {
-        SceneManager.LoadScene(2);
-    }
-
-    public void SendToLose()
-    {
-        SceneManager.LoadScene(3);
     }
 
     private void UnlockCursor()
@@ -121,20 +95,38 @@ public class MainMenu : MonoBehaviour
     private IEnumerator FadeTextAlpha(float duration, List<GameObject> elements, float start, float end)
     {
         if(start > end) foreach(GameObject parent in elements) parent.SetActive(!parent.activeSelf);
+        if(start < end) ToggleButtonComponents(elements);
 
         float timeToFade = duration;
+        bool buttonsToggled = false;
         while(timeToFade > 0f)
         {
             foreach(GameObject parent in elements)
             {
                 TextMeshProUGUI text = parent.GetComponentInChildren<TextMeshProUGUI>();
-                Color newAlpha = new Color(text.color.r, text.color.g, text.color.b, Mathf.Lerp(start, end, timeToFade / duration)); // lerp alpha based on duration of fade
+                float t = Mathf.Lerp(start, end, timeToFade / duration);
+                Color newAlpha = new Color(text.color.r, text.color.g, text.color.b, t); // lerp alpha based on duration of fade
                 text.color = newAlpha;
+                if(t > 0.25 && start > end && !buttonsToggled)
+                {
+                    buttonsToggled = true;
+                    ToggleButtonComponents(elements);
+                }
             }
             timeToFade -= Time.deltaTime;
             yield return null;
         }
 
         if(start < end) foreach(GameObject parent in elements) parent.SetActive(!parent.activeSelf);
+    }
+
+
+    private void ToggleButtonComponents(List<GameObject> Objects)
+    {
+        foreach(GameObject parent in Objects) 
+        {
+            Button potentialButton = parent.GetComponent<Button>();
+            if(potentialButton != null) potentialButton.enabled = !potentialButton.enabled;
+        }
     }
 }

@@ -55,7 +55,7 @@ public class SceneTransitionHandler : MonoBehaviour
         
         timePassed += Time.deltaTime;
 
-        if (Input.GetKeyDown(escape)) SceneManager.LoadScene(0);                              // transition to main scene when player exits
+        if (Input.GetKeyDown(escape)) SceneManager.LoadScene("MainMenu");                              // transition to main scene when player exits
         if (lvlHandler.enemiesKilled >= (int)lvlHandler.enemiesToKill && currTime == 0f)
         {
             currTime = timePassed;
@@ -115,11 +115,11 @@ public class SceneTransitionHandler : MonoBehaviour
 
     public void StartGame()
     {
-        SceneManager.LoadScene(1);
+        SceneManager.LoadScene("LustLevel");
     }
 
     public void SendToMainMenu()
     {
-        SceneManager.LoadScene(0);
+        SceneManager.LoadScene("MainMenu");
     }
 }

@@ -157,5 +157,7 @@ public class LimboHandler : MonoBehaviour
                 Instantiate(largeTimeRing, largeRingAnchor.position, Quaternion.identity, largeRingAnchor);
             }
         }
+
+        if(Input.GetKeyDown(KeyCode.Escape)) SceneManager.LoadScene("MainMenu");
     }
 }

@@ -22,7 +22,7 @@ public class OOBDamage : MonoBehaviour
         if (!inTrigger){
             dotTimer += Time.deltaTime;
             if (dotTimer > (.25f - expCount)){
-                playerHP.ReceiveDamage(1, false);
+                playerHP.ReceiveDamage(2, false);
                 dotTimer = 0;
                 expCount *= 1.035f;
                 if (expCount > .25f){
