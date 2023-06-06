@@ -69,14 +69,14 @@ public class LimboHandler : MonoBehaviour
                     transform.position = from1.position;
                     objSetter.SetObjective("PICK UP HEALTH", this);
                     virgilSetter.SetObjective("<b><i>Virgil</i></b><br>Get up, Dante. You've got demons to slay... but you're hurt<br>from entering Hell. Pick up that health and get to the portal.<br><br><b>WASD - Move | Space - Jump</b>", this);
-                    bgLoaderScript.SetBackgroundByNameTo("TopLeft", true);
+                    bgLoaderScript.SetBackgroundByNameTo("LimboTopLeft", true);
                     break;
                 case 2:
                     transform.position = from2.position;
                     movementScript.EnableBHopUI();
-                    objSetter.SetObjective("BHOP ACROSS GAP", this);
+                    objSetter.SetObjective("B-HOP ACROSS GAP", this);
                     virgilSetter.SetObjective("<b><i>Virgil</i></b><br>That's a large gap, but with the divine power bestowed upon you,<br>it's possible to jump it. B-Hop chains give speed and damage.<br><br><b>Press Space when landing a jump to chain B-Hops.</b>", this);
-                    bgLoaderScript.SetBackgroundByNameTo("TopRight", true);
+                    bgLoaderScript.SetBackgroundByNameTo("LimboTopRight", true);
                     break;
                 case 3:
                     transform.position = from3_1.position;
@@ -84,7 +84,6 @@ public class LimboHandler : MonoBehaviour
                     movementScript.grappleEnabled = true;
                     objSetter.SetObjective("GRAPPLE ACROSS", this);
                     virgilSetter.SetObjective("<b><i>Virgil</i></b><br>Ah, so you've found your grapple, allowing you to cross across<br>great distances and swing great heights. Take note that its power<br>cannot be abused. It can only go so far, and every so often.<br><br><b>Right Click - Grapple / Cancel Grapple<br>Icon under reticle indicates if possible to grapple.</b>", this);
-                    bgLoaderScript.SetBackgroundByNameTo("BottomLeft", true);
                     break;
                 case 4:
                     transform.position = from3_2.position;
@@ -100,7 +99,6 @@ public class LimboHandler : MonoBehaviour
                     revolverObj.SetActive(true);
                     objSetter.SetObjective("DESTROY TARGETS", this);
                     virgilSetter.SetObjective("<b><i>Virgil</i></b><br>Your fated revolver... back in your hands once more.<br>You haven't forgotten how to use it, have you?<br>Destroy these targets to open up the portal.<br><br><b>Left Click - Fire Weapon | Has infinite ammo.</b>", this);
-                    bgLoaderScript.SetBackgroundByNameTo("BottomRight", true);
                     break;
                 case 7:
                     transform.position = from4_2.position;
@@ -115,7 +113,7 @@ public class LimboHandler : MonoBehaviour
                     timeUpdaterScript.enabled = true;
                     objSetter.SetObjective("RACE TO THE EXIT", this);
                     virgilSetter.SetObjective("<b><i>Virgil</i></b><br>You're closer to the second ring of Hell then ever before.<br>The infernal magicks have made your time alive limited— make haste!<br><br><b>Collect Time-Rings and kill demons to extend your time alive.<br>Green rings give large amounts of time, blue rings give small.</b>", this);
-                    bgLoaderScript.SetBackgroundByNameTo("TopCenter", true);
+                    bgLoaderScript.SetBackgroundByNameTo("LimboTopCenter", true);
                     break;
                 case 9:
                     SceneManager.LoadScene("MainMenu");
