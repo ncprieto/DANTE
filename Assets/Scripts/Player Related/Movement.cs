@@ -93,7 +93,7 @@ public class Movement : MonoBehaviour
         SetUpControls();
         SetUpUI();
         currentJumpSFX = jumpSFXPath;
-        CooldownUpdater.SetSliderAndNumber(actualGrappleCooldown);
+        
     }
 
     void Update()
@@ -329,17 +329,14 @@ public class Movement : MonoBehaviour
         float timeLeft = grappleCooldown;
         CooldownUpdater.icon.SetActive(false);
         CooldownUpdater.transIcon.SetActive(true);
-        CooldownUpdater.fill.enabled = true;
         while(timeLeft > 0f)
         {
             CooldownUpdater.UpdateCooldown(timeLeft, grappleCooldown);
-            CooldownUpdater.SetSliderAndNumber(timeLeft);
             timeLeft -= Time.deltaTime;
             yield return null;
         }
         actualGrappleCooldown = 0f;
         grappleOnCooldown = false;
-        CooldownUpdater.fill.enabled = false;
         CooldownUpdater.transIcon.SetActive(false);
         CooldownUpdater.icon.SetActive(true);
         CooldownUpdater.SetCooldownToReady();
@@ -447,6 +444,7 @@ public class Movement : MonoBehaviour
         CanGrappleUI = Instantiate(CanGrapplePrefab, UICanvas.transform, false);
         bHopUI       = Instantiate(bHopPrefab,       UICanvas.transform, false);
         CooldownUpdater = CooldownUI.GetComponent<NewCooldownUpdater>();
+        CooldownUpdater.SetSliderAndNumber(grappleCooldown);
         CooldownUpdater.SetCooldownToReady();
         bHopChainText = bHopUI.GetComponent<TextMeshProUGUI>();
     }
