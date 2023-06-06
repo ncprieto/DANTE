@@ -20,7 +20,7 @@ public class GunMovement : MonoBehaviour
     public GameObject CooldownPrefab;
     protected GameObject UICanvas;
     protected GameObject CooldownUI;
-    protected CooldownCircle CooldownUpdater;
+    protected NewCooldownUpdater CooldownUpdater;
 
     // Player Related
     protected GameObject player;
@@ -99,7 +99,9 @@ public class GunMovement : MonoBehaviour
     {
         abilityState = ABILITY.ONCOOLDOWN;
         float timeLeft = abilityCooldown;
-        while(timeLeft > 0f)
+        CooldownUpdater.icon.SetActive(false);
+        CooldownUpdater.transIcon.SetActive(true);
+        while (timeLeft > 0f)
         {
             if(refundFactor > 0f)
             {
@@ -111,6 +113,8 @@ public class GunMovement : MonoBehaviour
             yield return null;
         }
         abilityState = ABILITY.OFFCOOLDOWN;
+        CooldownUpdater.transIcon.SetActive(false);
+        CooldownUpdater.icon.SetActive(true);
         CooldownUpdater.SetCooldownToReady();
         offCDSFXEvent.start();
     }
@@ -130,8 +134,9 @@ public class GunMovement : MonoBehaviour
     private void SetUpUI()
     {
         CooldownUI   = Instantiate(CooldownPrefab,   UICanvas.transform, false);
-        CooldownUpdater = CooldownUI.GetComponent<CooldownCircle>();
-        CooldownUpdater.InitializeCooldown("Ability");
+        CooldownUpdater = CooldownUI.GetComponent<NewCooldownUpdater>();
+        CooldownUpdater.SetSliderAndNumber(abilityCooldown);
+        CooldownUpdater.SetCooldownToReady();
     }
 
     public virtual void EnableUI()

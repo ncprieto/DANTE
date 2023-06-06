@@ -17,7 +17,6 @@ public class NewCooldownUpdater : MonoBehaviour
     {
         slider.value = n;
         fill.color = gradient.Evaluate(slider.normalizedValue);
-        Debug.Log("here");
     }
 
     public void SetCooldownToReady()
@@ -29,6 +28,7 @@ public class NewCooldownUpdater : MonoBehaviour
     public void UpdateCooldown(float timeLeft, float baseTime)
     {
         slider.value = 1f - (timeLeft / baseTime);
+        fill.color = gradient.Evaluate(slider.value);
         timer.text = Mathf.CeilToInt(timeLeft).ToString();
     }
 }
