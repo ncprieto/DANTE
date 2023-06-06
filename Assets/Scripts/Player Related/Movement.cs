@@ -46,7 +46,6 @@ public class Movement : MonoBehaviour
     [Header("Grapple Variables")]
     public float grappleRange;
     public float grappleCooldown;
-    public float actualGrappleCooldown;
     public float grapplePointSpeed;
     public float grapplePointDismountBoost;
     public bool  grappleEnabled;
@@ -335,7 +334,6 @@ public class Movement : MonoBehaviour
             timeLeft -= Time.deltaTime;
             yield return null;
         }
-        actualGrappleCooldown = 0f;
         grappleOnCooldown = false;
         CooldownUpdater.transIcon.SetActive(false);
         CooldownUpdater.icon.SetActive(true);
@@ -468,7 +466,6 @@ public class Movement : MonoBehaviour
     {
         bHopUI.SetActive(false);
     }
-
 
     private void SetUpControls()
     {
