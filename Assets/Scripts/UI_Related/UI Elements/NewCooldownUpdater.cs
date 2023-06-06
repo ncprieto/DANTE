@@ -4,28 +4,26 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
-public class BarAndNumber : MonoBehaviour
+public class NewCooldownUpdater : MonoBehaviour
 {
     public Slider slider;
     public Gradient gradient;
     public Image fill;
-    public TextMeshProUGUI number;
     public GameObject icon;
     public GameObject transIcon;
     public TextMeshProUGUI timer;
 
-    public void SetSliderAndNumber(int n)
+    public void SetSliderAndNumber(float n)
     {
         slider.value = n;
-        fill.color   = gradient.Evaluate(slider.normalizedValue);
-        number.text  = n.ToString();
+        fill.color = gradient.Evaluate(slider.normalizedValue);
+        Debug.Log("here");
     }
 
     public void SetCooldownToReady()
     {
+        timer.text = "";
         slider.value = 1f;
-        transIcon.SetActive(false);
-        icon.SetActive(true);
     }
 
     public void UpdateCooldown(float timeLeft, float baseTime)
