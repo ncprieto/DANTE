@@ -329,6 +329,7 @@ public class Movement : MonoBehaviour
         float timeLeft = grappleCooldown;
         CooldownUpdater.icon.SetActive(false);
         CooldownUpdater.transIcon.SetActive(true);
+        CooldownUpdater.fill.enabled = true;
         while(timeLeft > 0f)
         {
             CooldownUpdater.UpdateCooldown(timeLeft, grappleCooldown);
@@ -338,6 +339,7 @@ public class Movement : MonoBehaviour
         }
         actualGrappleCooldown = 0f;
         grappleOnCooldown = false;
+        CooldownUpdater.fill.enabled = false;
         CooldownUpdater.transIcon.SetActive(false);
         CooldownUpdater.icon.SetActive(true);
         CooldownUpdater.SetCooldownToReady();
