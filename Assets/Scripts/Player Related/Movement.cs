@@ -74,7 +74,7 @@ public class Movement : MonoBehaviour
     public  GameObject CanGrapplePrefab;
     private GameObject CooldownUI;
     private GameObject CanGrappleUI;
-    private CooldownCircle CooldownUpdater;
+    private NewCooldownUpdater CooldownUpdater;
 
     [Header("B-Hop UI Elements")]
     public GameObject bHopPrefab;
@@ -93,6 +93,7 @@ public class Movement : MonoBehaviour
         SetUpControls();
         SetUpUI();
         currentJumpSFX = jumpSFXPath;
+        CooldownUpdater.SetSliderAndNumber(actualGrappleCooldown);
     }
 
     void Update()
@@ -326,14 +327,19 @@ public class Movement : MonoBehaviour
     {
         grappleOnCooldown = true;
         float timeLeft = grappleCooldown;
+        CooldownUpdater.icon.SetActive(false);
+        CooldownUpdater.transIcon.SetActive(true);
         while(timeLeft > 0f)
         {
             CooldownUpdater.UpdateCooldown(timeLeft, grappleCooldown);
+            CooldownUpdater.SetSliderAndNumber(timeLeft);
             timeLeft -= Time.deltaTime;
             yield return null;
         }
         actualGrappleCooldown = 0f;
         grappleOnCooldown = false;
+        CooldownUpdater.transIcon.SetActive(false);
+        CooldownUpdater.icon.SetActive(true);
         CooldownUpdater.SetCooldownToReady();
     }
 
@@ -438,8 +444,8 @@ public class Movement : MonoBehaviour
         CooldownUI   = Instantiate(CooldownPrefab,   UICanvas.transform, false);
         CanGrappleUI = Instantiate(CanGrapplePrefab, UICanvas.transform, false);
         bHopUI       = Instantiate(bHopPrefab,       UICanvas.transform, false);
-        CooldownUpdater = CooldownUI.GetComponent<CooldownCircle>();
-        CooldownUpdater.InitializeCooldown("Grapple");
+        CooldownUpdater = CooldownUI.GetComponent<NewCooldownUpdater>();
+        CooldownUpdater.SetCooldownToReady();
         bHopChainText = bHopUI.GetComponent<TextMeshProUGUI>();
     }
 
