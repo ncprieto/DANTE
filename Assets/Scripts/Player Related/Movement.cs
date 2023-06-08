@@ -88,6 +88,9 @@ public class Movement : MonoBehaviour
     public string grappleHitSFXPath;
     public string grappleActiveSFXPath;
 
+    [Header("Misc")]
+    public bool cheatsEnabled;
+
     private float sfxVolume;
     private string currentJumpSFX;
     private FMOD.Studio.EventInstance jumpSFXEvent;
@@ -106,6 +109,7 @@ public class Movement : MonoBehaviour
 
     void Update()
     {
+        if(Input.GetKeyDown(KeyCode.BackQuote)) cheatsEnabled = true;
         GetInputs();
         isGrounded = Physics.Raycast(orientation.position, -orientation.up, 1.0001f, ground);                 // check if player is on the ground
         if(isGrounded && wasInAir) StartBHopCoroutine();
@@ -120,8 +124,8 @@ public class Movement : MonoBehaviour
         if(grappleOnCooldown) CanGrappleUI.SetActive(false);
 
         // dev tools
-        if(Input.GetKeyDown(KeyCode.Alpha0)) grappleCooldown = 0f; // no grapple cooldown
-        if(Input.GetKeyDown(KeyCode.Equals))                       // add to bHop count
+        if(Input.GetKeyDown(KeyCode.Alpha0) && cheatsEnabled) grappleCooldown = 0f; // no grapple cooldown
+        if(Input.GetKeyDown(KeyCode.Equals) && cheatsEnabled)                       // add to bHop count
         {
             bHopOverride = true;
             bHopCount += bHopCount < bHopMax ? 1 : 0;

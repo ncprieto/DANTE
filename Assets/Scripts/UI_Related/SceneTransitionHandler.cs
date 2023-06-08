@@ -37,6 +37,7 @@ public class SceneTransitionHandler : MonoBehaviour
 
     void Start()
     {
+        escape = (KeyCode)PlayerPrefs.GetInt("Escape", 27);
         currTime = 0f;
         timePassed = 0f;
         mainCamera.GetComponent<Animator>().enabled = false;
@@ -65,7 +66,6 @@ public class SceneTransitionHandler : MonoBehaviour
             statsOverlay.transform.Find("NumKills").gameObject.GetComponent<TextMeshProUGUI>().text = levelHandler.enemiesKilled.ToString();
             statsOverlay.transform.Find("CurrTime").gameObject.GetComponent<TextMeshProUGUI>().text = currTime.ToString();
             statsOverlay.SetActive(true);
-            
         }
         if ((playerHealth.playerCurrentHealth <= 0 || timeUI.timeLeft == -1) && currTime == 0f)
         {

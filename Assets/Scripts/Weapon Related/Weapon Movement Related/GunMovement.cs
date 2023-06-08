@@ -11,6 +11,7 @@ public class GunMovement : MonoBehaviour
     public float actualAbilityCooldown;
     public bool  IsToggleable;
     public float refundForKill;
+    public bool cheatsEnabled;
 
     [Header("SFX Keys")]
     public string SFXKey;
@@ -56,7 +57,8 @@ public class GunMovement : MonoBehaviour
 
     protected virtual void Update()
     {
-        if(Input.GetKeyDown(KeyCode.Minus)) abilityCooldown = 0f; // dev tool give no cooldown to weapon ability
+        if(Input.GetKeyDown(KeyCode.BackQuote)) cheatsEnabled = true;
+        if(Input.GetKeyDown(KeyCode.Minus) && cheatsEnabled) abilityCooldown = 0f; // dev tool give no cooldown to weapon ability
         if (Input.GetKeyDown(abilityKey) && !CanActivateAbility() && !CanDeactivateAbility()){
             CooldownUpdater.CooldownNotReadyYet();
         }

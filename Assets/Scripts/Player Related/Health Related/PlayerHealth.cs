@@ -10,6 +10,7 @@ public class PlayerHealth : MonoBehaviour
     public bool isInvincible;
     public bool unlimitedHealth;
     public bool isTutorial;
+    public bool cheatsEnabled;
     private int previousHealth = 100;
 
     [Header("VFX")]
@@ -48,7 +49,8 @@ public class PlayerHealth : MonoBehaviour
 
     void Update()
     {
-        if(Input.GetKeyDown(KeyCode.Alpha8)) unlimitedHealth = true;
+        if(Input.GetKeyDown(KeyCode.BackQuote)) cheatsEnabled = true;
+        if(Input.GetKeyDown(KeyCode.Alpha8) && cheatsEnabled) unlimitedHealth = true;
         
         if (previousHealth > 25 && playerCurrentHealth <= 25){
             dmgVFX.enterLowHP = true;

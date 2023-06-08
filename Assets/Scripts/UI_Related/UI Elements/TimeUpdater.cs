@@ -10,8 +10,9 @@ public class TimeUpdater : MonoBehaviour
     [Header ("Variables")]
     public  float startingTime;
     public  float warnPlayerOfTime;
-    private bool unlimitedTime;
     public float timeLeft;
+    public bool cheatsEnabled;
+    private bool unlimitedTime;
 
     [Header ("UI Elements")]
     public  GameObject UICanvas;
@@ -44,7 +45,8 @@ public class TimeUpdater : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Alpha9)) unlimitedTime = true;
+        if(Input.GetKeyDown(KeyCode.BackQuote)) cheatsEnabled = true;
+        if (Input.GetKeyDown(KeyCode.Alpha9) && cheatsEnabled) unlimitedTime = true;
         if (unlimitedTime) return;
         if (timeLeft == -1) return;
 
