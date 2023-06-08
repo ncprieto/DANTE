@@ -68,14 +68,14 @@ public class LimboHandler : MonoBehaviour
                 case 1:
                     transform.position = from1.position;
                     objSetter.SetObjective("PICK UP HEALTH", this);
-                    virgilSetter.SetObjective("<b><i>Virgil</i></b><br>Get up, Dante. You've got demons to slay... but you're hurt<br>from entering Hell. Pick up that health and get to the portal.<br><br><b>WASD - Move | Space - Jump</b>", this);
+                    virgilSetter.SetObjective("<b><i>Virgil</i></b><br>Get up, Dante. You've got demons to slay... but you're hurt<br>from entering Hell. Pick up that <b><color=#f985ff>health</color></b> and get to the <b><color=#eeff8f>portal</color></b>.<br><br><b>WASD - Move | Space - Jump</b>", this);
                     bgLoaderScript.SetBackgroundByNameTo("LimboTopLeft", true);
                     break;
                 case 2:
                     transform.position = from2.position;
                     movementScript.EnableBHopUI();
                     objSetter.SetObjective("B-HOP ACROSS GAP", this);
-                    virgilSetter.SetObjective("<b><i>Virgil</i></b><br>That's a large gap, but with the divine power bestowed upon you,<br>it's possible to jump it. B-Hop chains give speed and damage.<br><br><b>Press Space when landing a jump to chain B-Hops.</b>", this);
+                    virgilSetter.SetObjective("<b><i>Virgil</i></b><br>That's a large gap, but with the divine power bestowed upon you,<br>it's possible to jump it. <b><color=#fc8db6>B-Hop chains</color></b> give speed and damage.<br><br><b>Press Space when landing a jump to chain B-Hops.</b>", this);
                     bgLoaderScript.SetBackgroundByNameTo("LimboTopRight", true);
                     break;
                 case 3:
@@ -83,11 +83,11 @@ public class LimboHandler : MonoBehaviour
                     movementScript.EnableGrappleUI();
                     movementScript.grappleEnabled = true;
                     objSetter.SetObjective("GRAPPLE ACROSS", this);
-                    virgilSetter.SetObjective("<b><i>Virgil</i></b><br>Ah, so you've found your grapple, allowing you to cross across<br>great distances and swing great heights. Take note that its power<br>cannot be abused. It can only go so far, and every so often.<br><br><b>Right Click - Grapple / Cancel Grapple<br>Icon under reticle indicates if possible to grapple.</b>", this);
+                    virgilSetter.SetObjective("<b><i>Virgil</i></b><br>Ah, so you've found your <b><color=#bac6ff>grapple</color></b>, allowing you to cross across<br>great distances and swing great heights. Take note that its power<br>cannot be abused. It can only go so far, and every so often.<br><br><b>Right Click - Grapple / Cancel Grapple<br>Icon under reticle indicates if possible to grapple.</b>", this);
                     break;
                 case 4:
                     transform.position = from3_2.position;
-                    virgilSetter.SetObjective("<b><i>Virgil</i></b><br>These glowing constructs are gifts to you, imbuing your grapple<br>with the power to being used again immediately after use.<br>Remember to swing by looking where you want to move to.<br><br><b>When grappled onto, grapple points refund your grapple<br>cooldown, but have a respawn time between uses.</b>", this);
+                    virgilSetter.SetObjective("<b><i>Virgil</i></b><br>These <b><color=#dfffa3>grapple points</color></b> are gifts to you, imbuing your grapple<br>with the power to being used again immediately after use.<br>Remember to swing by looking where you want to move to.<br><br><b>When grappled onto, grapple points refund your grapple<br>cooldown, but have a respawn time between uses.</b>", this);
                     break;
                 case 5:
                     transform.position = from3_3.position;
@@ -98,12 +98,12 @@ public class LimboHandler : MonoBehaviour
                     targetsDestroyed = 0;
                     revolverObj.SetActive(true);
                     objSetter.SetObjective("DESTROY TARGETS", this);
-                    virgilSetter.SetObjective("<b><i>Virgil</i></b><br>Your fated revolver... back in your hands once more.<br>You haven't forgotten how to use it, have you?<br>Destroy these targets to open up the portal.<br><br><b>Left Click - Fire Weapon | Has infinite ammo.</b>", this);
+                    virgilSetter.SetObjective("<b><i>Virgil</i></b><br>Your fated <b><color=#f5d15d>revolver</color></b>... back in your hands once more.<br>You haven't forgotten how to use it, have you?<br>Destroy these <b><color=#b5b5b5>targets</color></b> to open up the portal.<br><br><b>Left Click - Fire Weapon | Has infinite ammo.</b>", this);
                     break;
                 case 7:
                     transform.position = from4_2.position;
                     targetsDestroyed = 0;
-                    virgilSetter.SetObjective("<b><i>Virgil</i></b><br>The holy ones have given you the ability to slow time<br>as well, ableit breifly and with absolute focus. Take care not<br>to miss a shot, lest that focus breaks.<br><br><b>Left Shift - Time-Slow Ability / Cancel Ability<br>Extends on hits, immediately ends on misses.</b>", this);
+                    virgilSetter.SetObjective("<b><i>Virgil</i></b><br>The holy ones have given you the <b><color=#ce95fc>ability to slow time</color></b><br>as well, ableit breifly and with absolute focus. Take care not<br>to miss a shot, lest that focus breaks.<br><br><b>Left Shift - Time-Slow Ability / Cancel Ability<br>Extends on hits, immediately ends on misses.</b>", this);
                     break;
                 case 8:
                     transform.position = from5.position;
@@ -112,7 +112,7 @@ public class LimboHandler : MonoBehaviour
                     Instantiate(largeTimeRing, largeRingAnchor.position, Quaternion.identity, largeRingAnchor);
                     timeUpdaterScript.enabled = true;
                     objSetter.SetObjective("RACE TO THE EXIT", this);
-                    virgilSetter.SetObjective("<b><i>Virgil</i></b><br>You're closer to the second ring of Hell then ever before.<br>The infernal magicks have made your time alive limited— make haste!<br><br><b>Collect Time-Rings and kill demons to extend your time alive.<br>Green rings give large amounts, blue rings give small.</b>", this);
+                    virgilSetter.SetObjective("<b><i>Virgil</i></b><br>You're closer to the second ring of Hell then ever before.<br>The infernal magicks have made your time alive limited— make haste!<br><br><b>Collect Time-Rings and kill demons to extend your time alive.<br><color=#a9fc8b>Green rings</color> give large amounts, <color=#8beffc>blue rings</color> give small.</b>", this);
                     bgLoaderScript.SetBackgroundByNameTo("LimboTopCenter", true);
                     break;
                 case 9:
