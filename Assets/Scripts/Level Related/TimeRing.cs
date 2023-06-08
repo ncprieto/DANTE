@@ -1,11 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using FMODUnity;
 
 public class TimeRing : MonoBehaviour
 {
     public float timeRingTimeAdded;
     public int waypointSystemIndex;
+    public string collectSFX;
     public TimeSource source;
     private WaypointSystem ringWaypoint;
     
@@ -21,6 +23,7 @@ public class TimeRing : MonoBehaviour
         if (col.gameObject.tag == "Player"){
             source.ReceiveTimeFromSource(timeRingTimeAdded);
             ringWaypoint.target = null;
+            FMODUnity.RuntimeManager.PlayOneShot(collectSFX);
             Destroy(this.gameObject.transform.parent.gameObject);
         }
     }

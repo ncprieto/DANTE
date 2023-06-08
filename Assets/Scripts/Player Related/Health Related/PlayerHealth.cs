@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using FMODUnity;
 
 public class PlayerHealth : MonoBehaviour
 {
@@ -21,6 +22,10 @@ public class PlayerHealth : MonoBehaviour
     public  GameObject HealthBarPrefab;
     private GameObject HealthBar;
     private BarAndNumber HPBarScript;
+
+    [Header("SFX")]
+    public string gainHealthSFX;
+    public string takeDamageSFX;
 
     void OnAwake()
     {
@@ -62,6 +67,7 @@ public class PlayerHealth : MonoBehaviour
             if      (tag == "SmallHealth")  playerCurrentHealth += 5;
             else if (tag == "MediumHealth") playerCurrentHealth += 10;
             else if (tag == "LargeHealth")  playerCurrentHealth += 25;
+            FMODUnity.RuntimeManager.PlayOneShot(gainHealthSFX);
             if (canHealVFX) StartCoroutine(HealVFXTimer());
         }
         playerCurrentHealth = Mathf.Clamp(playerCurrentHealth, 0, 100);
@@ -79,6 +85,7 @@ public class PlayerHealth : MonoBehaviour
             if (playerCurrentHealth <= 0) playerCurrentHealth = 0;
             if (hasIFrames) StartCoroutine(IFrames());
             HPBarScript.SetSliderAndNumber(playerCurrentHealth);
+            FMODUnity.RuntimeManager.PlayOneShot(takeDamageSFX);
         }
     }
 

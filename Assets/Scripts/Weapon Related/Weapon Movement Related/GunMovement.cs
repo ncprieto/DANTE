@@ -13,7 +13,8 @@ public class GunMovement : MonoBehaviour
     public float refundForKill;
 
     [Header("SFX Keys")]
-    public string sfxKey;
+    public string SFXKey;
+    public string startSFXKey;
     public string offCDSFXKey;
 
     [Header("UI Elements")]
@@ -34,6 +35,7 @@ public class GunMovement : MonoBehaviour
 
     // Sound Related
     protected FMOD.Studio.EventInstance sfxEvent;
+    protected FMOD.Studio.EventInstance startSFXEvent;
     protected FMOD.Studio.EventInstance offCDSFXEvent;
     protected BGMController bgmController;
 
@@ -65,13 +67,14 @@ public class GunMovement : MonoBehaviour
         rb       = player.GetComponent<Rigidbody>();
         movement = player.GetComponent<Movement>();
         gunAttributes = ga;                                                     // weapon related
-        fovVFX        = player.GetComponent<FOVVFX>();                               // fov
+        fovVFX        = player.GetComponent<FOVVFX>();                          // fov
         abilityState  = ABILITY.OFFCOOLDOWN;                                    // ability stuff
         abilityKey    = (KeyCode)PlayerPrefs.GetInt("Weapon Ability", 304);     // get ability key from player prefs
-        sfxEvent      = RuntimeManager.CreateInstance(sfxKey);                       // sfx and bgm stuff
+        sfxEvent      = RuntimeManager.CreateInstance(SFXKey);                  // sfx and bgm stuff
+        startSFXEvent = RuntimeManager.CreateInstance(startSFXKey);
         offCDSFXEvent = RuntimeManager.CreateInstance(offCDSFXKey);
         bgmController = soundSystem.GetComponent<BGMController>();
-        UICanvas      = Canvas;                                                      // UI related
+        UICanvas      = Canvas;                                                 // UI related
         SetUpUI();
     }
 

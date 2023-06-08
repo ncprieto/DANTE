@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<objects serializationModel="Studio.02.02.00">
+	<object class="EffectPreset" id="{652bca3d-db83-4442-84ab-bf76df926cb2}">
+		<property name="name">
+			<value>Multiband EQ</value>
+		</property>
+		<relationship name="folder">
+			<destination>{f724bd76-c3dc-469e-8684-5a8eeab20e5e}</destination>
+		</relationship>
+		<relationship name="effect">
+			<destination>{1b444dc1-67b9-4672-9975-f4585bfc3873}</destination>
+		</relationship>
+	</object>
+	<object class="MultibandEqEffect" id="{1b444dc1-67b9-4672-9975-f4585bfc3873}">
+		<property name="filterTypeA">
+			<value>9</value>
+		</property>
+	</object>
+</objects>

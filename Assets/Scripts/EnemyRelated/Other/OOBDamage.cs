@@ -54,9 +54,9 @@ public class OOBDamage : MonoBehaviour
         if (col.gameObject.tag == "Player"  && !inTrigger)
         {
             inTrigger = true;
-            sfxEvent.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
-            bgmController.SetVolumeTo(1f);
             bgmController.LerpBGMPitch(1f, 0.1f, 0.1f);                           // change bgm pitch
+            bgmController.SetVolumeTo(1f);
+            sfxEvent.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
         }
     }
 
@@ -65,9 +65,9 @@ public class OOBDamage : MonoBehaviour
         if (col.gameObject.tag == "Player" && inTrigger)
         {
             inTrigger = false;
-            sfxEvent.start();
-            bgmController.SetVolumeTo(0.2f);
             bgmController.LerpBGMPitch(0.1f, 1f, 0.1f);                           // change bgm pitch
+            bgmController.SetVolumeTo(0.5f);
+            sfxEvent.start();
         }
     }
 }

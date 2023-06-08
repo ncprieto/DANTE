@@ -177,6 +177,7 @@ public class RevolverMovement : GunMovement
     private void DoStartSFX()
     {
         sfxEvent.start();                                                     // play SFX
+        startSFXEvent.start();
         bgmController.LerpBGMPitch(0.1f, 1f, 0.1f);                           // change bgm pitch
         gunAttributes.gunShotSFXEvent.setPitch(slowScale);                    // change gun shot sfx
         offCDSFXEvent.setPitch(0.1f);                                         // change offcooldown sfx pitch
@@ -185,6 +186,7 @@ public class RevolverMovement : GunMovement
     private void DoEndSFX()
     {
         sfxEvent.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);                    // stop sfx
+        startSFXEvent.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
         bgmController.LerpBGMPitch(1f, 0.1f, 0.1f);                           // change bgm pitch
         gunAttributes.gunShotSFXEvent.setPitch(1f);                           // change gun shot sfx pitch
         offCDSFXEvent.setPitch(1f);                                           // change offcooldown sfx pitch

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<objects serializationModel="Studio.02.02.00">
+	<object class="AudioFile" id="{0e2d66da-ff7b-4e37-a30a-4daca2fc27a2}">
+		<property name="assetPath">
+			<value>healthpickup1.wav</value>
+		</property>
+		<property name="frequencyInKHz">
+			<value>44.0999985</value>
+		</property>
+		<property name="channelCount">
+			<value>1</value>
+		</property>
+		<property name="length">
+			<value>1.7418367346938775</value>
+		</property>
+		<relationship name="masterAssetFolder">
+			<destination>{21bbf59d-9958-44f0-a490-3762f6ca4e7a}</destination>
+		</relationship>
+	</object>
+</objects>

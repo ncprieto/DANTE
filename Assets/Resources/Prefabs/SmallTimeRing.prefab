@@ -7021,6 +7021,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   timeRingTimeAdded: 5
   waypointSystemIndex: 1
+  collectSFX: '{bb0d6e97-4de2-45ed-9fe7-39380c2c9558}'
   source: {fileID: 11400000, guid: 6805342b03703774bbe56a3c072d7088, type: 2}
 --- !u!1 &7266365202753246636
 GameObject:

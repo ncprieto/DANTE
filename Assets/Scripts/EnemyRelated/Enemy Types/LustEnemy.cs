@@ -33,10 +33,12 @@ public class LustEnemy : Enemy
     private float stalkRandTime;
     private float stalkRotTimer;
     private bool enterScatterState;
+    private float timeTilSFX;
 
     protected override void Start()
     {
         base.Start();
+        timeTilSFX = Random.Range(2f, 10f);
         origAccel = nmAgent.acceleration;
         patrolPointSet = false;
         stalkRotation = 0f;
@@ -145,6 +147,7 @@ public class LustEnemy : Enemy
         anims.speed = 2f;
         nmAgent.speed = chaseSpeed;
         nmAgent.SetDestination(player.transform.position);
+        PlayRoarSFX();
     }
 
     void HitPlayerState()
@@ -194,6 +197,22 @@ public class LustEnemy : Enemy
             patrolPointSet = false;
         }
 
+    }
+
+    bool waitingForSFX;
+    void PlayRoarSFX()
+    {
+        if(waitingForSFX) return;
+        StartCoroutine(WaitForThenPlaySFX());
+    }
+
+    IEnumerator WaitForThenPlaySFX()
+    {
+        waitingForSFX = true;
+        yield return new WaitForSeconds(timeTilSFX);
+        mainSFXEvent.Play();
+        timeTilSFX = Random.Range(2f, 10f);
+        waitingForSFX = false;
     }
 
     IEnumerator ScatterStateTimer()

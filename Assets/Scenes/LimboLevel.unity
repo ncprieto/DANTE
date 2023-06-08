@@ -1835,6 +1835,7 @@ MonoBehaviour:
   nextSegment: {fileID: 608734451}
   limboHandler: {fileID: 1552083247}
   limboOverlays: {fileID: 1217905667}
+  teleportSFX: '{bd8c12df-595b-470a-87eb-91d2438d3236}'
 --- !u!135 &63332312
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -2246,7 +2247,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh70050
+  m_Name: pb_Mesh729150
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -2773,6 +2774,7 @@ MonoBehaviour:
   nextSegment: {fileID: 1201613179}
   limboHandler: {fileID: 1552083247}
   limboOverlays: {fileID: 1217905667}
+  teleportSFX: '{bd8c12df-595b-470a-87eb-91d2438d3236}'
 --- !u!135 &107371360
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -6479,6 +6481,7 @@ MonoBehaviour:
   nextSegment: {fileID: 778717383}
   limboHandler: {fileID: 1552083247}
   limboOverlays: {fileID: 1217905667}
+  teleportSFX: '{bd8c12df-595b-470a-87eb-91d2438d3236}'
 --- !u!135 &291961467
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -13443,7 +13446,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh28098
+  m_Name: pb_Mesh727982
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -15654,7 +15657,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh85498
+  m_Name: pb_Mesh728370
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -16735,6 +16738,7 @@ MonoBehaviour:
   limboOverlays: {fileID: 1217905667}
   limboHandler: {fileID: 1552083247}
   isObj5: 0
+  respawnSFX: '{f27c4c64-8695-4221-9f2a-1342a4373d99}'
 --- !u!114 &501133955
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -17737,7 +17741,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh29118
+  m_Name: pb_Mesh729106
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -18730,7 +18734,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh85220
+  m_Name: pb_Mesh728118
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -24375,6 +24379,7 @@ MonoBehaviour:
   nextSegment: {fileID: 572830039}
   limboHandler: {fileID: 1552083247}
   limboOverlays: {fileID: 1217905667}
+  teleportSFX: '{bd8c12df-595b-470a-87eb-91d2438d3236}'
 --- !u!135 &715745046
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -25626,7 +25631,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh29002
+  m_Name: pb_Mesh728986
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -25865,7 +25870,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh70536
+  m_Name: pb_Mesh729650
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -26629,6 +26634,7 @@ MonoBehaviour:
   limboOverlays: {fileID: 1217905667}
   limboHandler: {fileID: 1552083247}
   isObj5: 0
+  respawnSFX: '{f27c4c64-8695-4221-9f2a-1342a4373d99}'
 --- !u!114 &829957522
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -27534,7 +27540,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh70354
+  m_Name: pb_Mesh729454
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -28626,6 +28632,7 @@ MonoBehaviour:
   limboOverlays: {fileID: 1217905667}
   limboHandler: {fileID: 1552083247}
   isObj5: 0
+  respawnSFX: '{f27c4c64-8695-4221-9f2a-1342a4373d99}'
 --- !u!114 &878693459
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -29063,7 +29070,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh68600
+  m_Name: pb_Mesh727692
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -29227,7 +29234,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh28630
+  m_Name: pb_Mesh728588
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -29960,7 +29967,7 @@ MonoBehaviour:
     type: 3}
   AddTimerPrefab: {fileID: 7556429183614412271, guid: 083b2cf0a2c298e40acf3e0f02397efb,
     type: 3}
-  sfxKey: event:/TimeLow
+  sfxKey: '{be72364e-542f-4d1f-b7f4-a85eb2b0a7a8}'
   Sources:
   - {fileID: 11400000, guid: 6805342b03703774bbe56a3c072d7088, type: 2}
 --- !u!114 &924419575
@@ -30474,6 +30481,8 @@ MonoBehaviour:
   UICanvas: {fileID: 924419567}
   HealthBarPrefab: {fileID: 3815038689838577901, guid: 4dea4407fa70bfb48bae5fddeb7aafb0,
     type: 3}
+  gainHealthSFX: '{be5c3208-76c9-4623-a4b8-40aaa9362251}'
+  takeDamageSFX: '{f27c4c64-8695-4221-9f2a-1342a4373d99}'
 --- !u!120 &939103760
 LineRenderer:
   m_ObjectHideFlags: 0
@@ -30639,8 +30648,11 @@ MonoBehaviour:
     type: 3}
   bHopPrefab: {fileID: 6806908220467286919, guid: 9bb46d5ffff51864eb281fc27981e65b,
     type: 3}
-  jumpSFXPath: event:/Jump
-  bHopSFXPath: event:/BHopChain
+  jumpSFXPath: '{227c5537-6b5b-410d-859b-900317193a8b}'
+  bHopSFXPath: '{fcb70f17-320e-4b86-9a8d-e9bb541459a3}'
+  landSFXPath: '{4bc99950-9ade-4067-9aec-c5ffa47fa5f9}'
+  grappleHitSFXPath: '{4aef2b7e-7837-46ba-8c9d-0140205edbff}'
+  grappleActiveSFXPath: '{8f0b4bc0-8e5a-4050-a367-df0811baad65}'
 --- !u!136 &939103762
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -30697,7 +30709,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh86170
+  m_Name: pb_Mesh729020
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -31999,7 +32011,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh69504
+  m_Name: pb_Mesh728604
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -33517,7 +33529,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh28980
+  m_Name: pb_Mesh728966
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -37002,7 +37014,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh85996
+  m_Name: pb_Mesh728840
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -38939,6 +38951,7 @@ MonoBehaviour:
   nextSegment: {fileID: 266583252}
   limboHandler: {fileID: 1552083247}
   limboOverlays: {fileID: 1217905667}
+  teleportSFX: '{bd8c12df-595b-470a-87eb-91d2438d3236}'
 --- !u!135 &1216278597
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -39983,6 +39996,7 @@ MonoBehaviour:
   limboOverlays: {fileID: 1217905667}
   limboHandler: {fileID: 1552083247}
   isObj5: 1
+  respawnSFX: '{f27c4c64-8695-4221-9f2a-1342a4373d99}'
 --- !u!114 &1265362002
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -42175,6 +42189,7 @@ MonoBehaviour:
   nextSegment: {fileID: 71184898}
   limboHandler: {fileID: 1552083247}
   limboOverlays: {fileID: 1217905667}
+  teleportSFX: '{bd8c12df-595b-470a-87eb-91d2438d3236}'
 --- !u!135 &1371321603
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -42291,6 +42306,7 @@ MonoBehaviour:
   nextSegment: {fileID: 805223453}
   limboHandler: {fileID: 1552083247}
   limboOverlays: {fileID: 1217905667}
+  teleportSFX: '{bd8c12df-595b-470a-87eb-91d2438d3236}'
 --- !u!135 &1375012400
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -43985,7 +44001,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh86604
+  m_Name: pb_Mesh729430
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -44852,6 +44868,7 @@ MonoBehaviour:
   limboOverlays: {fileID: 1217905667}
   limboHandler: {fileID: 1552083247}
   isObj5: 0
+  respawnSFX: '{f27c4c64-8695-4221-9f2a-1342a4373d99}'
 --- !u!114 &1476472726
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -55301,7 +55318,7 @@ MonoBehaviour:
   playerHP: {fileID: 939103759}
   isLimbo: 1
   bgmController: {fileID: 1758998908}
-  sfxKey: event:/OOBWhispering
+  sfxKey: '{28d9cf91-67ae-4d42-8b79-7f8976636b65}'
 --- !u!64 &1546240819
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -56329,7 +56346,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh85552
+  m_Name: pb_Mesh728430
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -56937,6 +56954,7 @@ MonoBehaviour:
   nextSegment: {fileID: 1260124341}
   limboHandler: {fileID: 1552083247}
   limboOverlays: {fileID: 1217905667}
+  teleportSFX: '{bd8c12df-595b-470a-87eb-91d2438d3236}'
 --- !u!135 &1595492770
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -60032,7 +60050,7 @@ MonoBehaviour:
       Data2: 1321235375
       Data3: 1626375094
       Data4: -1321971032
-    Path: event:/LimboBackgroundMusic
+    Path: event:/Background Music/LimboBackgroundMusic
   Event: 
   PlayEvent: 1
   StopEvent: 2
@@ -63908,6 +63926,7 @@ MonoBehaviour:
   limboOverlays: {fileID: 1217905667}
   limboHandler: {fileID: 1552083247}
   isObj5: 0
+  respawnSFX: '{f27c4c64-8695-4221-9f2a-1342a4373d99}'
 --- !u!114 &1920476604
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -66305,7 +66324,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh69660
+  m_Name: pb_Mesh728760
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -68329,7 +68348,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh69470
+  m_Name: pb_Mesh728570
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2

@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using FMODUnity;
 
 public class Movement : MonoBehaviour
 {
@@ -83,7 +84,11 @@ public class Movement : MonoBehaviour
     [Header("SFX Keys")]
     public string jumpSFXPath;
     public string bHopSFXPath;
+    public string landSFXPath;
+    public string grappleHitSFXPath;
+    public string grappleActiveSFXPath;
     private string currentJumpSFX;
+    private FMOD.Studio.EventInstance grappleActiveSFXEvent;
 
     void Start()
     {
@@ -92,16 +97,16 @@ public class Movement : MonoBehaviour
         SetUpControls();
         SetUpUI();
         currentJumpSFX = jumpSFXPath;
-        
+        grappleActiveSFXEvent = RuntimeManager.CreateInstance(grappleActiveSFXPath);
     }
 
     void Update()
     {
         GetInputs();
         isGrounded = Physics.Raycast(orientation.position, -orientation.up, 1.0001f, ground);                 // check if player is on the ground
-        if(isGrounded  && wasInAir) StartBHopCoroutine();
+        if(isGrounded && wasInAir) StartBHopCoroutine();
         if(!isGrounded && wasInAir && !justJumped && !justGrappled && canCoyote) StartCoyoteTime();
-        wasInAir = rb.velocity.y < 0;
+        wasInAir = rb.velocity.y < -0.00001f;
         CapSpeed();
         if(Input.GetKeyDown(jump))    OnJumpPressed();
         if(Input.GetKeyDown(grapple)) OnGrapplePressed();
@@ -227,6 +232,8 @@ public class Movement : MonoBehaviour
                 }
                 grapplePoint = hit.point;
                 ToggleGrapple();
+                FMODUnity.RuntimeManager.PlayOneShot(grappleHitSFXPath);
+                grappleActiveSFXEvent.start();
             }
         }
         else if(grappling && toggleControl) DoGrappleDismount();
@@ -314,7 +321,11 @@ public class Movement : MonoBehaviour
      */
     public void StopGrapple()
     {
-        if(grappling) ToggleGrapple();
+        if(grappling)
+        {
+            ToggleGrapple();
+            grappleActiveSFXEvent.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
+        }
     }
 
     bool grappleJustEnded;
@@ -406,9 +417,11 @@ public class Movement : MonoBehaviour
      * and start if it isn't.
      */
     IEnumerator bHopCoroutine;
+    bool bHopRunning;
     private void StartBHopCoroutine()
     {
-        if(bHopCoroutine != null) StopCoroutine(bHopCoroutine);
+        if(bHopRunning) return;
+        FMODUnity.RuntimeManager.PlayOneShot(landSFXPath);
         bHopCoroutine = CheckBHopWindow();
         StartCoroutine(bHopCoroutine);
     }
@@ -422,6 +435,7 @@ public class Movement : MonoBehaviour
     private bool bHopOverride;
     private IEnumerator CheckBHopWindow()
     {
+        bHopRunning = true;
         justJumped = false;
         canCoyote = true;
         float timer = bHopWindow;
@@ -430,6 +444,7 @@ public class Movement : MonoBehaviour
             if(Input.GetKeyUp(jump)){
                 bHopCount += bHopCount < bHopMax ? 1 : 0;
                 currentJumpSFX = bHopSFXPath;
+                bHopRunning = false;
                 yield break;
             };
             timer -= Time.deltaTime;
@@ -437,6 +452,7 @@ public class Movement : MonoBehaviour
         }
         if(!bHopOverride) bHopCount = 0;
         currentJumpSFX = jumpSFXPath;
+        bHopRunning = false;
     }
 
     private void SetUpUI()

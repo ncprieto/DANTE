@@ -5119,7 +5119,8 @@ MonoBehaviour:
   actualAbilityCooldown: 0
   IsToggleable: 1
   refundForKill: 0.5
-  sfxKey: '{2d0d076a-8c96-434b-aa57-89f941815cc4}'
+  SFXKey: '{2d0d076a-8c96-434b-aa57-89f941815cc4}'
+  startSFXKey: '{8936e0d6-93c6-48d6-9a01-e736fef6644f}'
   offCDSFXKey: '{60830888-ebeb-4547-a716-dfade380f492}'
   CooldownPrefab: {fileID: 2745045284921296317, guid: d7119b8848d870e488e9e99cd1a712b9,
     type: 3}

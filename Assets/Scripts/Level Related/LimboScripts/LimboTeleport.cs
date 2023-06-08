@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using FMODUnity;
 
 public class LimboTeleport : MonoBehaviour
 {
@@ -10,6 +11,8 @@ public class LimboTeleport : MonoBehaviour
 
     public LimboHandler limboHandler;
     public LimboOverlays limboOverlays;
+
+    public string teleportSFX;
 
     private UnityEngine.Object tpParticles;
 
@@ -28,6 +31,7 @@ public class LimboTeleport : MonoBehaviour
             limboOverlays.runCompleteMat = true;
             nextSegment.SetActive(true);
             prevSegment.SetActive(false);
+            FMODUnity.RuntimeManager.PlayOneShot(teleportSFX);
         }
     }
 }

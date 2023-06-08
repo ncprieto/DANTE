@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using FMODUnity;
 
 public class Enemy : MonoBehaviour
 {
@@ -10,6 +11,10 @@ public class Enemy : MonoBehaviour
     public LayerMask playerLayer;
     public TimeValues timeValues;
     public bool isTarget;
+
+    [Header ("SFX Events")]
+    public FMODUnity.StudioEventEmitter mainSFXEvent;
+    public FMODUnity.StudioEventEmitter deathSFXEvent;
 
     protected GameObject player;
     protected PlayerHealth playerHP;
@@ -83,6 +88,7 @@ public class Enemy : MonoBehaviour
                 Instantiate(deathParticles, new Vector3(this.gameObject.transform.position.x, this.gameObject.transform.position.y + 3, this.gameObject.transform.position.z), Quaternion.identity);
                 enemyHasDied = true;
                 lvlHandler.enemiesKilled++;
+                deathSFXEvent.Play();
             }
             else{
                 Instantiate(deathParticles, new Vector3(this.gameObject.transform.position.x, this.gameObject.transform.position.y, this.gameObject.transform.position.z), Quaternion.identity);
