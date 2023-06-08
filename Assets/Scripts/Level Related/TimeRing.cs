@@ -10,6 +10,8 @@ public class TimeRing : MonoBehaviour
     public string collectSFX;
     public TimeSource source;
     private WaypointSystem ringWaypoint;
+    private float sfxVolume;
+    private FMOD.Studio.EventInstance collectSFXEvent;
     
     // Start is called before the first frame update
     void Start()
@@ -17,15 +19,24 @@ public class TimeRing : MonoBehaviour
         ringWaypoint = Camera.main.GetComponents<WaypointSystem>()[waypointSystemIndex];
         ringWaypoint.target = this.transform;
         SetUpModifiers();
+        SetUpAudio();
     }
 
     void OnTriggerEnter(Collider col){
         if (col.gameObject.tag == "Player"){
             source.ReceiveTimeFromSource(timeRingTimeAdded);
             ringWaypoint.target = null;
-            FMODUnity.RuntimeManager.PlayOneShot(collectSFX);
+            collectSFXEvent.start();
+            collectSFXEvent.release();
             Destroy(this.gameObject.transform.parent.gameObject);
         }
+    }
+
+    private void SetUpAudio()
+    {
+        sfxVolume = PlayerPrefs.GetFloat("Master", 0.75f) * PlayerPrefs.GetFloat("SFX", 1f);
+        collectSFXEvent = RuntimeManager.CreateInstance(collectSFX);
+        collectSFXEvent.setVolume(sfxVolume);
     }
 
     private void SetUpModifiers()

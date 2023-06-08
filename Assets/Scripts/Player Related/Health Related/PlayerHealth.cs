@@ -26,6 +26,10 @@ public class PlayerHealth : MonoBehaviour
     [Header("SFX")]
     public string gainHealthSFX;
     public string takeDamageSFX;
+    
+    private float sfxVolume;
+    private FMOD.Studio.EventInstance gainHealthSFXEvent;
+    private FMOD.Studio.EventInstance takeDamageSFXEvent;
 
     void OnAwake()
     {
@@ -39,6 +43,7 @@ public class PlayerHealth : MonoBehaviour
         HPBarScript = HealthBar.GetComponent<BarAndNumber>();
         HPBarScript.SetSliderAndNumber(playerCurrentHealth);
         if (isTutorial) StartCoroutine(WaitForVignette());
+        SetUpAudio();
     }
 
     void Update()
@@ -67,7 +72,7 @@ public class PlayerHealth : MonoBehaviour
             if      (tag == "SmallHealth")  playerCurrentHealth += 5;
             else if (tag == "MediumHealth") playerCurrentHealth += 10;
             else if (tag == "LargeHealth")  playerCurrentHealth += 25;
-            FMODUnity.RuntimeManager.PlayOneShot(gainHealthSFX);
+            gainHealthSFXEvent.start();
             if (canHealVFX) StartCoroutine(HealVFXTimer());
         }
         playerCurrentHealth = Mathf.Clamp(playerCurrentHealth, 0, 100);
@@ -85,7 +90,7 @@ public class PlayerHealth : MonoBehaviour
             if (playerCurrentHealth <= 0) playerCurrentHealth = 0;
             if (hasIFrames) StartCoroutine(IFrames());
             HPBarScript.SetSliderAndNumber(playerCurrentHealth);
-            FMODUnity.RuntimeManager.PlayOneShot(takeDamageSFX);
+            takeDamageSFXEvent.start();
         }
     }
 
@@ -108,6 +113,15 @@ public class PlayerHealth : MonoBehaviour
         StartCoroutine(dmgVFX.HealVFX());
         yield return new WaitForSeconds(.25f);
         canHealVFX = true;
+    }
+
+    private void SetUpAudio()
+    {
+        sfxVolume = PlayerPrefs.GetFloat("Master", 0.75f) * PlayerPrefs.GetFloat("SFX", 1f);
+        gainHealthSFXEvent = RuntimeManager.CreateInstance(gainHealthSFX);
+        takeDamageSFXEvent = RuntimeManager.CreateInstance(takeDamageSFX);
+        gainHealthSFXEvent.setVolume(sfxVolume);
+        takeDamageSFXEvent.setVolume(sfxVolume);
     }
 
     public void EnableUI()

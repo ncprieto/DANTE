@@ -6,17 +6,29 @@ public class BGMController : MonoBehaviour
 {
     public  FMODUnity.StudioEventEmitter BGM;
     private FMOD.Studio.EventInstance    BGMEvent;
-    // Start is called before the first frame update
+    private float originalVolume;
+    
     void Start()
     {
-        // get volume from player prefs
+        UpdateOriginalVolume();
         BGMEvent = BGM.EventInstance;
-        BGMEvent.setVolume(1f);
+        BGMEvent.setVolume(originalVolume);
     }
 
     public void SetVolumeTo(float level)
     {
-        BGMEvent.setVolume(level);
+        BGMEvent.setVolume(level * originalVolume);
+    }
+
+    public void SetVolumeToOriginal()
+    {
+        BGMEvent.setVolume(originalVolume);
+    }
+
+    public void UpdateOriginalVolume()
+    {
+        originalVolume = PlayerPrefs.GetFloat("Master", 0.75f) * PlayerPrefs.GetFloat("Music", 1f);
+        SetVolumeToOriginal();
     }
 
     public void LerpBGMPitch(float start, float end, float timeFrame)

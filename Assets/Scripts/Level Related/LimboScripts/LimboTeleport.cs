@@ -13,6 +13,8 @@ public class LimboTeleport : MonoBehaviour
     public LimboOverlays limboOverlays;
 
     public string teleportSFX;
+    private float sfxVolume;
+    private FMOD.Studio.EventInstance teleportSFXEvent;
 
     private UnityEngine.Object tpParticles;
 
@@ -20,6 +22,7 @@ public class LimboTeleport : MonoBehaviour
     void Start()
     {
         tpParticles = Resources.Load("Prefabs/TeleportSmokeParticles");
+        SetUpAudio();
     }
 
     void OnCollisionEnter(Collision col){
@@ -31,7 +34,16 @@ public class LimboTeleport : MonoBehaviour
             limboOverlays.runCompleteMat = true;
             nextSegment.SetActive(true);
             prevSegment.SetActive(false);
-            FMODUnity.RuntimeManager.PlayOneShot(teleportSFX);
+            teleportSFXEvent.start();
+            teleportSFXEvent.release();
         }
+    }
+
+    private void SetUpAudio()
+    {
+        sfxVolume = PlayerPrefs.GetFloat("Master", 0.75f) * PlayerPrefs.GetFloat("SFX", 1f);
+        teleportSFXEvent = RuntimeManager.CreateInstance(teleportSFX);
+        teleportSFXEvent.setVolume(sfxVolume);
+        
     }
 }

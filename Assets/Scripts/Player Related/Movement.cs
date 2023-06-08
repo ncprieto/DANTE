@@ -87,7 +87,12 @@ public class Movement : MonoBehaviour
     public string landSFXPath;
     public string grappleHitSFXPath;
     public string grappleActiveSFXPath;
+
+    private float sfxVolume;
     private string currentJumpSFX;
+    private FMOD.Studio.EventInstance jumpSFXEvent;
+    private FMOD.Studio.EventInstance landSFXEvent;
+    private FMOD.Studio.EventInstance grappleHitSFXEvent;
     private FMOD.Studio.EventInstance grappleActiveSFXEvent;
 
     void Start()
@@ -96,8 +101,7 @@ public class Movement : MonoBehaviour
         baseMoveSpeed = moveSpeed;
         SetUpControls();
         SetUpUI();
-        currentJumpSFX = jumpSFXPath;
-        grappleActiveSFXEvent = RuntimeManager.CreateInstance(grappleActiveSFXPath);
+        SetUpAudio();
     }
 
     void Update()
@@ -195,7 +199,10 @@ public class Movement : MonoBehaviour
         {
             rb.AddForce(transform.up * jumpHeight, ForceMode.Impulse);
             justJumped = true;
-            FMODUnity.RuntimeManager.PlayOneShot(currentJumpSFX);
+            jumpSFXEvent = RuntimeManager.CreateInstance(currentJumpSFX);
+            jumpSFXEvent.setVolume(sfxVolume);
+            jumpSFXEvent.start();
+            jumpSFXEvent.release();
         }
     }
 
@@ -232,7 +239,7 @@ public class Movement : MonoBehaviour
                 }
                 grapplePoint = hit.point;
                 ToggleGrapple();
-                FMODUnity.RuntimeManager.PlayOneShot(grappleHitSFXPath);
+                grappleHitSFXEvent.start();
                 grappleActiveSFXEvent.start();
             }
         }
@@ -403,7 +410,10 @@ public class Movement : MonoBehaviour
             {
                 rb.AddForce(transform.up * jumpHeight * coyoteJumpBoost, ForceMode.Impulse);
                 coyoteTimeRunning = false;
-                FMODUnity.RuntimeManager.PlayOneShot(bHopSFXPath);                             // play sfx
+                jumpSFXEvent = RuntimeManager.CreateInstance(bHopSFXPath);
+                jumpSFXEvent.setVolume(sfxVolume);
+                jumpSFXEvent.start();
+                jumpSFXEvent.release();
                 bHopCount += bHopCount < bHopMax ? 1 : 0;
                 yield break;
             }
@@ -421,7 +431,7 @@ public class Movement : MonoBehaviour
     private void StartBHopCoroutine()
     {
         if(bHopRunning) return;
-        FMODUnity.RuntimeManager.PlayOneShot(landSFXPath);
+        landSFXEvent.start();
         bHopCoroutine = CheckBHopWindow();
         StartCoroutine(bHopCoroutine);
     }
@@ -464,6 +474,20 @@ public class Movement : MonoBehaviour
         CooldownUpdater.SetSliderAndNumber(grappleCooldown);
         CooldownUpdater.SetCooldownToReady();
         bHopChainText = bHopUI.GetComponent<TextMeshProUGUI>();
+    }
+
+    private void SetUpAudio()
+    {
+        sfxVolume = PlayerPrefs.GetFloat("Master", 0.75f) * PlayerPrefs.GetFloat("SFX", 1f);
+        currentJumpSFX = jumpSFXPath;
+        jumpSFXEvent = RuntimeManager.CreateInstance(currentJumpSFX);
+        landSFXEvent = RuntimeManager.CreateInstance(landSFXPath);
+        grappleHitSFXEvent = RuntimeManager.CreateInstance(grappleHitSFXPath);
+        grappleActiveSFXEvent = RuntimeManager.CreateInstance(grappleActiveSFXPath);
+        jumpSFXEvent.setVolume(sfxVolume);
+        landSFXEvent.setVolume(sfxVolume);
+        grappleHitSFXEvent.setVolume(sfxVolume);
+        grappleActiveSFXEvent.setVolume(sfxVolume);
     }
 
     public void EnableGrappleUI()

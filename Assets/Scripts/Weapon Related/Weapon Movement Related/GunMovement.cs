@@ -34,6 +34,7 @@ public class GunMovement : MonoBehaviour
     protected FOVVFX fovVFX;
 
     // Sound Related
+    protected float sfxVolume;
     protected FMOD.Studio.EventInstance sfxEvent;
     protected FMOD.Studio.EventInstance startSFXEvent;
     protected FMOD.Studio.EventInstance offCDSFXEvent;
@@ -70,12 +71,10 @@ public class GunMovement : MonoBehaviour
         fovVFX        = player.GetComponent<FOVVFX>();                          // fov
         abilityState  = ABILITY.OFFCOOLDOWN;                                    // ability stuff
         abilityKey    = (KeyCode)PlayerPrefs.GetInt("Weapon Ability", 304);     // get ability key from player prefs
-        sfxEvent      = RuntimeManager.CreateInstance(SFXKey);                  // sfx and bgm stuff
-        startSFXEvent = RuntimeManager.CreateInstance(startSFXKey);
-        offCDSFXEvent = RuntimeManager.CreateInstance(offCDSFXKey);
         bgmController = soundSystem.GetComponent<BGMController>();
         UICanvas      = Canvas;                                                 // UI related
         SetUpUI();
+        SetUpAudio();
     }
 
     protected virtual void DoMovementAbility()
@@ -143,6 +142,17 @@ public class GunMovement : MonoBehaviour
         CooldownUpdater = CooldownUI.GetComponent<NewCooldownUpdater>();
         CooldownUpdater.SetSliderAndNumber(abilityCooldown);
         CooldownUpdater.SetCooldownToReady();
+    }
+
+    private void SetUpAudio()
+    {
+        sfxEvent      = RuntimeManager.CreateInstance(SFXKey);                  // sfx and bgm stuff
+        startSFXEvent = RuntimeManager.CreateInstance(startSFXKey);
+        offCDSFXEvent = RuntimeManager.CreateInstance(offCDSFXKey);
+        sfxVolume = PlayerPrefs.GetFloat("Master", 0.75f) * PlayerPrefs.GetFloat("SFX", 1f);
+        sfxEvent.setVolume(sfxVolume);
+        startSFXEvent.setVolume(sfxVolume);
+        offCDSFXEvent.setVolume(sfxVolume);
     }
 
     public virtual void EnableUI()

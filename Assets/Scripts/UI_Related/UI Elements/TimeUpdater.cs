@@ -25,6 +25,7 @@ public class TimeUpdater : MonoBehaviour
     [Header ("SFX Key and Events")]
     public string sfxKey;
     private FMOD.Studio.EventInstance sfxEvent;
+    private float sfxVolume;
 
     [Header ("Sources")]
     public List<TimeSource> Sources;
@@ -36,7 +37,7 @@ public class TimeUpdater : MonoBehaviour
         AddTimer   = Instantiate(AddTimerPrefab, UICanvas.transform, false);
         TimerText  = Timer.GetComponent<TextMeshProUGUI>();
         AddTimerText  = AddTimer.GetComponent<TextMeshProUGUI>();
-        sfxEvent   = RuntimeManager.CreateInstance(sfxKey);
+        SetUpAudio();
         SetUpModifiers();
         InitializeSources();
     }
@@ -96,6 +97,13 @@ public class TimeUpdater : MonoBehaviour
     private void InitializeSources()
     {
         foreach(TimeSource source in Sources) source.Initialize(this);
+    }
+
+    private void SetUpAudio()
+    {
+        sfxVolume = PlayerPrefs.GetFloat("Master", 0.75f) * PlayerPrefs.GetFloat("SFX", 1f);
+        sfxEvent = RuntimeManager.CreateInstance(sfxKey);
+        sfxEvent.setVolume(sfxVolume);
     }
 
     private void SetUpModifiers()

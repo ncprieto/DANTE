@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
+using FMODUnity;
 
 public class LustEnemy : Enemy
 {
@@ -210,7 +211,8 @@ public class LustEnemy : Enemy
     {
         waitingForSFX = true;
         yield return new WaitForSeconds(timeTilSFX);
-        mainSFXEvent.Play();
+        mainSFXEmitter.Play();
+        mainSFXEmitter.EventInstance.setVolume(sfxVolume);
         timeTilSFX = Random.Range(2f, 10f);
         waitingForSFX = false;
     }

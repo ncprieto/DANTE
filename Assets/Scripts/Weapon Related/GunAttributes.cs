@@ -20,6 +20,7 @@ public class GunAttributes : MonoBehaviour
     [Header ("SFX Key and Events")]
     public string gunShotSFXKey;
     public FMOD.Studio.EventInstance gunShotSFXEvent;
+    private float sfxVolume;
 
     [Header ("Bullet Trail/Flash Variables")]
     public Transform trailOrigin;
@@ -51,16 +52,14 @@ public class GunAttributes : MonoBehaviour
     private Movement movement;
     
     void Start(){
-        shotTrail = GetComponent<LineRenderer>();
-        fireAnim  = GetComponent<Animator>();
-        hammerAnim = transform.Find("idlerevolver").GetComponent<Animator>();
+        SetUpVFX();
         GameObject player = GameObject.Find("Player");
         movement = player.GetComponent<Movement>();
         SetUpUI();
         gunMovement.Initialize(player, this, GameObject.Find("SoundSystem"), UICanvas);
         antiStuckScript = GameObject.Find("AntiStuckCheck").GetComponent<AntiStuck>();
         shoot = (KeyCode)PlayerPrefs.GetInt("Shoot", 323);
-        gunShotSFXEvent = RuntimeManager.CreateInstance(gunShotSFXKey);
+        SetUpAudio();
     }
 
     // Update is called once per frame
@@ -146,6 +145,20 @@ public class GunAttributes : MonoBehaviour
     public void DisableUI()
     {
         BHopDamage.SetActive(false);
+    }
+
+    private void SetUpVFX()
+    {
+        shotTrail = GetComponent<LineRenderer>();
+        fireAnim  = GetComponent<Animator>();
+        hammerAnim = transform.Find("idlerevolver").GetComponent<Animator>();
+    }
+
+    private void SetUpAudio()
+    {
+        sfxVolume = PlayerPrefs.GetFloat("Master", 0.75f) * PlayerPrefs.GetFloat("SFX", 1f);
+        gunShotSFXEvent = RuntimeManager.CreateInstance(gunShotSFXKey);
+        gunShotSFXEvent.setVolume(sfxVolume);
     }
 
     private void DisplayHitmarker(string tag)

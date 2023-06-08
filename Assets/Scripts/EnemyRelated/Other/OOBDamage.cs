@@ -13,6 +13,7 @@ public class OOBDamage : MonoBehaviour
 
     [Header ("SFX Key and Event")]
     public string sfxKey;
+    private float sfxVolume;
     private FMOD.Studio.EventInstance sfxEvent;
 
     private float dotTimer;
@@ -21,9 +22,9 @@ public class OOBDamage : MonoBehaviour
 
     void Awake()
     {
-        sfxEvent = RuntimeManager.CreateInstance(sfxKey);
         dotTimer = 0;
         expCount = .01f;
+        SetUpAudio();
     }
 
     void OnDestroy()
@@ -55,7 +56,7 @@ public class OOBDamage : MonoBehaviour
         {
             inTrigger = true;
             bgmController.LerpBGMPitch(1f, 0.1f, 0.1f);                           // change bgm pitch
-            bgmController.SetVolumeTo(1f);
+            bgmController.SetVolumeToOriginal();
             sfxEvent.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
         }
     }
@@ -69,5 +70,12 @@ public class OOBDamage : MonoBehaviour
             bgmController.SetVolumeTo(0.5f);
             sfxEvent.start();
         }
+    }
+
+    private void SetUpAudio()
+    {
+        sfxVolume = PlayerPrefs.GetFloat("Master", 0.75f) * PlayerPrefs.GetFloat("SFX", 1f);
+        sfxEvent = RuntimeManager.CreateInstance(sfxKey);
+        sfxEvent.setVolume(sfxVolume);
     }
 }

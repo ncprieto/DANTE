@@ -13,8 +13,9 @@ public class Enemy : MonoBehaviour
     public bool isTarget;
 
     [Header ("SFX Events")]
-    public FMODUnity.StudioEventEmitter mainSFXEvent;
-    public FMODUnity.StudioEventEmitter deathSFXEvent;
+    public FMODUnity.StudioEventEmitter mainSFXEmitter;
+    public FMODUnity.StudioEventEmitter deathSFXEmitter;
+    protected float sfxVolume;
 
     protected GameObject player;
     protected PlayerHealth playerHP;
@@ -56,6 +57,7 @@ public class Enemy : MonoBehaviour
                 hpDrop = Resources.Load("Prefabs/LargeHealthDrop");
             }
             deathParticles = Resources.Load("Prefabs/NewEnemyDeathParticles");
+            SetUpAudio();
         }
         else{
             deathParticles = Resources.Load("Prefabs/TargetDeathParticles");
@@ -88,7 +90,8 @@ public class Enemy : MonoBehaviour
                 Instantiate(deathParticles, new Vector3(this.gameObject.transform.position.x, this.gameObject.transform.position.y + 3, this.gameObject.transform.position.z), Quaternion.identity);
                 enemyHasDied = true;
                 lvlHandler.enemiesKilled++;
-                deathSFXEvent.Play();
+                deathSFXEmitter.Play();
+                deathSFXEmitter.EventInstance.setVolume(sfxVolume);
             }
             else{
                 Instantiate(deathParticles, new Vector3(this.gameObject.transform.position.x, this.gameObject.transform.position.y, this.gameObject.transform.position.z), Quaternion.identity);
@@ -131,6 +134,11 @@ public class Enemy : MonoBehaviour
         yield return new WaitForSeconds(.75f);
         damageKnockback = false;
         invertVelocity = false;
+    }
+
+    protected virtual void SetUpAudio()
+    {
+        sfxVolume = PlayerPrefs.GetFloat("Master", 0.75f) * PlayerPrefs.GetFloat("SFX", 1f);
     }
 
     protected virtual void SetUpModifiers()

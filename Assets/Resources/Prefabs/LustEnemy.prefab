@@ -29513,8 +29513,10 @@ MonoBehaviour:
     m_Bits: 128
   timeValues: {fileID: 11400000, guid: 11283353a9c15344d8cf43fe5de90466, type: 2}
   isTarget: 0
-  mainSFXEvent: {fileID: 3457222466582248600}
-  deathSFXEvent: {fileID: 5050625674713092726}
+  mainSFXKey: 
+  deathSFXKey: '{d6251eba-713d-4ac6-848b-326eb053b3dd}'
+  mainSFXEmitter: {fileID: 3457222466582248600}
+  deathSFXEmitter: {fileID: 5050625674713092726}
   otherEnemiesInRange: 0
   nmAgent: {fileID: 8435643818165358570}
   anims: {fileID: 4783836808374918033}
