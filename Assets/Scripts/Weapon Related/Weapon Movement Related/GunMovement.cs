@@ -54,6 +54,9 @@ public class GunMovement : MonoBehaviour
     protected virtual void Update()
     {
         if(Input.GetKeyDown(KeyCode.Minus)) abilityCooldown = 0f; // dev tool give no cooldown to weapon ability
+        if (Input.GetKeyDown(abilityKey) && !CanActivateAbility() && !CanDeactivateAbility()){
+            CooldownUpdater.CooldownNotReadyYet();
+        }
     }
     
     public virtual void Initialize(GameObject playerObj, GunAttributes ga, GameObject soundSystem, GameObject Canvas)

@@ -230,6 +230,9 @@ public class Movement : MonoBehaviour
             }
         }
         else if(grappling && toggleControl) DoGrappleDismount();
+        else {
+            CooldownUpdater.CooldownNotReadyYet();
+        }
     }
 
     // OnGrappleReleased() ends the player's grapple if toggleControl is set to false.

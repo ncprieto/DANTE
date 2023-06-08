@@ -6,6 +6,7 @@ using FMODUnity;
 public class OOBDamage : MonoBehaviour
 {
     public PlayerHealth playerHP;
+    public bool isLimbo;
 
     [Header ("BGM")]
     public BGMController bgmController;
@@ -31,7 +32,7 @@ public class OOBDamage : MonoBehaviour
     }
 
     void Update(){
-        if (!inTrigger){
+        if (!inTrigger && !isLimbo){
             dotTimer += Time.deltaTime;
             if (dotTimer > (.25f - expCount)){
                 playerHP.ReceiveDamage(2, false);

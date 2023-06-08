@@ -112,7 +112,7 @@ public class LimboHandler : MonoBehaviour
                     Instantiate(largeTimeRing, largeRingAnchor.position, Quaternion.identity, largeRingAnchor);
                     timeUpdaterScript.enabled = true;
                     objSetter.SetObjective("RACE TO THE EXIT", this);
-                    virgilSetter.SetObjective("<b><i>Virgil</i></b><br>You're closer to the second ring of Hell then ever before.<br>The infernal magicks have made your time alive limited— make haste!<br><br><b>Collect Time-Rings and kill demons to extend your time alive.<br>Green rings give large amounts of time, blue rings give small.</b>", this);
+                    virgilSetter.SetObjective("<b><i>Virgil</i></b><br>You're closer to the second ring of Hell then ever before.<br>The infernal magicks have made your time alive limited— make haste!<br><br><b>Collect Time-Rings and kill demons to extend your time alive.<br>Green rings give large amounts, blue rings give small.</b>", this);
                     bgLoaderScript.SetBackgroundByNameTo("LimboTopCenter", true);
                     break;
                 case 9:
