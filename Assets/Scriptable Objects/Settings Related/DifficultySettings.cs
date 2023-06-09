@@ -36,10 +36,12 @@ public class DifficultySettings : ScriptableObject
     {
         "Time Per Ring",
         "Starting Time",
-        "Enemies To Kill"
+        "Enemies To Kill",
+        "Par Time"
     };
     public List<float>  generalValues = new List<float>()
     {
+        1f,
         1f,
         1f,
         1f

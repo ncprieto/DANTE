@@ -29,7 +29,9 @@ MonoBehaviour:
   - Time Per Ring
   - Starting Time
   - Enemies To Kill
+  - Par Time
   generalValues:
   - 1.5
   - 1.5
   - 0.6
+  - 60

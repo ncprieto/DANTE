@@ -64,7 +64,8 @@ public class SceneTransitionHandler : MonoBehaviour
             Time.timeScale = 0;
             statsOverlay.transform.Find("WinText").gameObject.SetActive(true);
             statsOverlay.transform.Find("NumKills").gameObject.GetComponent<TextMeshProUGUI>().text = levelHandler.enemiesKilled.ToString();
-            statsOverlay.transform.Find("CurrTime").gameObject.GetComponent<TextMeshProUGUI>().text = currTime.ToString();
+            statsOverlay.transform.Find("CurrTime").gameObject.GetComponent<TextMeshProUGUI>().text = Mathf.FloorToInt(currTime / 60).ToString() + ":" + Mathf.FloorToInt(currTime % 60).ToString();
+            statsOverlay.transform.Find("Grade").gameObject.GetComponent<TextMeshProUGUI>().text = CalculateGrade((float)lvlHandler.enemiesKilled / (float)lvlHandler.enemiesToKill, currTime);
             statsOverlay.SetActive(true);
         }
         if ((playerHealth.playerCurrentHealth <= 0 || timeUI.timeLeft == -1) && currTime == 0f)
@@ -103,7 +104,8 @@ public class SceneTransitionHandler : MonoBehaviour
         UnlockCursor();
         statsOverlay.transform.Find("LoseText").gameObject.SetActive(true);
         statsOverlay.transform.Find("NumKills").gameObject.GetComponent<TextMeshProUGUI>().text = levelHandler.enemiesKilled.ToString();
-        statsOverlay.transform.Find("CurrTime").gameObject.GetComponent<TextMeshProUGUI>().text = currTime.ToString();
+        statsOverlay.transform.Find("CurrTime").gameObject.GetComponent<TextMeshProUGUI>().text = Mathf.FloorToInt(currTime / 60).ToString() + ":" + Mathf.FloorToInt(currTime % 60).ToString();
+        statsOverlay.transform.Find("Grade").gameObject.GetComponent<TextMeshProUGUI>().text = CalculateGrade((float)lvlHandler.enemiesKilled / (float)lvlHandler.enemiesToKill, currTime);
         statsOverlay.SetActive(true);
     }
 
@@ -121,5 +123,69 @@ public class SceneTransitionHandler : MonoBehaviour
     public void SendToMainMenu()
     {
         SceneManager.LoadScene("MainMenu");
+    }
+
+    public string CalculateGrade(float killsPercent, float time){
+        float parTime = PlayerPrefs.GetFloat("Par Time");
+        float timeGrade = 0f;
+        float killGrade = 0f;
+        if (time <= parTime){
+            timeGrade = 5f;
+        }
+        else if (time <= parTime + 30f){
+            timeGrade = 4f;
+        }
+        else if (time <= parTime + 75f){
+            timeGrade = 3f;
+        }
+        else if (time <= parTime + 135f){
+            timeGrade = 2f;
+        }
+        else{
+            timeGrade = 1f;
+        }
+
+        if (killsPercent >= .999f){
+            killGrade = 5f;
+        }
+        else if (killsPercent >= .75f){
+            killGrade = 4f;
+        }
+        else if (killsPercent >= .5f){
+            killGrade = 3f;
+        }
+        else if (killsPercent >= .25f){
+            killGrade = 2f;
+        }
+        else{
+            killGrade = 1f;
+        }
+
+        float avg = Mathf.Floor((timeGrade + killGrade) / 2f);
+        if (playerHealth.playerCurrentHealth <= 0f){
+            avg -= 2f;
+            avg = Mathf.Clamp(avg, 1f, 5f);
+        }
+
+        Debug.Log(timeGrade);
+        Debug.Log(killGrade);
+        Debug.Log(killsPercent);
+        Debug.Log(avg);
+
+        if (avg == 5f){
+            return "S";
+        }
+        else if (avg == 4f){
+            return "A";
+        }
+        else if (avg == 3f){
+            return "B";
+        }
+        else if (avg == 2f){
+            return "C";
+        }
+        else{
+            return "D";
+        }
     }
 }
