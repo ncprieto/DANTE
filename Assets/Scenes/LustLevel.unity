@@ -30476,6 +30476,7 @@ MonoBehaviour:
   lvlHandler: {fileID: 925069814}
   playerHealth: {fileID: 939103759}
   timeUI: {fileID: 924419574}
+  move: {fileID: 939103761}
   fadeToOverlayTime: 0
   player: {fileID: 939103757}
   mainCamera: {fileID: 1705315971}

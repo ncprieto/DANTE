@@ -18,6 +18,7 @@ public class SceneTransitionHandler : MonoBehaviour
     public LevelHandler lvlHandler;
     public PlayerHealth playerHealth;
     public TimeUpdater timeUI;
+    public Movement move;
 
     [Header ("FadeIn/Out Variables")]
     public float fadeToOverlayTime;
@@ -34,6 +35,7 @@ public class SceneTransitionHandler : MonoBehaviour
     public LevelHandler levelHandler;
     private float timePassed;
     private float currTime;
+    private string secondsFixed;
 
     void Start()
     {
@@ -64,9 +66,11 @@ public class SceneTransitionHandler : MonoBehaviour
             Time.timeScale = 0;
             statsOverlay.transform.Find("WinText").gameObject.SetActive(true);
             statsOverlay.transform.Find("NumKills").gameObject.GetComponent<TextMeshProUGUI>().text = levelHandler.enemiesKilled.ToString();
-            statsOverlay.transform.Find("CurrTime").gameObject.GetComponent<TextMeshProUGUI>().text = Mathf.FloorToInt(currTime / 60).ToString() + ":" + Mathf.FloorToInt(currTime % 60).ToString();
-            statsOverlay.transform.Find("Grade").gameObject.GetComponent<TextMeshProUGUI>().text = CalculateGrade(lvlHandler.enemiesKilled / (float)lvlHandler.enemiesToKill, currTime);
+            secondsFixed = Mathf.FloorToInt(currTime % 60) < 10 ? "0" + Mathf.FloorToInt(currTime % 60).ToString() : Mathf.FloorToInt(currTime % 60).ToString();
+            statsOverlay.transform.Find("CurrTime").gameObject.GetComponent<TextMeshProUGUI>().text = Mathf.FloorToInt(currTime / 60).ToString() + ":" + secondsFixed;
+            statsOverlay.transform.Find("Grade").gameObject.GetComponent<TextMeshProUGUI>().text = CalculateGrade(lvlHandler.enemiesKilled / (float)lvlHandler.enemiesToKill, currTime, false);
             statsOverlay.SetActive(true);
+            move.StopGrapple();
         }
         if ((playerHealth.playerCurrentHealth <= 0 || timeUI.timeLeft == -1) && currTime == 0f)
         {
@@ -104,9 +108,11 @@ public class SceneTransitionHandler : MonoBehaviour
         UnlockCursor();
         statsOverlay.transform.Find("LoseText").gameObject.SetActive(true);
         statsOverlay.transform.Find("NumKills").gameObject.GetComponent<TextMeshProUGUI>().text = levelHandler.enemiesKilled.ToString();
-        statsOverlay.transform.Find("CurrTime").gameObject.GetComponent<TextMeshProUGUI>().text = Mathf.FloorToInt(currTime / 60).ToString() + ":" + Mathf.FloorToInt(currTime % 60).ToString();
-        statsOverlay.transform.Find("Grade").gameObject.GetComponent<TextMeshProUGUI>().text = CalculateGrade(lvlHandler.enemiesKilled / (float)lvlHandler.enemiesToKill, currTime);
+        secondsFixed = Mathf.FloorToInt(currTime % 60) < 10 ? "0" + Mathf.FloorToInt(currTime % 60).ToString() : Mathf.FloorToInt(currTime % 60).ToString();
+        statsOverlay.transform.Find("CurrTime").gameObject.GetComponent<TextMeshProUGUI>().text = Mathf.FloorToInt(currTime / 60).ToString() + ":" + secondsFixed;
+        statsOverlay.transform.Find("Grade").gameObject.GetComponent<TextMeshProUGUI>().text = CalculateGrade(lvlHandler.enemiesKilled / (float)lvlHandler.enemiesToKill, currTime, true);
         statsOverlay.SetActive(true);
+        move.StopGrapple();
     }
 
     private void UnlockCursor()
@@ -125,7 +131,7 @@ public class SceneTransitionHandler : MonoBehaviour
         SceneManager.LoadScene("MainMenu");
     }
 
-    public string CalculateGrade(float killsPercent, float time){
+    public string CalculateGrade(float killsPercent, float time, bool isDead){
         float parTime = PlayerPrefs.GetFloat("Par Time");
         float timeGrade = 0f;
         float killGrade = 0f;
@@ -162,10 +168,10 @@ public class SceneTransitionHandler : MonoBehaviour
         }
 
         float avg = Mathf.Floor((timeGrade + killGrade) / 2f);
-        if (playerHealth.playerCurrentHealth <= 0f){
+        if (isDead){
             avg -= 2f;
-            avg = Mathf.Clamp(avg, 1f, 5f);
         }
+        avg = Mathf.Clamp(avg, 1f, 5f);
 
         if (avg == 5f){
             return "S";
