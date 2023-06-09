@@ -65,7 +65,7 @@ public class SceneTransitionHandler : MonoBehaviour
             statsOverlay.transform.Find("WinText").gameObject.SetActive(true);
             statsOverlay.transform.Find("NumKills").gameObject.GetComponent<TextMeshProUGUI>().text = levelHandler.enemiesKilled.ToString();
             statsOverlay.transform.Find("CurrTime").gameObject.GetComponent<TextMeshProUGUI>().text = Mathf.FloorToInt(currTime / 60).ToString() + ":" + Mathf.FloorToInt(currTime % 60).ToString();
-            statsOverlay.transform.Find("Grade").gameObject.GetComponent<TextMeshProUGUI>().text = CalculateGrade((float)lvlHandler.enemiesKilled / (float)lvlHandler.enemiesToKill, currTime);
+            statsOverlay.transform.Find("Grade").gameObject.GetComponent<TextMeshProUGUI>().text = CalculateGrade(lvlHandler.enemiesKilled / (float)lvlHandler.enemiesToKill, currTime);
             statsOverlay.SetActive(true);
         }
         if ((playerHealth.playerCurrentHealth <= 0 || timeUI.timeLeft == -1) && currTime == 0f)
@@ -105,7 +105,7 @@ public class SceneTransitionHandler : MonoBehaviour
         statsOverlay.transform.Find("LoseText").gameObject.SetActive(true);
         statsOverlay.transform.Find("NumKills").gameObject.GetComponent<TextMeshProUGUI>().text = levelHandler.enemiesKilled.ToString();
         statsOverlay.transform.Find("CurrTime").gameObject.GetComponent<TextMeshProUGUI>().text = Mathf.FloorToInt(currTime / 60).ToString() + ":" + Mathf.FloorToInt(currTime % 60).ToString();
-        statsOverlay.transform.Find("Grade").gameObject.GetComponent<TextMeshProUGUI>().text = CalculateGrade((float)lvlHandler.enemiesKilled / (float)lvlHandler.enemiesToKill, currTime);
+        statsOverlay.transform.Find("Grade").gameObject.GetComponent<TextMeshProUGUI>().text = CalculateGrade(lvlHandler.enemiesKilled / (float)lvlHandler.enemiesToKill, currTime);
         statsOverlay.SetActive(true);
     }
 
@@ -166,11 +166,6 @@ public class SceneTransitionHandler : MonoBehaviour
             avg -= 2f;
             avg = Mathf.Clamp(avg, 1f, 5f);
         }
-
-        Debug.Log(timeGrade);
-        Debug.Log(killGrade);
-        Debug.Log(killsPercent);
-        Debug.Log(avg);
 
         if (avg == 5f){
             return "S";

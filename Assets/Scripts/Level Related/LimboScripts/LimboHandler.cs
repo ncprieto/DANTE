@@ -103,7 +103,7 @@ public class LimboHandler : MonoBehaviour
                 case 7:
                     transform.position = from4_2.position;
                     targetsDestroyed = 0;
-                    virgilSetter.SetObjective("<b><i>Virgil</i></b><br>The holy ones have given you the <b><color=#ce95fc>ability to slow time</color></b><br>as well, ableit breifly and with absolute focus. Take care not<br>to miss a shot, lest that focus breaks.<br><br><b>Left Shift - Time-Slow Ability / Cancel Ability<br>Extends on hits, immediately ends on misses.</b>", this);
+                    virgilSetter.SetObjective("<b><i>Virgil</i></b><br>The holy ones have given you the <b><color=#ce95fc>ability to slow time</color></b><br>as well, ableit briefly and with absolute focus. Take care not<br>to miss a shot, lest that focus breaks.<br><br><b>Left Shift - Time-Slow Ability / Cancel Ability<br>Extends on hits, immediately ends on misses.</b>", this);
                     break;
                 case 8:
                     transform.position = from5.position;
